@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	SuRE_III_Dm3_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm3_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm8_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm8_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm5_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm5_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm12_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm12_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm10_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm10_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm13_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm13_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm6_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm6_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm4_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm4_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm9_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm9_sequence_fastqc.zip
+FastQC	all_sections	SuRE_III_Dm11_sequence	/DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm11_sequence_fastqc.zip
