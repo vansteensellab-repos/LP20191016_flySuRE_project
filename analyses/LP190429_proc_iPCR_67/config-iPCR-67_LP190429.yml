@@ -1,0 +1,199 @@
+#SNP_DIR: "/DATA/home/ludo/projects/LP140430_SureSeq_JvArensbergen/data/LP170210_SuRE42-45_1000Genomes/"
+BOWTIE2_REFSEQ: "/DATA/data/bowtie2/hg19_ch1-22_XYM"
+BOWTIE2_REFSEQ: "/DATA/data/bowtie2/dmel_r5_genome_2L_YHet"
+  
+  # directory for all generated output
+OUTDIR: "SuRE42-1_pipelineOutput"
+# expected adapter sequence in cDNA reads
+ADPT_SEQ: "CCTAGCTAACTATAACGGTCCTAAGGTAGCGAA"
+# expected adapter sequence in forward iPCR reads
+ADPTR_IPCR_FORW_SEQ: "CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT"
+# expected adapter sequence in reverse iPCR reads
+ADPTR_IPCR_REV_SEQ: "CCAGTCGT"
+
+CUTMOTIF_NONE: &CUTMOTIF_NONE
+  ""
+
+SuRE42_GID: &SURE42_GID
+  "HG02601"
+SuRE43_GID: &SURE43_GID
+  "NA18983"
+SuRE44_GID: &SURE44_GID
+  "HG01241"
+SuRE45_GID: &SURE45_GID
+  "HG03464"
+
+# location of reference sequence index file for bowtie2
+# BOWTIE2_REFSEQ: "$HOME/data/bowtie2-indexes/hg19_ch1-22_XYM"
+BOWTIE2_INDEX_DIR: "/DATA/usr/ludo/projects/LP140430_SureSeq_JvArensbergen/analyses/LP171023_createAltRefs/bowtie/altRef_171107"
+BOWTIE2_PARENTAL:
+  HG02601:
+    paternal: HG02601_paternal
+    maternal: HG02601_maternal
+  NA18983:
+    paternal: NA18983_paternal
+    maternal: NA18983_maternal
+  HG01241:
+    paternal: HG01241_paternal
+    maternal: HG01241_maternal
+  HG03464:
+    paternal: HG03464_paternal
+    maternal: HG03464_maternal
+
+VCF_DIR: "/DATA/usr/ludo/projects/LP140430_SureSeq_JvArensbergen/analyses/LP171023_createAltRefs/fasta/altRef_171107"
+VCF_PARENTAL:
+  HG02601:
+    paternal: HG02601/HG02601_CHR_pat_LP181129.vcf
+    maternal: HG02601/HG02601_CHR_mat_LP181129.vcf
+  NA18983:
+    paternal: NA18983/NA18983_CHR_pat_LP181129.vcf
+    maternal: NA18983/NA18983_CHR_mat_LP181129.vcf
+  HG01241:
+    paternal: HG01241/HG01241_CHR_pat_LP181129.vcf
+    maternal: HG01241/HG01241_CHR_mat_LP181129.vcf
+  HG03464:
+    paternal: HG03464/HG03464_CHR_pat_LP181129.vcf
+    maternal: HG03464/HG03464_CHR_mat_LP181129.vcf
+
+CHR_TARGET:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - X
+
+ASSEMBLY: "hg19"
+MAX_INSERT_LENGTH: 1000
+NCORES: 30
+ALLELE_SPECIFIC: "yes"
+ALLELE_SPECIFIC: 0
+
+###################################################
+# The above settings are 'general' ################
+# Below are settings to specify input data files ##
+###################################################
+
+# section specifying genome specific info
+# genotype selection for a particular dataset
+GID: *SURE42_GID
+  # in snakemake file: BOWTIE2_REFSEQ=join.path(config["BOWTIE2_INDEX_DIR"],config["BOWTIE2_PARENTAL"][config["GID"]]["PATERNAL"/"MATERNAL"]
+
+cDNA:
+  FASTQ_DIR:
+    # "/home/ludo/DATA/fromHPC_resProjects/LP170124_SuRE42-45/fastq/cDNA/raw_data/"
+    "/DATA/usr/ludo/projects/LP140430_SureSeq_JvArensbergen/analyses/LP170124_SuRE42-45/fastq/cDNA/raw_data/"
+  OUTDIR:
+    "cDNA"
+  SAMPLES:
+    SuRE42_B1_T1:
+      - 4307_1_SuRE42_K562_cDNA_RNA_62_1_ATCACGA_Brep1_ATCACGA_R1.fastq.gz
+    SuRE42_B2_T1:
+      - 4321_1_SuRE42_K562_cDNA_RNA_64_1_ATCACGA_Brep2_ATCACGA_S3_R1_001.fastq.gz
+    SuRE42_B3_T1:
+      - 4475_1_SuRE42_K562_cDNA_RNA_68_1_ATCACGA_Brep3_ATCACGA_S33_R1_001.fastq.gz
+    SuRE42_HEPG2_B1_T1:
+      - 4487_1_SuRE42_HEPG2_cDNA_RNA_72_1_ATCACGA_Brep1_ATCACGA_S1_R1_001.fastq.gz
+    SuRE42_HEPG2_B2_T1:
+      - 4488_1_SuRE42_HEPG2_cDNA_RNA_72_1_ATCACGA_Brep2_ATCACGA_S1_R1_001.fastq.gz
+  REPLICATES:
+    SuRE42_1_HEPG2_B1_2:
+      - SuRE42_HEPG2_B1_T1
+      - SuRE42_HEPG2_B2_T1
+    SuRE42_1_K562_B1_2_3:
+      - SuRE42_B1_T1
+      - SuRE42_B2_T1
+      - SuRE42_B3_T1
+
+plDNA:
+  FASTQ_DIR:
+    # "/home/ludo/DATA/fromHPC_resProjects/LP161222_SuRE40/fastq/plDNA/"
+    "/DATA/usr/ludo/projects/LP140430_SureSeq_JvArensbergen/analyses/LP170124_SuRE42-45/fastq/cDNA/raw_data/"
+  OUTDIR:
+    "plDNA"
+  SAMPLES:
+
+iPCR:
+  FASTQ_DIR:
+    # "/home/ludo/DATA/fromHPC_resProjects/LP170124_SuRE42-45/fastq/iPCR/raw_data/"
+    "/DATA/usr/ludo/projects/LP140430_SureSeq_JvArensbergen/analyses/LP170124_SuRE42-45/fastq/iPCR/raw_data/"
+  OUTDIR:
+    "iPCR"
+  SAMPLES:
+    iPCR_SuRE42_B1_T01: 
+      R1: SuRE42_KD17010268_HF3H2ALXX_L3_1.fq.gz
+      R2: SuRE42_KD17010268_HF3H2ALXX_L3_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T02: 
+      R1: SuRE42_KD17010268_HF7HMALXX_L5_1.fq.gz
+      R2: SuRE42_KD17010268_HF7HMALXX_L5_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T03: 
+      R1: SuRE42_KD17010268_HF7HMALXX_L6_1.fq.gz
+      R2: SuRE42_KD17010268_HF7HMALXX_L6_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T04: 
+      R1: SuRE42_KD17010268_HF7HMALXX_L7_1.fq.gz
+      R2: SuRE42_KD17010268_HF7HMALXX_L7_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T05: 
+      R1: SuRE42_KD17010268_HF7HMALXX_L8_1.fq.gz
+      R2: SuRE42_KD17010268_HF7HMALXX_L8_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T06: 
+      R1: SuRE42_KD17010268_H7NT5ALXX_L7_1.fq.gz
+      R2: SuRE42_KD17010268_H7NT5ALXX_L7_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T07: 
+      R1: SuRE42_KD17010268_H7NT5ALXX_L8_1.fq.gz
+      R2: SuRE42_KD17010268_H7NT5ALXX_L8_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T08: 
+      R1: SuRE42_KD17010268_H7NWVALXX_L5_1.fq.gz
+      R2: SuRE42_KD17010268_H7NWVALXX_L5_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T09: 
+      R1: SuRE42_KD17010268_H7NWVALXX_L6_1.fq.gz
+      R2: SuRE42_KD17010268_H7NWVALXX_L6_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T10: 
+      R1: SuRE42_KD17010268_H7NWVALXX_L7_1.fq.gz
+      R2: SuRE42_KD17010268_H7NWVALXX_L7_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T11: 
+      R1: SuRE42_KD17010268_H7NWVALXX_L8_1.fq.gz
+      R2: SuRE42_KD17010268_H7NWVALXX_L8_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T12: 
+      R1: SuRE42_KD17010268_HH2JCALXX_L2_1.fq.gz
+      R2: SuRE42_KD17010268_HH2JCALXX_L2_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T13: 
+      R1: SuRE42_KD17010268_HH2JCALXX_L3_1.fq.gz
+      R2: SuRE42_KD17010268_HH2JCALXX_L3_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T14: 
+      R1: SuRE42_KD17010268_HH2JCALXX_L4_1.fq.gz
+      R2: SuRE42_KD17010268_HH2JCALXX_L4_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
+    iPCR_SuRE42_B1_T15: 
+      R1: SuRE42_KD17010268_HH2JCALXX_L5_1.fq.gz
+      R2: SuRE42_KD17010268_HH2JCALXX_L5_2.fq.gz
+      CUTMOTIF: *CUTMOTIF_NONE
