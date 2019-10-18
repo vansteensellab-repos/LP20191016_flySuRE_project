@@ -15,7 +15,7 @@ ADPTR_IPCR_REV_SEQ: "CCAGTCGT"
 # BOWTIE2_REFSEQ: "$HOME/data/bowtie2-indexes/hg19_ch1-22_XYM"
 BOWTIE2_INDEX_DIR: "/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/T01/"
 BOWTIE2_PARENTAL:
-  T01: T01/T01
+  T01: T01
 
 VCF_DIR: "/home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/"
 VCF_PARENTAL:
