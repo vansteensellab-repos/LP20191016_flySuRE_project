@@ -13,6 +13,7 @@ TARGET="reversed_liftover"
 TARGET="sorted_cnt_tbls"
 TARGET="trim_iPCR"
 TARGET="split_bam"
+TARGET="bedpe"
 # TARGET="bed2coverage_done"
 
 CMD="/usr/bin/time -v nice -19 snakemake ${DRYRUN}-prs ${SNAKEFILE} --use-conda --resources ram=${RAM} --configfile ${CONFIG} --cores $NCORES ${TARGET} &> ${LOG}"
