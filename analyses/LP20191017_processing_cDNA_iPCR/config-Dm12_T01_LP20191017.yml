@@ -20,6 +20,8 @@ BOWTIE2_PARENTAL:
 VCF_DIR: "/home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/"
 VCF_PARENTAL:
   T01: Haplotype_joint_call_SuRe_lines_lenient_filtering_T01_homoz.vcf.gz
+REVCHAIN:
+  T01: "chain/T01_LP20191028_reverse.chain"
 
 CHR_TARGET:
   - chr2L
