@@ -1,0 +1,64 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 15
+Rules claiming more threads will be scaled down.
+Provided resources: ram=100
+Job counts:
+	count	jobs
+	1	cDNA
+	1	trim_cDNA
+	2
+
+[Tue Oct 29 11:06:23 2019]
+rule cDNA:
+    input: /home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm11_sequence.txt.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/cDNA/N02_B1_T1/N02_B1_T1_trimmed_table.txt.gz
+    jobid: 1
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/cDNA/N02_B1_T1/N02_B1_T1_trimmed_table.txt.gz
+    wildcards: s=N02_B1_T1
+
+/DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/cDNA-plDNA-count-BC.bash -l -b 'N02_B1_T1' -o '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/cDNA/N02_B1_T1' -a 'CCTAGCTAACTATAACGGTCCTAAGGTAGCGAA' /home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I/SuRE_III_Dm11_sequence.txt.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191017_processing_cDNA_iPCR/.snakemake/conda/a8e43192
+Read 156 records
+[Tue Oct 29 11:24:17 2019]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Tue Oct 29 11:24:17 2019]
+localrule trim_cDNA:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/cDNA/N02_B1_T1/N02_B1_T1_trimmed_table.txt.gz
+    jobid: 0
+    reason: Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/cDNA/N02_B1_T1/N02_B1_T1_trimmed_table.txt.gz
+
+[Tue Oct 29 11:24:17 2019]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191017_processing_cDNA_iPCR/.snakemake/log/2019-10-29T110622.880543.snakemake.log
+SuRE-seq pipeline version:  0.14.feature_SNP-usr-config 
+ git commit hash:  8bf8731b0e97f5f2bd512693c6a20864dae6a7d1 
+
+
+['/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/coverage/N02.norm.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/coverage/N02.norm.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/coverage/N02.norm.minus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/coverage/N02.normflat.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/coverage/N02.normflat.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm11_N02_pipelineOutput/coverage/N02.normflat.minus.bw']
+	Command being timed: "nice -19 snakemake -prs ../../code/pipeline/SuRE-snakemake --use-conda --resources ram=100 --configfile config-Dm11_N02_LP20191029.yml --cores 15 trim_cDNA"
+	User time (seconds): 1138.35
+	System time (seconds): 41.14
+	Percent of CPU this job got: 109%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 17:55.17
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4799396
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 2046345
+	Voluntary context switches: 2273224
+	Involuntary context switches: 5113
+	Swaps: 0
+	File system inputs: 1050840
+	File system outputs: 15954048
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
