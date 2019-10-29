@@ -1,0 +1,80 @@
+#SNP_DIR: "/DATA/home/ludo/projects/LP140430_SureSeq_JvArensbergen/data/LP170210_SuRE42-45_1000Genomes/"
+BOWTIE2_REFSEQ: ""
+  
+  # directory for all generated output
+OUTDIR: "/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191028_Dm09_I02_pipelineOutput"
+# expected adapter sequence in cDNA reads
+ADPT_SEQ: "CCTAGCTAACTATAACGGTCCTAAGGTAGCGAA"
+# expected adapter sequence in forward iPCR reads
+ADPTR_IPCR_FORW_SEQ: "CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT"
+# expected adapter sequence in reverse iPCR reads
+ADPTR_IPCR_REV_SEQ: "CCAGTCGT"
+
+
+# location of reference sequence index file for bowtie2
+# BOWTIE2_REFSEQ: "$HOME/data/bowtie2-indexes/hg19_ch1-22_XYM"
+BOWTIE2_INDEX_DIR: "/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/I02/"
+BOWTIE2_PARENTAL:
+  T01: T01
+  I02: I02
+
+VCF_DIR: "/home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/"
+VCF_PARENTAL:
+  T01: Haplotype_joint_call_SuRe_lines_lenient_filtering_T01_homoz.vcf.gz
+  I02: Haplotype_joint_call_SuRe_lines_lenient_filtering_I02_homoz.vcf.gz
+REVCHAIN:
+  T01: "chain/T01_LP20191028_reverse.chain"
+
+CHR_TARGET:
+  - chr2L
+  - chr2R
+  - chr3L
+  - chr3R
+  - chr4
+  - chrM
+
+ASSEMBLY: "dm6"
+MAX_INSERT_LENGTH: 500
+NCORES: 30
+ALLELE_SPECIFIC: "yes"
+# ALLELE_SPECIFIC: 0
+
+###################################################
+# The above settings are 'general' ################
+# Below are settings to specify input data files ##
+###################################################
+
+# section specifying genome specific info
+# genotype selection for a particular dataset
+GID: T01
+GID: I02
+  # in snakemake file: BOWTIE2_REFSEQ=join.path(config["BOWTIE2_INDEX_DIR"],config["BOWTIE2_PARENTAL"][config["GID"]]["PATERNAL"/"MATERNAL"]
+
+cDNA:
+  FASTQ_DIR:
+    "/home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I"
+  OUTDIR:
+    "cDNA"
+  SAMPLES:
+    I02_B1_T1:
+      - SuRE_III_Dm9_sequence.txt.gz
+  REPLICATES:
+    I02:
+      - I02_B1_T1
+
+plDNA:
+  FASTQ_DIR:
+    ""
+  OUTDIR:
+    ""
+  SAMPLES:
+
+iPCR:
+  FASTQ_DIR:
+    "/home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I"
+  OUTDIR:
+    "iPCR"
+  SAMPLES:
+    I02_B1_T01: 
+      R1: iPCR_mix2_DM09GDLI02_1_sequence.txt.gz
+      R2: iPCR_mix2_DM09GDLI02_2_sequence.txt.gz
