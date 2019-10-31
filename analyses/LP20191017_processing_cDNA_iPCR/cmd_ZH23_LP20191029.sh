@@ -10,10 +10,10 @@ RAM=100
 TARGET="bedpe_merged_smpls"
 TARGET="merged_ipcr_cdna"
 TARGET="reversed_liftover"
-TARGET="sorted_cnt_tbls"
 TARGET="trim_iPCR"
 TARGET="split_bam"
-TARGET="trim_cDNA"
+TARGET="trim_iPCR"
+TARGET="sorted_cnt_tbls"
 #TARGET="bedpe_BC"
 # TARGET="bed2coverage_done"
 

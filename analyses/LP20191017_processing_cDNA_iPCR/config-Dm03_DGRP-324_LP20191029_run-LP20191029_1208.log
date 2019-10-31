@@ -1,0 +1,63 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 15
+Rules claiming more threads will be scaled down.
+Provided resources: ram=100
+Job counts:
+	count	jobs
+	1	iPCR_trim
+	1	trim_iPCR
+	2
+
+[Tue Oct 29 12:08:35 2019]
+rule iPCR_trim:
+    input: /home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I/iPCR_mix1_DM03DGRP324_1_sequence.txt.gz, /home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I/iPCR_mix1_DM03DGRP324_2_sequence.txt.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed/DGRP-324_B1_T01_forw.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed/DGRP-324_B1_T01_rev.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed/DGRP-324_B1_T01_forw.info.gz
+    jobid: 1
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed/DGRP-324_B1_T01_forw.info.gz
+    wildcards: s=DGRP-324_B1_T01
+
+/DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR-trim.bash -o '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed' -l -d '' -b 'DGRP-324_B1_T01' -f 'CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT' -r 'CCAGTCGT' -c /home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I/iPCR_mix1_DM03DGRP324_1_sequence.txt.gz /home/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I/iPCR_mix1_DM03DGRP324_2_sequence.txt.gz; parallel gzip ::: '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed'/*fastq '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed'/*info
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191017_processing_cDNA_iPCR/.snakemake/conda/a8e43192
+[Tue Oct 29 15:46:34 2019]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Tue Oct 29 15:46:34 2019]
+localrule trim_iPCR:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed/DGRP-324_B1_T01_forw.info.gz
+    jobid: 0
+    reason: Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/01_fastq_trimmed/DGRP-324_B1_T01_forw.info.gz
+
+[Tue Oct 29 15:46:34 2019]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191017_processing_cDNA_iPCR/.snakemake/log/2019-10-29T120835.665835.snakemake.log
+SuRE-seq pipeline version:  0.14.feature_SNP-usr-config 
+ git commit hash:  8bf8731b0e97f5f2bd512693c6a20864dae6a7d1 
+
+
+['/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.norm.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.norm.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.norm.minus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.normflat.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.normflat.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191029_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.normflat.minus.bw']
+	Command being timed: "nice -19 snakemake -prs ../../code/pipeline/SuRE-snakemake --use-conda --resources ram=100 --configfile config-Dm03_DGRP-324_LP20191029.yml --cores 15 trim_iPCR"
+	User time (seconds): 18760.86
+	System time (seconds): 681.06
+	Percent of CPU this job got: 148%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:37:58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 45888
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 41
+	Minor (reclaiming a frame) page faults: 944567
+	Voluntary context switches: 13487716
+	Involuntary context switches: 549249
+	Swaps: 0
+	File system inputs: 329814544
+	File system outputs: 385057752
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
