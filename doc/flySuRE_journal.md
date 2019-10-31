@@ -486,6 +486,11 @@ heterozygous SNPs.
 
 ### Split VCF file per sample
 
+**Note:** Later (dd 20191008) I found that the VCFs contain a blank line before
+the #CHROM line. I fixed that below but for future reference I should print the
+header (all ^## lines) without an additional newline, probably by changing ORS
+to "")
+
 ```
 awk -F"\t" '
 BEGIN {
@@ -531,3 +536,233 @@ parallel gzip ::: *vcf
 find -name \*gz -not -name "*homo*" -not -name Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz -delete
 ```
 
+# 20191008
+
+## Generate ref sequences per sample
+
+Follow recipe from https://olgabotvinnik.com/blog/how-to-create-a-custom-genome-fasta-from-a-vcf-file/
+```
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia
+cat dm6.AE017196.fasta | awk '/Wolbachia/{OUT="wolbachia.fa";print >OUT; next} /^>chr/{OUT=substr($0,2) ".fa"}; OUT{print >OUT}'
+for f in chr2L.fa chr2R.fa chr3L.fa chr3R.fa chr4.fa chrM.fa chrX*.fa chrY*.fa chrUn*.fa; do cat $f >> dm6.AE017196_karyoSort.fasta; done
+rm -f chr*fa
+samtools faidx dm6.AE017196_karyoSort.fasta
+picard CreateSequenceDictionary R=dm6.AE017196_karyoSort.fasta O=dm6.AE017196_karyoSort.dict
+
+# remove empty lines from VCF files:
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia
+for f in *filtering_*vcf; do mv $f tmp; awk NF tmp > $f; rm -f tmp; done
+
+# create refseq fasta files
+
+**BELOW CODE IS WRONG!!** As it turns out GATK creates genome sequences taking
+the alternative allele at every SNP position, regardless haplotype. BCFtools
+consensus can do what I want it to do. See dd20191015 for continued processing.
+
+```
+mkdir /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta
+
+conda activate gatk
+REFSEQ=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia/dm6.AE017196_karyoSort.fasta
+declare -a SAMPLES=("B04" "DGRP-304" "DGRP-324" "DGRP-360" "DGRP-362" "DGRP-57" "DGRP-714" "I02" "I33" "N02" "T01" "ZH23" "vgn")
+
+for sample in "${SAMPLES[@]}"; do
+  echo "$sample"
+  VAR=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia/Haplotype_joint_call_SuRe_lines_lenient_filtering_${sample}_homoz.vcf
+  OUT=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/${sample}_LP20191008.fa
+  gatk3 -T FastaAlternateReferenceMaker -R ${REFSEQ} --variant ${VAR} -o ${OUT}
+done
+```
+
+# 20191015
+
+## Create refseq fastta, using bcftools consensus
+
+```
+# clean up previous data which are wrong
+rm -rf /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/*
+
+conda activate vcftools
+REFSEQ=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia/dm6.AE017196.fasta
+declare -a SAMPLES=("B04" "DGRP-304" "DGRP-324" "DGRP-360" "DGRP-362" "DGRP-57" "DGRP-714" "I02" "I33" "N02" "T01" "ZH23" "vgn")
+
+for sample in "${SAMPLES[@]}"; do
+  echo "$sample"
+  VAR=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia/Haplotype_joint_call_SuRe_lines_lenient_filtering_${sample}_homoz.vcf
+  OUT=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/${sample}_LP20191015.fa
+
+  # compress vcf using bgzip/tabix
+  bgzip ${VAR}
+  tabix ${VAR}.gz
+
+  CMD="bcftools consensus -H 1 -s ${sample}  -f ${REFSEQ} ${VAR}.gz -o ${OUT} 2> ${OUT%.fa}.err"
+  echo ${CMD}
+  eval ${CMD}
+done
+
+```
+
+
+## Create bowtie2 indices
+
+```
+# set some paths to data files and runfiles
+DATE=$(date +"%Y%m%d")
+INDIR="/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/"
+OUTDIR="/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices"
+CHRS=( $(seq 1 22) 'X' )
+BOWTIE=bowtie2-build
+echo "BOWTIE VERSION:"
+${BOWTIE} --version
+echo -e "\n\n"
+
+declare -a SAMPLES=("B04" "DGRP-304" "DGRP-324" "DGRP-360" "DGRP-362" "DGRP-57" "DGRP-714" "I02" "I33" "N02" "T01" "ZH23" "vgn")
+
+NCORES=1
+# loop pver samples and create all ref sequences
+for sample in "${SAMPLES[@]}"; do
+    indir="${INDIR}/${sample}"
+    infile="${INDIR}/${sample}_LP20191015.fa"
+    CMD=( "${BOWTIE}" --threads ${NCORES} "${infile}" "${OUTDIR}/${sample}/${sample}" ) 
+    echo "CMD = ${CMD[@]}"
+    mkdir -p "${OUTDIR}/${sample}"
+    eval "${CMD[@]}"
+done
+```
+
+# 20191028
+
+## Generate chain and reverse chain files
+
+```
+cd /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/
+
+declare -a SAMPLES=("B04" "DGRP-304" "DGRP-324" "DGRP-360" "DGRP-362" "DGRP-57" "DGRP-714" "I02" "I33" "N02" "T01" "ZH23" "vgn")
+REFSEQ=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia/dm6.AE017196.fasta
+mkdir -p /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/
+for sample in "${SAMPLES[@]}"; do
+  echo "$sample"
+  VAR=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_${sample}_homoz.vcf.gz
+  OUT=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/${sample}_LP20191028.chain
+
+  CMD="bcftools consensus -H 1 -s ${sample} -f ${REFSEQ} ${VAR} -c ${OUT} 2> ${OUT%.chain}.err > /dev/null"
+  conda activate vcftools
+  echo "CMD = ${CMD[@]}"
+  eval "${CMD[@]}"
+
+  CMD="chainSwap <( grep -v \"^0 0 0\" ${OUT} ) ${OUT%.chain}_reverse.chain"
+  conda activate base
+  echo "CMD = ${CMD[@]}"
+  eval "${CMD[@]}"
+done
+```
+
+# 20191029 
+
+## Overview of adapting the pipeline for current fly data
+
+I adapted the pipeline from commit `84097a803e405a233a4b9ed25d930354581216e8` onward, in branch `fly-embl`.
+
+The adaptations revolved around two aspects:
+
+* adapting for input data, eg ref seq, VCF files, etc
+* adapting for the homozygosity of the fly data
+
+The adaptations start with commit `0aef3d3` and continue (at least) to commit `8bf8731`.
+
+## Overview of workflow for processing data
+
+The processing is done from directory
+`../analyses/LP20191017_processing_cDNA_iPCR`. The entire project directory
+(`../../`) is under git control, in the github repos
+[LP20191016_flySuRE_project](https://github.com/vansteensellab-repos/LP20191016_flySuRE_project).
+
+Wrt the processing I commit the command wrapper (eg `cmd_I02_LP20191028.sh`)
+and the resulting log file(s) (eg
+`config-Dm08_B04_LP20191028_run-LP20191028_0957.log`) to the repos.
+
+The output is stored per fly strain in `../../data/intermediate/`, eg. `LP20191017_Dm12_T01_pipelineOutput`.
+
+## Overview of current results.
+
+The testing of the pipeline was done while processing the data of Dm12_T01. Now
+that it is finished I checked the results, basically checking the counts for
+iPCR and cDNA in the counts table
+(`../../data/intermediate/LP20191017_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2R.bedpe.gz`).
+
+I find that there are nearly no cDNA counts!!
+
+The cDNA trimmed-table file suggests there are plenty of cDNAs, and the count
+distribution looks good. Also the count distribution of the iPCR counts looks
+good. It appears as if the cDNA counts in the final counts table is only due to
+random matches. This could indicate that the samples are mixed...
+
+### Checking whether (cDNA) samples are mixed
+
+I want to parse all cDNA data, extract frequent barcode sequences from each,
+and check overlap of each with the iPCR barcodes I have so far (T01, B04,
+DGRP-304).
+
+### Prep config and cmd wrappers for all strains
+
+Here is an overview of strains and sample numbers:
+
+| sample nr (based on github wiki) | strain short name | strain name in outputdir | strain long name in iPCR fastq| cDNA fastq fname | processing started | processing finished |
+| --------- | ----------------- | --------------------- | ---------------- | --- |
+| 03  | DGRP-324 | Dm03_DGRP-324  | DM03DGRP324  | SuRE_III_Dm3  |   |   |
+| 04  | DGRP-360 | Dm04_DGRP-360  | DM04DGRP360  | SuRE_III_Dm4  |   |   |
+| 05  | DGRP-362 | Dm05_DGRP-362  | DM05DGRP362  | SuRE_III_Dm5  |   |   |
+| 06  | DGRP-714 | Dm06_DGRP-714  | DM06DGRP714  | SuRE_III_Dm6  |   |   |
+| 08  | B04      | Dm08_B04       | DM08GDLB04   | SuRE_III_Dm8  | X |   |
+| 09  | I02      | Dm09_I02       | DM09GDLI02   | SuRE_III_Dm9  | X |   |
+| 10  | I33      | Dm10_I33       | DM10GDLI33   | SuRE_III_Dm10 |   |   |
+| 11  | N02      | Dm11_N02       | DM11GDLN02   | SuRE_III_Dm11 |   |   |
+| 12  | T01      | Dm12_T01       | DM12GDLT01   | SuRE_III_Dm12 | X |   |
+| 13  | ZH23     | Dm13_ZH23      | DM13GDLZH23  | SuRE_III_Dm13 |   |   |
+| **No libraries:** | 
+| --  | DGRP-304 |   |   |   |
+| --  | DGRP-57 |   |   |   |
+| --  | vgn |   |   |   |
+
+I created all remaining config files and command wrappers, among others with below code qbut also with lots of manual editing.
+
+
+
+
+```
+declare -a SAMPLES=("Dm03_DGRP-324" "Dm04_DGRP-360" "Dm05_DGRP-362" "Dm06_DGRP-714" "Dm10_I33" "Dm11_N02" "Dm13_ZH23")
+
+pushd /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191017_processing_cDNA_iPCR
+for sample in "${SAMPLES[@]}"; do
+  # copy template config file
+  cp config-Dm08_B04_LP20191028.yml config-${sample}_LP20191029.yml
+  # create new command wrapper from template, including replacing the correct config file
+  sed 's/config-Dm08_B04_LP20191028.yml/config-'"${sample}"'_LP20191029.yml/g' cmd_B04_LP20191028.sh | sed 's/TARGET="bedpe"/TARGET="trim_cDNA"/g' - > cmd_${sample#Dm*_}_LP20191029.sh
+done
+popd
+```
+
+```
+declare -a SAMPLES=("Dm03_DGRP-324" "Dm04_DGRP-360" "Dm05_DGRP-362" "Dm06_DGRP-714" "Dm10_I33" "Dm11_N02" "Dm13_ZH23")
+for sample in "${SAMPLES[@]}"; do
+  smpl=${sample#Dm*_}
+  sed -i 's#T01: "chain/T01_LP20191028_reverse.chain"#'"${smpl}"': "chain/'"${smpl}"'_LP20191028_reverse.chain"#' config-${sample}_LP20191029.yml
+done
+```
+
+# 20191031
+
+## Sample *are* swapped
+
+I finished processing all data. I checked the cDNA-iPCR sample correspondence in R (`../analyses/LP20191017_processing_cDNA_iPCR/check_cDNA-iPCR_SampleCorrelation_20191031.R', run in `../data/intermediate`) and found that only in 3 cases the barcodes of cDNA and iPCR data have a high overlap. For in total 6 strains there is a obvious correspondence between cDNA and iPCR samples (median overlap is 5e-5, high overlap >0.5, this includes the three correct samples). The remaining 4 strains have max overlap scores of:
+```
+0.02080964
+0.06932100
+0.09863326
+0.33418182
+```
+Not so good.
+
+Strains with lower overlap tend to have worse sequencing depth of the cDNA.
+
+I sent an email to Matteo/Mattia with the bad news.
