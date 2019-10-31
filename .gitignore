@@ -14,7 +14,9 @@ data/
 *.tex
 *.toc
 *.aux
-*.log
+# *.log
 *.out
 cache/
 doc/flySuRE_journal
+code/pipeline/
+.snakemake
