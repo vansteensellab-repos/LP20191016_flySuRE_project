@@ -3,7 +3,7 @@ DRYRUN=""
 
 DATETAG="LP$( date +"%Y%m%d_%H%M" )"
 SNAKEFILE=../../code/pipeline/SuRE-snakemake
-CONFIG=config-Dm09_I02_LP20191028.yml
+CONFIG=config-Dm09_I02_LP20191106.yml
 LOG="${CONFIG%.yml}_run-${DATETAG}.log"
 NCORES=15
 RAM=100

@@ -3,10 +3,10 @@ DRYRUN=""
 
 DATETAG="LP$( date +"%Y%m%d_%H%M" )"
 SNAKEFILE=../../code/pipeline/SuRE-snakemake
-CONFIG=config-Dm12_T01_LP20191017.yml
+CONFIG=config-Dm12_T01_LP20191106.yml
 LOG="${CONFIG%.yml}_run-${DATETAG}.log"
 NCORES=15
-RAM=150
+RAM=100
 TARGET="bedpe_merged_smpls"
 TARGET="merged_ipcr_cdna"
 TARGET="reversed_liftover"
