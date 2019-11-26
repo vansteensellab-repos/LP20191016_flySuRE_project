@@ -1,0 +1,265 @@
+---
+title: "Overview of pipeline results"
+output: html_document
+---
+
+## Init
+```{r init}
+library(data.table)
+library(parallel)
+```
+
+Note: In this document I'm using data.table partly as exercise. With hindsight for this kind of small work a data.frame is probably easier. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This document will show some statistics on the iPCR and cDNA data and the results of processing these data with the SuRE-INDEL pipeline.
+
+The results in this document are taking into account the following sample - iPCR datafile - cDNA datafile correspondence into account:
+
+| sample       | iPCR filename | cDNA filename |
+| ------------ | ------------- | ------------- |
+| Dm03_DGRP324 | Dm03          | Dm04          |
+| Dm04_DGRP360 | Dm04          | Dm05          |
+| Dm05_DGRP362 | Dm05          | Dm06          |
+| Dm06_DGRP714 | Dm06          | Dm08          |
+| Dm08_B04     | Dm08          | Dm03          |
+| Dm09_I02     | Dm09          | Dm09          |
+| Dm10_I33     | Dm10          | Dm10          |
+| Dm11_N02     | Dm11          | Dm11          |
+| Dm12_T01     | Dm13          | Dm12          |
+| Dm13_ZH23    | Dm12          | Dm13          |
+
+### Association strains and filenames
+
+```{r assoc}
+assoc <- data.table(
+  strain=c("Dm03_DGRP324", "Dm04_DGRP360", "Dm05_DGRP362", "Dm06_DGRP714", "Dm08_B04", "Dm09_I02", "Dm10_I33", "Dm11_N02", "Dm12_T01", "Dm13_ZH23"),
+  ipcr=c("Dm03", "Dm04", "Dm05", "Dm06", "Dm08", "Dm09", "Dm10", "Dm11", "Dm13", "Dm12"),
+  cdna=c("Dm04", "Dm05", "Dm06", "Dm08", "Dm03", "Dm09", "Dm10", "Dm11", "Dm12", "Dm13"),
+  stringsAsFactors = FALSE)
+assoc <- cbind(assoc, short=sub("(Dm..).*","\\1",assoc[["strain"]]))
+setkey(assoc, short)
+assoc
+```
+
+## Raw read counts of iPCR and cDNA fastq files
+
+Statistics are collected from the multiQC output (ie overview of the fastQC reports)
+
+### iPCR
+```{r multiQCipcr}
+# read ipcr data
+ipcrStats <- fread('/DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20190909_resequencing-I_1st_samples/iPCR_resequencing_I_multiQC/multiqc_data/multiqc_general_stats.txt')
+# short name based on filename
+ipcrStats$shortname <- paste0(rep(each=2, sprintf("Dm%0.2d",c(3,4,5,6,8,9,10,11,12,13))), c("","_2"))
+setkey(ipcrStats, shortname)
+# rownames(ipcrStats) <- paste0(ipcrStats$shortname, c("","_2"))
+# readcount scaled to million
+ipcrStats[,6] = signif(ipcrStats[,6]/1e6, digits = 3)
+# rename readcount column
+names(ipcrStats)[6]="totalReads (M)"
+# show correspondence of given names and shortnames
+owidth <- options(width=500)
+ipcrStats[,c(1,7)]
+options(owidth)
+# print short name/readcount columns
+ipcrStats[seq(1,20, by=2),c(7,6)]
+```
+### cDNA
+```{r multiQCcdna}
+# read cdna data
+cdnaStats <- fread('/DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20190909_resequencing-I_1st_samples/cDNA_resequencing_I_multiQC/multiqc_data/multiqc_general_stats.txt')
+# create short sample name
+cdnaStats$shortname <- sprintf("Dm%0.2d",c(10,11,12,13,3,4,5,6,8,9))
+setkey(cdnaStats, shortname)
+# show correspondence of given names and shortnames
+cdnaStats[,c(1,7)]
+# readcounts scaled to million
+cdnaStats[,6] <- signif(cdnaStats[,6]/1e6, digits=3)
+# rename readcount column
+names(cdnaStats)[6] <- "totalReads (M)"
+# print sort name/readcount columns
+cdnaStats[,c(7,6)]
+```
+
+## Combine iPCR/cDNA counts, using correct data sets per strain
+
+```{r comb.ipcr.cdna}
+stats <- data.table(libComplFlat=0, libCompl=0,cdnaComplFlat=0,cdnaCompl=0,iPCRraw=0, cDNAraw=0)[-1,]
+for (i in seq.int(nrow(assoc))) {
+  stats = rbind(stats,list(0,0,0,0,0,0))
+  set(stats, i=i, j="iPCRraw", value = ipcrStats[assoc[i,.(ipcr)][[1]],.(`totalReads (M)`)][[1]])
+  set(stats, i=i, j="cDNAraw", value = cdnaStats[assoc[i,.(cdna)][[1]],.(`totalReads (M)`)][[1]])
+}
+stats <- cbind(stats, short=assoc$short)
+setkey(stats, short)
+```
+
+## Add iPCR and cDNA counts after processing
+
+```{r add.processed, cache=TRUE, cache.vars=c("stats","data4viz")}
+fnames <- grep(value=TRUE, pattern="LP20191106.*11_sorted",dir(path='/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/',recursive=T, include.dirs=T,pattern=".*gz",full.names=T))
+fname.sample <- sub("^.*LP20191106_(Dm..).*_pipelineOutp.*$","\\1",fnames)
+samples <- unique(fname.sample)
+
+data4viz <- list()
+for (s in samples) {
+  fs <- fnames[fname.sample %in% s]
+  dt <- rbindlist(lapply(fs, fread, select=c(3,4,5,6,14), sep="\t"))
+  # stats[s,c('libCompl', 'cdnaCompl', 'libComplFlat', 'cdnaComplFlat') := as.data.table(t(c(colSums(dt), colSums(dt>0))))]
+  stats[s,c('libCompl', 'cdnaCompl', 'libComplFlat', 'cdnaComplFlat') := 
+          dt[,.('libCompl'=sum(count), 'cdnaCompl'=sum(get(colnames(dt)[5])), 'libComplFlat'=sum(count>0), 'cdnaComplFlat'=sum(0+(get(colnames(dt)[5]))>0))]]
+
+  sname <- colnames(dt)[5]
+  data4viz[[s]] <- list(iPCR=dt[,.N,by="count"][order(count)],
+                        cDNA=dt[,.N,by=eval(sname)][order(get(sname))],
+                        ratio=dt[get(sname)>0,.(ratio=get(sname)/count)][,.N, by=ratio][order(ratio)],
+                        chrom=dt[,.N,by=chrom][order(chrom)],
+                        fragLen=dt[!(is.na(start) | is.na(end)),.(len=end-start+1)][,.N, by=len][order(len)],
+                        sampledCompl=
+  sapply(mclapply(10^seq(5,8,by=0.1), 
+                  function(s){sample(rep(seq.int(nrow(dt)), dt$count), size=s, replace=TRUE)},
+                  mc.cores = 30), 
+         function(x){tbl=table(x);c(length(tbl),sum(tbl==1))}))
+}
+#dt <- NULL
+#gc()
+#print(stats)
+```
+
+## Visualization
+
+```{r plot.iPCR.distr, out.width=1000}
+#for (type in c("iPCR","cDNA","ratio","fragLen")) {
+col <- rep(1:5,2)
+names(col) <- names(data4viz)
+pch <- rep(c(4,19), each=5)
+names(pch) <- names(data4viz)
+type = "iPCR"
+xlim <- range(unlist(lapply(data4viz, function(e) {e[[type]]$count})))
+ylim <- range(unlist(lapply(data4viz, function(e) {e[[type]]$N})))
+plot(NA,ty='p', log='yx', pch=19, cex=.5, xlim=xlim, ylim=ylim, 
+     ylab='frequency',xlab='iPCR count', main=sprintf("Distribution iPCR counts per SuRE fragment"))
+for (s in names(data4viz)) {
+  points(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s])
+}
+legend(x='topr', inset=0.02, bty='n',legend=names(data4viz), col=col, pch=pch,ncol = 2)
+
+```
+
+```{r plot.cDNA.distr, out.width=1200}
+col <- rep(1:5,2)
+names(col) <- names(data4viz)
+pch <- rep(c(4,19), each=5)
+names(pch) <- names(data4viz)
+type = "cDNA"
+xlim <- range(unlist(lapply(data4viz, function(e) {e[[type]][[1]]})))
+ylim <- range(unlist(lapply(data4viz, function(e) {e[[type]]$N})))
+plot(NA,ty='p', log='y', pch=19, cex=.5, xlim=xlim, ylim=ylim, 
+     ylab='frequency',xlab='iPCR count', main=sprintf("Distribution cDNA counts per SuRE fragment"))
+for (s in names(data4viz)) {
+  points(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s])
+}
+legend(x='topr', inset=0.02, bty='n',legend=names(data4viz), col=col, pch=pch,ncol = 2)
+
+par(mfrow=c(2,5), mar=c(2,2,1,1))
+for (s in names(data4viz)) {
+  plot(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s],ty='p', log='y', ylim=ylim, 
+     ylab='',xlab='', main=sprintf("%s",s))
+}
+
+```
+
+```{r plot.fraglen.distr, out.width=1200}
+col <- rep(1:5,2)
+names(col) <- names(data4viz)
+pch <- rep(c(4,19), each=5)
+names(pch) <- names(data4viz)
+type = "fragLen"
+xlim <- c(1,max(unlist(lapply(data4viz, function(e) {e[[type]][[1]]}))))
+ylim <- c(1,max(unlist(lapply(data4viz, function(e) {e[[type]]$N}))))
+main <- "Distribution fragment length"
+xlab=sprintf("fragment length (bp)")
+ylab <- "frequency"
+plot(NA,ty='p', log='', xlim=xlim, ylim=ylim, ylab=ylab,xlab=xlab, main=main)
+for (s in names(data4viz)) {
+  points(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s])
+}
+legend(x='topr', inset=0.02, bty='n',legend=names(data4viz), col=col, pch=pch,ncol = 2)
+
+```
+
+```{r plot.SuRE.score, out.width=1200}
+col <- rep(1:5,2)
+names(col) <- names(data4viz)
+pch <- rep(c(4,19), each=5)
+names(pch) <- names(data4viz)
+type = "ratio"
+xlim <- range(unlist(lapply(data4viz, function(e) {e[[type]][[1]]})))
+ylim <- c(0,100) #range(unlist(lapply(data4viz, function(e) {e[[type]]$N})))
+main <- sprintf("%s: distribution cDNA/iPCR ratio",s)
+xlab <- "ratio(cDNA/iPCR), for cDNA>0"
+ylab <- "cumulative percentage"
+plot(NA,ty='p', log='x', xlim=xlim, ylim=ylim, ylab=ylab,xlab=xlab, main=main)
+for (s in names(data4viz)) {
+  with(data4viz[[s]][[type]], points(ratio, 100*cumsum(N)/sum(N), pch=pch[s], cex=.5, col=col[s]))
+}
+legend(x='topl', inset=0.02, bty='n',legend=names(data4viz), col=col, pch=pch,ncol = 2)
+
+par(mfrow=c(2,5), mar=c(2,2,1,1))
+for (s in names(data4viz)) {
+  plot(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s],ty='p', log='x',
+     ylab='',xlab='', main=sprintf("%s",s))
+}
+```
+
+```{r plot.chrom, out.width=1200}
+chromcount <- sapply(data4viz, function(e){e[["chrom"]][["N"]]})
+rownames(chromcount) <- data4viz[[1]][["chrom"]][["chrom"]]
+chromcount <- t(t(chromcount)/colSums(chromcount))
+barplot(t(chromcount), beside = T, col=1:5, angle=rep(c(45,-45),times=5), density=10,space = c(.0,1.2))
+legend(x='topr',inset=0.025, bty='n', legend=names(data4viz), fill =1:5, angle=rep(c(45,-45),times=5), density=20,cex=1.2)
+```
+
+
+### Complexity vs. flat complexity
+
+Complexity is defined as the sum of counts of fragments detected in either iPCR or cDNA data. Flat complexity is defined as the sum of all fragments detected in either iPCR or cDNA data. The two generally highly correlate. outliers may indicate under-sequencing of other problems.
+
+Also plot distribution of fragment lengths
+
+```{r plots, out.width="100%"}
+plot(stats$iPCRraw, stats$libCompl, col=1:4, pch=19,log='y', xlab="Raw iPCR read count (in fastq, x1e6)", ylab="iPCR count (x1e6, see legend)", main="Library complexity and iPCR counts vs raw read count")
+legend(x="topl", inset = 0.025, bty='n', legend=c("iPCR total count","library complexity\n(ie, detected fragment)"), pch=c(19,1))
+text(stats$iPCRraw, stats$libCompl,labels=stats$short,pos=1:4,xpd=NA,col=1:4)
+points(stats$iPCRraw, stats$libComplFlat, col=1:4, pch=1)
+
+plot(stats$libCompl, stats$libComplFlat, pch=19, xlab="library complexity (sum of iPCR counts)", ylab="flat complexity (detected fragments)", main="Library complexity; flat vs full", col=1:4)
+#abline(lm(libComplFlat~libCompl,data = as.data.frame(stats)), lty=3)
+text(stats$libCompl, stats$libComplFlat,labels=stats$short,pos=1:4,xpd=NA,col=1:4)
+cor(stats$libCompl, stats$libComplFlat)
+
+plot(stats$cdnaCompl, stats$cdnaComplFlat, pch=19, xlab="cDNA complexity (sum of cDNA counts)", ylab="flat complexity (detected fragments)", main="cDNA complexity; flat vs full",col=1:4, ylim=c(-5e5,0.7e7))
+#abline(lm(cdnaComplFlat~cdnaCompl,data = as.data.frame(stats)), lty=3)
+text(stats$cdnaCompl, stats$cdnaComplFlat,labels=stats$short,pos=1:4,xpd=NA,col=1:4)
+cor(stats$cdnaCompl, stats$cdnaComplFlat)
+```
+
+**Conclusion:**  
+
+* iPCR libraries all look good, as far as complexity vs flat complexity is concerned.
+* Dm04_DGRP360 and Dm05_DGRP362 have very low library complexities
+* Dm3_DGRP324 has a relatively high cDNA complexity given the low flat cDNA complexity
+* Dm04_DGRP360, Dm05_DGRP362, and Dm12_T01 have very low cDNA complexities
+
+
+# R session
+
+```{r session}
+sessionInfo()
+```
