@@ -766,3 +766,128 @@ Not so good.
 Strains with lower overlap tend to have worse sequencing depth of the cDNA.
 
 I sent an email to Matteo/Mattia with the bad news.
+
+# 20191104
+
+## Need for cross correlating iPCR data sets
+
+Matteo replied he doesn't know what happened. He can't say whether either the
+cDNA or the iPCR samples are swapped. So, I need to check the iPCR samples as
+well.
+
+For the iPCR data sets I want to extract reads for a single chromosome from the
+bam files with previously aligned reads. Then re-align these reads to all other
+9 genome sequences. I assume that the alignment against the correct genome
+sequence will have the maximal alignment scores.
+
+## Extract reads from chr3L, for T01
+
+```
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/
+mkdir -p LP20191104_iPCR_cross_correlation
+cd LP20191104_iPCR_cross_correlation
+
+for f in ../LP2019*_pipelineOutput/iPCR/*_B1_T01/05_split_bam/*chr3L.bam; do
+# for f in "../LP20191017_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/05_split_bam/*chr3L.bam"; do
+  tt=$( basename ${f} )
+  f1=${tt%.bam}_forw.fq
+  f2=${tt%.bam}_rev.fq
+  CMD="samtools bam2fq -1 ${f1} -2 ${f2} -F 2304 -@ 4 ${f}"
+  echo "CMD = ${CMD[@]}"
+  eval "${CMD[@]}"
+  for b in /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/*; do
+    index=${b}/$( basename ${b} )
+
+    CMD="(bowtie2  --sam-no-qname-trunc -p 35 -x ${index} -1 ${f1} -2 ${f2} -X 500 | samtools view -S - | awk -F\"\t\" '{as=gensub(\"AS:i:(.*)\$\",\"\\\\1\",\"g\",\$12); print \$1\"\t\"as}' > ${tt%.bam}_$( basename $index ).tsv) 2>>${tt%.bam}.stats"
+    echo "CMD = ${CMD[@]}"
+    eval "${CMD[@]}"
+  done
+done
+```
+
+I made a mistake: The B04 sample used T01 as label. I renamed all files and dirs in `data/intermediate/LP20191028_Dm08_B04_pipelineOutput/iPCR/T01_B1_T01/05_split_bam/` from T01 to B04!!!
+
+```
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/
+# mkdir -p LP20191104_iPCR_cross_correlation
+cd LP20191104_iPCR_cross_correlation
+
+for f in ../LP2019*_[BT]0[14]_pipelineOutput/iPCR/*_B1_T01/05_split_bam/*chr3L.bam; do
+# for f in "../LP20191017_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/05_split_bam/*chr3L.bam"; do
+  tt=$( basename ${f} )
+  f1=${tt%.bam}_forw.fq
+  f2=${tt%.bam}_rev.fq
+  CMD="samtools bam2fq -1 ${f1} -2 ${f2} -F 2304 -@ 4 ${f}"
+  echo "CMD = ${CMD[@]}"
+  eval "${CMD[@]}"
+  for b in /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/*; do
+    index=${b}/$( basename ${b} )
+
+    CMD="(bowtie2  --sam-no-qname-trunc -p 35 -x ${index} -1 ${f1} -2 ${f2} -X 500 | samtools view -S - | awk -F\"\t\" '{as=gensub(\"AS:i:(.*)\$\",\"\\\\1\",\"g\",\$12); print \$1\"\t\"as}' > ${tt%.bam}_$( basename $index ).tsv) 2>>${tt%.bam}.stats"
+    echo "CMD = ${CMD[@]}"
+    eval "${CMD[@]}"
+  done
+done
+```
+
+# 20191106
+
+## Checking cross contamination of iPCR samples
+
+Analysis of correspondence of iPCR samples shows that B04 and ZH23 have lower
+correspondence to the appearent correct data files than other samples. One
+possibility is that samples got cross contaminated. I want to check whether I
+see a larger overlap of iPCR barcodes of the B04/ZH23 samples with other data
+sets, as compared to the other samples. For this I will collect barcodes of the
+iPCR data sets anddetermine overlap with other data sets, for all samples.
+
+```
+cd data/intermediate/LP20191106_iPCR_cross_contamination
+for f in ../*_pipelineOutput/iPCR/*T01/01*/*for*info*; do 
+  (strain=$(bn=$( basename $f ); 
+   echo ${bn%_B1_T01_forw.info.gz}); 
+   zcat $f | \
+     awk -F"\t" '$5~/[ACGT]+/{print $5}' | \
+     sort | \
+     uniq -c | \
+     sort -rg > ${strain}_BC.tbl& ) ; 
+done
+
+```
+
+```
+for t1 in *tbl; do 
+  for t2 in *tbl; do 
+    [ $t1 == $t2 ] && continue; 
+    awk ' length($2)!=20{next} 
+          NR==FNR{a[$2]=1; next} 
+          {if($2 in a){a[$2]+=2}else{a[$2]=2}} 
+          END{for(k in a){b[a[k]]++} 
+              for(k in b){print k, b[k]}}' $t1 $t2 > ${t1%_BC.tbl}_${t2%_BC.tbl}.tbl; 
+  done; 
+done
+```
+
+## Fixing swaps
+
+There are two types of swaps, and a possible contamination:
+- cDNA samples 3,4,5,6,8 are swapped to 8,3,4,5,6
+- iPCR samples 12, 13 are swapped to 13,12
+- iPCR samples Dm08_B04 and Dm13_ZH23 (filename Dm12_T01) may have been cross-contaminated
+
+
+| ------------ | ------------- | ------------- |
+| sample       | iPCR filename | cDNA filename |
+| ------------ | ------------- | ------------- |
+| Dm03_DGRP324 | Dm03          | Dm04          |
+| Dm04_DGRP360 | Dm04          | Dm05          |
+| Dm05_DGRP362 | Dm05          | Dm06          |
+| Dm06_DGRP714 | Dm06          | Dm08          |
+| Dm08_B04     | Dm08          | Dm03          |
+| Dm09_I02     | Dm09          | Dm09          |
+| Dm10_I33     | Dm10          | Dm10          |
+| Dm11_N02     | Dm11          | Dm11          |
+| Dm12_T01     | Dm13          | Dm12          |
+| Dm13_ZH23    | Dm12          | Dm13          |
+| ------------ | ------------- | ------------- |
+
