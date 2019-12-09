@@ -1,0 +1,38 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 15
+Rules claiming more threads will be scaled down.
+Provided resources: ram=100
+Job counts:
+	count	jobs
+	1	addBC2bedpe_multi
+	1	cDNA
+	1	iPCR_merge_bedpe_genomeWide
+	6	merge_ipcr_cdna
+	6	reverse_liftover
+	6	sort_cnt_tbls
+	1	sorted_cnt_tbls
+	22
+
+[Mon Dec  9 14:00:54 2019]
+rule cDNA:
+    input: /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/CDRJ7ANXX_SuRE_III_a_19s003656-1-1_Perino_lane7Dm3_sequence.txt.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/cDNA/B04_B1_T1/B04_B1_T1_trimmed_table.txt.gz
+    jobid: 19
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/cDNA/B04_B1_T1/B04_B1_T1_trimmed_table.txt.gz
+    wildcards: s=B04_B1_T1
+
+/DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/cDNA-plDNA-count-BC.bash -l -b 'B04_B1_T1' -o '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/cDNA/B04_B1_T1' -a 'CCTAGCTAACTATAACGGTCCTAAGGTAGCGAA' /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/CDRJ7ANXX_SuRE_III_a_19s003656-1-1_Perino_lane7Dm3_sequence.txt.gz
+
+[Mon Dec  9 14:00:54 2019]
+rule addBC2bedpe_multi:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/01_fastq_trimmed/B04_B1_T01_forw.info.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01.log, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01.stats
+    jobid: 21
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr2L.bedpe.gz
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR, smpl=B04_B1_T01
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_addBC2bedpe.py --bedpe /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/06_bedpe/B04_B1_T01_chrM.bedpe.gz --info /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/01_fastq_trimmed/B04_B1_T01_forw.info.gz --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01_chrM.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01.log --stats /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm08_B04_pipelineOutput/iPCR/B04_B1_T01/07_bedpe_BC/B04_B1_T01.stats
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415

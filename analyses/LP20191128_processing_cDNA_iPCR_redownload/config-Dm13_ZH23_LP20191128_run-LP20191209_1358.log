@@ -1,0 +1,26 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 15
+Rules claiming more threads will be scaled down.
+Provided resources: ram=100
+Job counts:
+	count	jobs
+	1	bedpe
+	6	iPCR_bam2bedpe
+	1	iPCR_coordsort_bam
+	1	iPCR_map_bowtie2_paired_end
+	1	iPCR_splitBAM
+	6	iPCR_templateBAM
+	1	iPCR_trim
+	17
+
+[Mon Dec  9 13:58:31 2019]
+rule iPCR_trim:
+    input: /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H5JNHBGXC_iPCR_mix2_19s003539-1-1_Perino_lane1DM12GDLT01_1_sequence.txt.gz, /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H5JNHBGXC_iPCR_mix2_19s003539-1-1_Perino_lane1DM12GDLT01_2_sequence.txt.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed/ZH23_B1_T01_forw.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed/ZH23_B1_T01_rev.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed/ZH23_B1_T01_forw.info.gz
+    jobid: 16
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed/ZH23_B1_T01_forw.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed/ZH23_B1_T01_rev.fastq.gz
+    wildcards: s=ZH23_B1_T01
+
+/DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR-trim.bash -o '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed' -l -d '' -b 'ZH23_B1_T01' -f 'CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT' -r 'CCAGTCGT' -c /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H5JNHBGXC_iPCR_mix2_19s003539-1-1_Perino_lane1DM12GDLT01_1_sequence.txt.gz /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H5JNHBGXC_iPCR_mix2_19s003539-1-1_Perino_lane1DM12GDLT01_2_sequence.txt.gz; parallel gzip ::: '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed'/*fastq '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm13_ZH23_pipelineOutput/iPCR/ZH23_B1_T01/01_fastq_trimmed'/*info
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415

@@ -1,0 +1,2218 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 15
+Rules claiming more threads will be scaled down.
+Provided resources: ram=100
+Job counts:
+	count	jobs
+	1	bedpe
+	6	iPCR_bam2bedpe
+	1	iPCR_coordsort_bam
+	1	iPCR_map_bowtie2_paired_end
+	1	iPCR_splitBAM
+	6	iPCR_templateBAM
+	1	iPCR_trim
+	17
+
+[Tue Dec  3 10:48:14 2019]
+rule iPCR_trim:
+    input: /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H3C3HBGXC_iPCR_mix1_19s003538-1-1_Perino_lane1DM05DGRP362_1_sequence.txt.gz, /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H3C3HBGXC_iPCR_mix1_19s003538-1-1_Perino_lane1DM05DGRP362_2_sequence.txt.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_forw.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_rev.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_forw.info.gz
+    jobid: 16
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_rev.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_forw.fastq.gz
+    wildcards: s=DGRP-362_B1_T01
+
+/DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR-trim.bash -o '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed' -l -d '' -b 'DGRP-362_B1_T01' -f 'CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT' -r 'CCAGTCGT' -c /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H3C3HBGXC_iPCR_mix1_19s003538-1-1_Perino_lane1DM05DGRP362_1_sequence.txt.gz /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/H3C3HBGXC_iPCR_mix1_19s003538-1-1_Perino_lane1DM05DGRP362_2_sequence.txt.gz; parallel gzip ::: '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed'/*fastq '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed'/*info
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Tue Dec  3 13:55:09 2019]
+Finished job 16.
+1 of 17 steps (6%) done
+
+[Tue Dec  3 13:55:09 2019]
+rule iPCR_map_bowtie2_paired_end:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_forw.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_rev.fastq.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/02_mapped/DGRP-362_B1_T01.bam
+    jobid: 15
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/02_mapped/DGRP-362_B1_T01.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_rev.fastq.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_forw.fastq.gz
+    wildcards: s=DGRP-362_B1_T01
+    priority: 50
+    threads: 5
+    resources: ram=5
+
+/DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR-map.bash -o '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/02_mapped' -l -n 5 -t '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/DGRP-362_B1_T01.stats' -b 'DGRP-362_B1_T01' -m '500' -s '/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/DGRP-362/DGRP-362' -c /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_forw.fastq.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/01_fastq_trimmed/DGRP-362_B1_T01_rev.fastq.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Tue Dec  3 19:24:25 2019]
+Finished job 15.
+2 of 17 steps (12%) done
+
+[Tue Dec  3 19:24:25 2019]
+rule iPCR_coordsort_bam:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/02_mapped/DGRP-362_B1_T01.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam.bai
+    jobid: 8
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/02_mapped/DGRP-362_B1_T01.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01
+    threads: 4
+    resources: ram=60
+
+samtools sort -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam -@ 4 -m 20G -T /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/02_mapped/DGRP-362_B1_T01.bam ; samtools index /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam ; 
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Tue Dec  3 19:45:10 2019]
+Finished job 8.
+3 of 17 steps (18%) done
+
+[Tue Dec  3 19:45:10 2019]
+rule iPCR_templateBAM:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L_template.bam
+    jobid: 11
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L_template.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, chr=chr3L
+
+samtools view -H -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L_template.bam
+
+[Tue Dec  3 19:45:10 2019]
+rule iPCR_templateBAM:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R_template.bam
+    jobid: 12
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R_template.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, chr=chr3R
+
+samtools view -H -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R_template.bam
+
+[Tue Dec  3 19:45:10 2019]
+rule iPCR_templateBAM:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4_template.bam
+    jobid: 13
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4_template.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, chr=chr4
+
+samtools view -H -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4_template.bam
+
+[Tue Dec  3 19:45:10 2019]
+rule iPCR_templateBAM:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L_template.bam
+    jobid: 9
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L_template.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, chr=chr2L
+
+samtools view -H -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L_template.bam
+
+[Tue Dec  3 19:45:10 2019]
+rule iPCR_templateBAM:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM_template.bam
+    jobid: 14
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM_template.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, chr=chrM
+
+samtools view -H -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM_template.bam
+
+[Tue Dec  3 19:45:10 2019]
+rule iPCR_templateBAM:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R_template.bam
+    jobid: 10
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R_template.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, chr=chr2R
+
+samtools view -H -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R_template.bam
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Tue Dec  3 19:45:13 2019]
+Finished job 9.
+4 of 17 steps (24%) done
+[Tue Dec  3 19:45:13 2019]
+Finished job 11.
+5 of 17 steps (29%) done
+[Tue Dec  3 19:45:13 2019]
+Finished job 13.
+6 of 17 steps (35%) done
+[Tue Dec  3 19:45:13 2019]
+Finished job 12.
+7 of 17 steps (41%) done
+[Tue Dec  3 19:45:13 2019]
+Finished job 10.
+8 of 17 steps (47%) done
+[Tue Dec  3 19:45:14 2019]
+Finished job 14.
+9 of 17 steps (53%) done
+
+[Tue Dec  3 19:45:14 2019]
+rule iPCR_splitBAM:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM_template.bam
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM.bam
+    jobid: 7
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R.bam; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM_template.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R_template.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01
+
+rename -f -e 's/_template//' /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L_template.bam /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R_template.bam /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L_template.bam /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R_template.bam /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4_template.bam /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM_template.bam ; bam splitChromosome  --in /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/04_sort_after_assign/DGRP-362_B1_T01.bam --out '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_'; for f in '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_'*bam; do mv $f ${f}.tmp; samtools sort -n -o ${f} ${f}.tmp; rm -f ${f}.tmp; done ; 
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Reference Name: ENA|AE017196|AE017196.1 has 1207218 records
+Reference Name: chr2L has 18310948 records
+Reference Name: chr2R has 20450816 records
+Reference Name: chr3L has 20992566 records
+Reference Name: chr3R has 25413900 records
+Reference Name: chr4 has 633402 records
+Reference Name: chrM has 43906 records
+Reference Name: chrUn_DS485919v1 has 102 records
+Reference Name: chrUn_DS483755v1 has 4868 records
+Reference Name: chrUn_DS485425v1 has 184 records
+Reference Name: chrUn_DS484861v1 has 646 records
+Reference Name: chrUn_DS484484v1 has 5654 records
+Reference Name: chrUn_DS483705v1 has 468 records
+Reference Name: chrUn_DS485490v1 has 140 records
+Reference Name: chrUn_DS485998v1 has 24 records
+Reference Name: chrUn_DS483873v1 has 854 records
+Reference Name: chrUn_DS485608v1 has 386 records
+Reference Name: chrUn_DS485270v1 has 2876 records
+Reference Name: chrUn_DS485979v1 has 482 records
+Reference Name: chrUn_DS485398v1 has 178 records
+Reference Name: chrUn_DS484139v1 has 156 records
+Reference Name: chrUn_DS483906v1 has 5202 records
+Reference Name: chrUn_DS485760v1 has 8 records
+Reference Name: chrUn_DS484191v1 has 4854 records
+Reference Name: chrUn_DS485340v1 has 16 records
+Reference Name: chrUn_DS484489v1 has 160 records
+Reference Name: chrUn_DS485495v1 has 1978 records
+Reference Name: chrUn_DS484923v1 has 1494 records
+Reference Name: chrUn_DS484663v1 has 3666 records
+Reference Name: chrUn_DS485390v1 has 1852 records
+Reference Name: chrUn_DS485130v1 has 536 records
+Reference Name: chrUn_DS485995v1 has 82960 records
+Reference Name: chrUn_DS484448v1 has 80 records
+Reference Name: chrUn_DS484827v1 has 30 records
+Reference Name: chrUn_DS485467v1 has 178 records
+Reference Name: chrUn_DS485433v1 has 1050 records
+Reference Name: chrUn_DS484944v1 has 108 records
+Reference Name: chrUn_DS485504v1 has 4098 records
+Reference Name: chrUn_DS484938v1 has 17612 records
+Reference Name: chrUn_DS485984v1 has 14910 records
+Reference Name: chrUn_DS484921v1 has 948 records
+Reference Name: chrUn_DS485859v1 has 942 records
+Reference Name: chrUn_DS485086v1 has 386 records
+Reference Name: chrUn_DS484058v1 has 2860 records
+Reference Name: chrUn_DS485294v1 has 640 records
+Reference Name: chrUn_DS484855v1 has 146 records
+Reference Name: chrUn_DS485356v1 has 254 records
+Reference Name: chrUn_DS485246v1 has 748 records
+Reference Name: chrUn_DS485386v1 has 2230 records
+Reference Name: chrUn_DS484726v1 has 494 records
+Reference Name: chrUn_DS484366v1 has 536 records
+Reference Name: chrUn_DS486002v1 has 2 records
+Reference Name: chrUn_DS484770v1 has 254 records
+Reference Name: chrUn_DS485354v1 has 178 records
+Reference Name: chrUn_DS483728v1 has 460 records
+Reference Name: chrUn_DS485403v1 has 392 records
+Reference Name: chrUn_DS484964v1 has 18 records
+Reference Name: chrUn_DS483921v1 has 634 records
+Reference Name: chrUn_DS485602v1 has 102 records
+Reference Name: chrUn_DS485783v1 has 38 records
+Reference Name: chrUn_DS485547v1 has 158 records
+Reference Name: chrUn_DS485280v1 has 148 records
+Reference Name: chrUn_DS483976v1 has 450 records
+Reference Name: chrUn_DS484972v1 has 3264 records
+Reference Name: chrUn_DS484407v1 has 186 records
+Reference Name: chrUn_DS484446v1 has 540 records
+Reference Name: chrUn_DS485906v1 has 1690 records
+Reference Name: chrUn_DS484769v1 has 68 records
+Reference Name: chrUn_DS484527v1 has 134 records
+Reference Name: chrUn_DS484933v1 has 248 records
+Reference Name: chrUn_DS483748v1 has 1622 records
+Reference Name: chrUn_DS484460v1 has 434 records
+Reference Name: chrUn_DS483711v1 has 680 records
+Reference Name: chrUn_DS484039v1 has 502 records
+Reference Name: chrUn_DS484339v1 has 1054 records
+Reference Name: chrUn_DS485457v1 has 94 records
+Reference Name: chrUn_DS485643v1 has 796 records
+Reference Name: chrUn_DS484689v1 has 15410 records
+Reference Name: chrUn_DS485822v1 has 374 records
+Reference Name: chrUn_DS485678v1 has 10512 records
+Reference Name: chrUn_DS485150v1 has 4626 records
+Reference Name: chrUn_DS485957v1 has 1030 records
+Reference Name: chrUn_DS485541v1 has 132 records
+Reference Name: chrUn_DS485741v1 has 126 records
+Reference Name: chrUn_DS484490v1 has 160 records
+Reference Name: chrUn_DS484881v1 has 28 records
+Reference Name: chrUn_DS485539v1 has 16 records
+Reference Name: chrUn_DS485958v1 has 216 records
+Reference Name: chrUn_DS485748v1 has 218 records
+Reference Name: chrUn_DS484822v1 has 6 records
+Reference Name: chrUn_DS485421v1 has 436 records
+Reference Name: chrUn_DS485296v1 has 638 records
+Reference Name: chrUn_DS485337v1 has 216 records
+Reference Name: chrUn_DS483700v1 has 288 records
+Reference Name: chrUn_DS484511v1 has 136 records
+Reference Name: chrUn_DS485973v1 has 126 records
+Reference Name: chrUn_DS483719v1 has 2562 records
+Reference Name: chrUn_DS484571v1 has 334 records
+Reference Name: chrUn_DS485733v1 has 38 records
+Reference Name: chrUn_CP007102v1 has 386 records
+Reference Name: chrUn_DS484052v1 has 1154 records
+Reference Name: chrUn_DS485073v1 has 836 records
+Reference Name: chrUn_DS484257v1 has 5712 records
+Reference Name: chrUn_DS485376v1 has 718 records
+Reference Name: chrUn_DS484485v1 has 226 records
+Reference Name: chrUn_DS485572v1 has 114 records
+Reference Name: chrUn_DS484816v1 has 166 records
+Reference Name: chrUn_DS485925v1 has 158 records
+Reference Name: chrUn_DS485239v1 has 354 records
+Reference Name: chrUn_DS485853v1 has 178 records
+Reference Name: chrUn_DS485443v1 has 1156 records
+Reference Name: chrUn_DS485381v1 has 764 records
+Reference Name: chrUn_DS485339v1 has 2372 records
+Reference Name: chrUn_DS484707v1 has 15288 records
+Reference Name: chrUn_DS485675v1 has 46 records
+Reference Name: chrUn_DS485065v1 has 54 records
+Reference Name: chrUn_DS484546v1 has 828 records
+Reference Name: chrUn_DS485846v1 has 982 records
+Reference Name: chrUn_DS484667v1 has 770 records
+Reference Name: chrUn_DS484756v1 has 24668 records
+Reference Name: chrUn_DS485558v1 has 15216 records
+Reference Name: chrUn_DS485703v1 has 860 records
+Reference Name: chrUn_DS483977v1 has 4010 records
+Reference Name: chrUn_DS485341v1 has 1104 records
+Reference Name: chrUn_DS484226v1 has 9094 records
+Reference Name: chrUn_DS485505v1 has 844 records
+Reference Name: chrUn_DS485451v1 has 1986 records
+Reference Name: chrUn_DS484736v1 has 1316 records
+Reference Name: chrUn_DS484304v1 has 1274 records
+Reference Name: chrUn_DS485024v1 has 15730 records
+Reference Name: chrUn_DS485808v1 has 24322 records
+Reference Name: chrUn_DS485578v1 has 488 records
+Reference Name: chrUn_DS485029v1 has 138 records
+Reference Name: chrUn_DS485634v1 has 98 records
+Reference Name: chrUn_DS483877v1 has 92 records
+Reference Name: chrUn_DS483723v1 has 1956 records
+Reference Name: chrUn_DS485038v1 has 456 records
+Reference Name: chrUn_DS485788v1 has 128 records
+Reference Name: chrUn_DS484496v1 has 450 records
+Reference Name: chrUn_DS484841v1 has 410 records
+Reference Name: chrUn_DS485123v1 has 140 records
+Reference Name: chrUn_DS485261v1 has 10 records
+Reference Name: chrUn_DS485673v1 has 36 records
+Reference Name: chrUn_DS483879v1 has 786 records
+Reference Name: chrUn_DS484716v1 has 150 records
+Reference Name: chrUn_DS485907v1 has 272 records
+Reference Name: chrUn_DS484100v1 has 712 records
+Reference Name: chrUn_DS486008v1 has 420 records
+Reference Name: chrUn_DS485747v1 has 70 records
+Reference Name: chrUn_DS485891v1 has 178 records
+Reference Name: chrUn_DS484329v1 has 470 records
+Reference Name: chrUn_DS484653v1 has 112 records
+Reference Name: chrUn_DS483692v1 has 420 records
+Reference Name: chrUn_DS485387v1 has 64 records
+Reference Name: chrUn_DS483938v1 has 806 records
+Reference Name: chrUn_DS484073v1 has 52 records
+Reference Name: chrUn_DS483957v1 has 258 records
+Reference Name: chrUn_DS484050v1 has 44 records
+Reference Name: chrUn_DS483694v1 has 12 records
+Reference Name: chrUn_DS485407v1 has 4 records
+Reference Name: chrUn_DS485357v1 has 30 records
+Reference Name: chrUn_DS484122v1 has 328 records
+Reference Name: chrUn_DS484548v1 has 352 records
+Reference Name: chrUn_DS485254v1 has 216 records
+Reference Name: chrUn_DS484988v1 has 416 records
+Reference Name: chrUn_DS485205v1 has 34 records
+Reference Name: chrUn_DS485793v1 has 26 records
+Reference Name: chrUn_DS485496v1 has 20 records
+Reference Name: chrUn_DS484904v1 has 1128 records
+Reference Name: chrUn_DS483707v1 has 3618 records
+Reference Name: chrUn_DS485365v1 has 46 records
+Reference Name: chrUn_DS485789v1 has 302 records
+Reference Name: chrUn_DS484842v1 has 168 records
+Reference Name: chrUn_DS484180v1 has 6072 records
+Reference Name: chrUn_DS485333v1 has 38 records
+Reference Name: chrUn_DS485954v1 has 122 records
+Reference Name: chrUn_DS484202v1 has 4922 records
+Reference Name: chrUn_DS485825v1 has 138 records
+Reference Name: chrUn_DS485285v1 has 64 records
+Reference Name: chrUn_DS485223v1 has 618 records
+Reference Name: chrUn_DS485313v1 has 194 records
+Reference Name: chrUn_DS484567v1 has 4538 records
+Reference Name: chrUn_DS484040v1 has 626 records
+Reference Name: chrUn_DS484475v1 has 354 records
+Reference Name: chrUn_DS484168v1 has 170 records
+Reference Name: chrUn_DS485711v1 has 2 records
+Reference Name: chrUn_DS485475v1 has 174 records
+Reference Name: chrUn_DS484532v1 has 312 records
+Reference Name: chrUn_DS484751v1 has 2004 records
+Reference Name: chrUn_DS484229v1 has 32 records
+Reference Name: chrUn_DS485870v1 has 10866 records
+Reference Name: chrUn_DS484787v1 has 746 records
+Reference Name: chrUn_DS484277v1 has 1446 records
+Reference Name: chrUn_DS485304v1 has 400 records
+Reference Name: chrUn_DS485794v1 has 11080 records
+Reference Name: chrUn_DS485226v1 has 7096 records
+Reference Name: chrUn_DS484470v1 has 352 records
+Reference Name: chrUn_DS484303v1 has 3084 records
+Reference Name: chrUn_DS485506v1 has 130 records
+Reference Name: chrUn_DS485522v1 has 2 records
+Reference Name: chrUn_DS484505v1 has 206 records
+Reference Name: chrUn_DS485854v1 has 60 records
+Reference Name: chrUn_DS485342v1 has 1062 records
+Reference Name: chrUn_DS484739v1 has 2108 records
+Reference Name: chrUn_DS484452v1 has 656 records
+Reference Name: chrUn_DS484720v1 has 288 records
+Reference Name: chrUn_DS485722v1 has 232 records
+Reference Name: chrUn_DS484522v1 has 452 records
+Reference Name: chrUn_DS485781v1 has 190 records
+Reference Name: chrUn_DS485542v1 has 282 records
+Reference Name: chrUn_DS485821v1 has 174 records
+Reference Name: chrUn_DS484350v1 has 658 records
+Reference Name: chrUn_DS485623v1 has 756 records
+Reference Name: chrUn_DS485989v1 has 52 records
+Reference Name: chrUn_DS485743v1 has 166 records
+Reference Name: chrUn_DS485872v1 has 264 records
+Reference Name: chrUn_DS484190v1 has 40 records
+Reference Name: chrUn_DS485240v1 has 362 records
+Reference Name: chrUn_DS484844v1 has 100 records
+Reference Name: chrUn_DS483695v1 has 6454 records
+Reference Name: chrUn_DS484798v1 has 162 records
+Reference Name: chrUn_DS484096v1 has 442 records
+Reference Name: chrUn_DS483799v1 has 604 records
+Reference Name: chrUn_DS484843v1 has 370 records
+Reference Name: chrUn_DS484659v1 has 116 records
+Reference Name: chrUn_DS485864v1 has 224 records
+Reference Name: chrUn_DS484825v1 has 80 records
+Reference Name: chrUn_DS485229v1 has 2052 records
+Reference Name: chrUn_DS485773v1 has 18 records
+Reference Name: chrUn_DS485659v1 has 120 records
+Reference Name: chrUn_DS484993v1 has 34 records
+Reference Name: chrUn_DS484896v1 has 48 records
+Reference Name: chrUn_DS486005v1 has 2 records
+Reference Name: chrUn_DS485047v1 has 160 records
+Reference Name: chrUn_DS484069v1 has 6626 records
+Reference Name: chrUn_DS485138v1 has 310 records
+Reference Name: chrUn_DS485886v1 has 42 records
+Reference Name: chrUn_DS484493v1 has 378 records
+Reference Name: chrUn_DS485661v1 has 56 records
+Reference Name: chrUn_DS484866v1 has 246 records
+Reference Name: chrUn_DS484772v1 has 66 records
+Reference Name: chrUn_DS484727v1 has 156 records
+Reference Name: chrUn_DS485838v1 has 106 records
+Reference Name: chrUn_DS485701v1 has 236 records
+Reference Name: chrUn_DS483936v1 has 88 records
+Reference Name: chrUn_DS485581v1 has 1354 records
+Reference Name: chrUn_DS485019v1 has 14 records
+Reference Name: chrUn_DS483940v1 has 3428 records
+Reference Name: chrUn_DS485810v1 has 96 records
+Reference Name: chrUn_DS485982v1 has 60 records
+Reference Name: chrUn_DS485165v1 has 334 records
+Reference Name: chrUn_DS484404v1 has 318 records
+Reference Name: chrUn_DS483736v1 has 914 records
+Reference Name: chrUn_DS485654v1 has 636 records
+Reference Name: chrUn_DS485415v1 has 11430 records
+Reference Name: chrUn_DS484275v1 has 1414 records
+Reference Name: chrUn_DS485255v1 has 176240 records
+Reference Name: chrUn_DS484383v1 has 3214 records
+Reference Name: chrUn_DS485331v1 has 1502 records
+Reference Name: chrUn_DS483901v1 has 940 records
+Reference Name: chrUn_DS484884v1 has 930 records
+Reference Name: chrUn_DS484515v1 has 1192 records
+Reference Name: chrUn_DS485883v1 has 22 records
+Reference Name: chrUn_DS483703v1 has 6632 records
+Reference Name: chrUn_DS485311v1 has 372 records
+Reference Name: chrUn_DS484897v1 has 2 records
+Reference Name: chrUn_DS483933v1 has 128 records
+Reference Name: chrUn_DS485740v1 has 346 records
+Reference Name: chrUn_DS485290v1 has 22 records
+Reference Name: chrUn_DS484481v1 has 230 records
+Reference Name: chrUn_DS485349v1 has 44 records
+Reference Name: chrUn_DS484454v1 has 2578 records
+Reference Name: chrUn_DS483808v1 has 1252 records
+Reference Name: chrUn_DS484976v1 has 50 records
+Reference Name: chrUn_DS484311v1 has 980 records
+Reference Name: chrUn_DS485089v1 has 1334 records
+Reference Name: chrUn_DS485985v1 has 642 records
+Reference Name: chrUn_DS485753v1 has 116 records
+Reference Name: chrUn_DS484776v1 has 1196 records
+Reference Name: chrUn_DS483864v1 has 880 records
+Reference Name: chrUn_DS485132v1 has 182 records
+Reference Name: chrUn_DS485209v1 has 76 records
+Reference Name: chrUn_DS485693v1 has 190 records
+Reference Name: chrUn_DS484210v1 has 92 records
+Reference Name: chrUn_DS484764v1 has 86 records
+Reference Name: chrUn_DS484999v1 has 8 records
+Reference Name: chrUn_DS484232v1 has 190 records
+Reference Name: chrUn_DS484262v1 has 278 records
+Reference Name: chrUn_DS484076v1 has 242 records
+Reference Name: chrUn_DS485437v1 has 46 records
+Reference Name: chrUn_DS485515v1 has 152 records
+Reference Name: chrUn_DS485199v1 has 52 records
+Reference Name: chrUn_DS485462v1 has 14122 records
+Reference Name: chrUn_DS485501v1 has 1904 records
+Reference Name: chrUn_DS484710v1 has 116 records
+Reference Name: chrUn_DS485153v1 has 758 records
+Reference Name: chrUn_DS484920v1 has 198 records
+Reference Name: chrUn_DS485163v1 has 210 records
+Reference Name: chrUn_DS485940v1 has 3214 records
+Reference Name: chrUn_DS485650v1 has 322 records
+Reference Name: chrUn_DS483849v1 has 6298 records
+Reference Name: chrUn_DS483972v1 has 854 records
+Reference Name: chrUn_DS485242v1 has 176 records
+Reference Name: chrUn_DS485056v1 has 790 records
+Reference Name: chrUn_DS485683v1 has 674 records
+Reference Name: chrUn_DS483682v1 has 370 records
+Reference Name: chrUn_DS484478v1 has 178 records
+Reference Name: chrUn_DS485325v1 has 52 records
+Reference Name: chrUn_DS484054v1 has 758 records
+Reference Name: chrUn_DS484771v1 has 166 records
+Reference Name: chrUn_DS485477v1 has 142 records
+Reference Name: chrUn_DS484170v1 has 104 records
+Reference Name: chrUn_DS484922v1 has 510 records
+Reference Name: chrUn_DS484160v1 has 1882 records
+Reference Name: chrUn_DS485812v1 has 442 records
+Reference Name: chrUn_DS485438v1 has 84 records
+Reference Name: chrUn_DS485102v1 has 5416 records
+Reference Name: chrUn_DS485082v1 has 1126 records
+Reference Name: chrUn_DS483743v1 has 268 records
+Reference Name: chrUn_DS484282v1 has 5488 records
+Reference Name: chrUn_DS485664v1 has 2334 records
+Reference Name: chrUn_DS484369v1 has 2178 records
+Reference Name: chrUn_DS485585v1 has 188 records
+Reference Name: chrUn_DS484948v1 has 2328 records
+Reference Name: chrUn_DS484728v1 has 446 records
+Reference Name: chrUn_DS484313v1 has 606 records
+Reference Name: chrUn_DS485395v1 has 92 records
+Reference Name: chrUn_DS484443v1 has 1160 records
+Reference Name: chrUn_DS483650v1 has 7892 records
+Reference Name: chrUn_DS485498v1 has 3762 records
+Reference Name: chrUn_DS485668v1 has 2958 records
+Reference Name: chrUn_DS485751v1 has 12300 records
+Reference Name: chrUn_DS484077v1 has 1220 records
+Reference Name: chrUn_DS485900v1 has 132 records
+Reference Name: chrUn_DS485545v1 has 6058 records
+Reference Name: chrUn_DS484394v1 has 5970 records
+Reference Name: chrUn_DS485064v1 has 1400 records
+Reference Name: chrUn_DS484549v1 has 774 records
+Reference Name: chrUn_DS484738v1 has 1452 records
+Reference Name: chrUn_DS484985v1 has 2380 records
+Reference Name: chrUn_DS485324v1 has 282 records
+Reference Name: chrUn_DS485904v1 has 282 records
+Reference Name: chrUn_DS484979v1 has 9332 records
+Reference Name: chrUn_DS485353v1 has 72 records
+Reference Name: chrUn_DS485688v1 has 30 records
+Reference Name: chrUn_DS484987v1 has 110 records
+Reference Name: chrUn_DS483680v1 has 226 records
+Reference Name: chrUn_DS484456v1 has 962 records
+Reference Name: chrUn_DS485488v1 has 68 records
+Reference Name: chrUn_DS484479v1 has 68 records
+Reference Name: chrUn_DS484154v1 has 86 records
+Reference Name: chrUn_DS483845v1 has 2496 records
+Reference Name: chrUn_DS484251v1 has 306 records
+Reference Name: chrUn_DS485442v1 has 98 records
+Reference Name: chrUn_DS484559v1 has 32 records
+Reference Name: chrUn_DS485062v1 has 208 records
+Reference Name: chrUn_DS484333v1 has 332 records
+Reference Name: chrUn_DS484207v1 has 422 records
+Reference Name: chrUn_DS485322v1 has 24 records
+Reference Name: chrUn_DS484309v1 has 2158 records
+Reference Name: chrUn_DS485100v1 has 202 records
+Reference Name: chrUn_DS485526v1 has 60 records
+Reference Name: chrUn_DS483914v1 has 100 records
+Reference Name: chrUn_DS485362v1 has 798 records
+Reference Name: chrUn_DS484760v1 has 204 records
+Reference Name: chrUn_DS484846v1 has 82 records
+Reference Name: chrUn_DS485249v1 has 40228 records
+Reference Name: chrUn_DS484102v1 has 408 records
+Reference Name: chrUn_DS484380v1 has 412 records
+Reference Name: chrUn_DS485466v1 has 334 records
+Reference Name: chrUn_DS483805v1 has 462 records
+Reference Name: chrUn_DS485000v1 has 296 records
+Reference Name: chrUn_DS484243v1 has 470 records
+Reference Name: chrUn_DS483871v1 has 36 records
+Reference Name: chrUn_DS484436v1 has 456 records
+Reference Name: chrUn_DS484713v1 has 226 records
+Reference Name: chrUn_DS485905v1 has 108 records
+Reference Name: chrUn_DS485055v1 has 464 records
+Reference Name: chrUn_DS483712v1 has 1446 records
+Reference Name: chrUn_DS484152v1 has 184 records
+Reference Name: chrUn_DS485472v1 has 2 records
+Reference Name: chrUn_DS483678v1 has 3544 records
+Reference Name: chrUn_DS484709v1 has 114 records
+Reference Name: chrUn_DS485026v1 has 54 records
+Reference Name: chrUn_DS484508v1 has 242 records
+Reference Name: chrUn_DS485842v1 has 46 records
+Reference Name: chrUn_DS485826v1 has 14606 records
+Reference Name: chrUn_DS484578v1 has 92 records
+Reference Name: chrUn_DS485766v1 has 300 records
+Reference Name: chrUn_DS484654v1 has 294 records
+Reference Name: chrUn_DS485058v1 has 130 records
+Reference Name: chrUn_DS485828v1 has 122 records
+Reference Name: chrUn_DS484301v1 has 378 records
+Reference Name: chrUn_DS483740v1 has 456 records
+Reference Name: chrUn_DS484606v1 has 484 records
+Reference Name: chrUn_DS484220v1 has 598 records
+Reference Name: chrUn_DS484355v1 has 390 records
+Reference Name: chrUn_DS485682v1 has 154 records
+Reference Name: chrUn_DS485563v1 has 38 records
+Reference Name: chrUn_DS485059v1 has 140 records
+Reference Name: chrUn_DS486004v1 has 438 records
+Reference Name: chrUn_DS485173v1 has 12 records
+Reference Name: chrUn_DS483759v1 has 2564 records
+Reference Name: chrUn_DS484111v1 has 1566 records
+Reference Name: chrUn_DS483674v1 has 1174 records
+Reference Name: chrUn_DS484895v1 has 288 records
+Reference Name: chrUn_DS484577v1 has 1358 records
+Reference Name: chrUn_DS484400v1 has 664 records
+Reference Name: chrUn_DS484721v1 has 514 records
+Reference Name: chrUn_DS485529v1 has 412 records
+Reference Name: chrUn_DS484445v1 has 182 records
+Reference Name: chrUn_DS484991v1 has 138 records
+Reference Name: chrUn_DS484642v1 has 18 records
+Reference Name: chrUn_DS485868v1 has 456 records
+Reference Name: chrUn_DS485607v1 has 1500 records
+Reference Name: chrUn_DS483876v1 has 460 records
+Reference Name: chrUn_DS485867v1 has 720 records
+Reference Name: chrUn_DS485509v1 has 3176 records
+Reference Name: chrUn_DS484241v1 has 1756 records
+Reference Name: chrUn_DS485605v1 has 116 records
+Reference Name: chrUn_DS484331v1 has 2076 records
+Reference Name: chrUn_DS484106v1 has 1686 records
+Reference Name: chrUn_DS485368v1 has 422 records
+Reference Name: chrUn_DS484276v1 has 1006 records
+Reference Name: chrUn_DS485005v1 has 480 records
+Reference Name: chrUn_DS485469v1 has 34 records
+Reference Name: chrUn_DS485566v2 has 4050 records
+Reference Name: chrUn_DS483855v1 has 388 records
+Reference Name: chrUn_DS483662v1 has 546 records
+Reference Name: chrUn_DS485260v1 has 2636 records
+Reference Name: chrUn_DS484469v1 has 1060 records
+Reference Name: chrUn_DS484601v1 has 1342 records
+Reference Name: chrUn_DS483681v1 has 2308 records
+Reference Name: chrUn_DS484916v1 has 316 records
+Reference Name: chrUn_DS484385v1 has 914 records
+Reference Name: chrUn_DS485557v1 has 380 records
+Reference Name: chrUn_DS485997v1 has 678 records
+Reference Name: chrUn_DS484960v1 has 58 records
+Reference Name: chrUn_DS483726v1 has 220 records
+Reference Name: chrUn_DS485456v1 has 6 records
+Reference Name: chrUn_DS484246v1 has 1152 records
+Reference Name: chrUn_DS485887v1 has 396 records
+Reference Name: chrUn_DS484396v1 has 1152 records
+Reference Name: chrUn_DS485902v1 has 2 records
+Reference Name: chrUn_DS484629v1 has 150 records
+Reference Name: chrUn_DS484310v1 has 5292 records
+Reference Name: chrUn_DS485117v1 has 298 records
+Reference Name: chrUn_DS485468v1 has 18 records
+Reference Name: chrUn_DS484263v1 has 1436 records
+Reference Name: chrUn_DS485224v1 has 36 records
+Reference Name: chrUn_DS485156v1 has 88 records
+Reference Name: chrUn_DS484501v1 has 5926 records
+Reference Name: chrUn_DS485991v1 has 23992 records
+Reference Name: chrUn_DS485964v1 has 1062 records
+Reference Name: chrUn_DS485361v1 has 1150 records
+Reference Name: chrUn_DS484593v1 has 648 records
+Reference Name: chrUn_DS485681v1 has 144 records
+Reference Name: chrUn_DS484982v1 has 1014 records
+Reference Name: chrUn_DS485136v1 has 168 records
+Reference Name: chrUn_DS483738v1 has 354 records
+Reference Name: chrUn_DS483783v1 has 2952 records
+Reference Name: chrUn_DS485411v1 has 628 records
+Reference Name: chrUn_DS485729v1 has 8 records
+Reference Name: chrUn_DS485622v1 has 82 records
+Reference Name: chrUn_DS484796v1 has 2 records
+Reference Name: chrUn_DS485671v1 has 846 records
+Reference Name: chrUn_DS485684v1 has 518 records
+Reference Name: chrUn_DS485148v1 has 860 records
+Reference Name: chrUn_DS484188v1 has 1204 records
+Reference Name: chrUn_DS484566v1 has 1802 records
+Reference Name: chrUn_DS484646v1 has 356 records
+Reference Name: chrUn_DS485588v1 has 168 records
+Reference Name: chrUn_DS484498v1 has 240 records
+Reference Name: chrUn_DS485820v1 has 7196 records
+Reference Name: chrUn_DS484048v1 has 1144 records
+Reference Name: chrUn_DS485079v1 has 340 records
+Reference Name: chrUn_DS485420v1 has 526 records
+Reference Name: chrUn_DS483772v1 has 1324 records
+Reference Name: chrUn_DS484281v1 has 1052 records
+Reference Name: chrUn_DS484059v1 has 880 records
+Reference Name: chrUn_DS485969v1 has 26 records
+Reference Name: chrUn_DS485133v1 has 130 records
+Reference Name: chrUn_DS485192v1 has 142 records
+Reference Name: chrUn_DS483693v1 has 1988 records
+Reference Name: chrUn_DS484228v1 has 2052 records
+Reference Name: chrUn_DS484239v1 has 878 records
+Reference Name: chrUn_DS484595v1 has 258 records
+Reference Name: chrUn_DS484274v1 has 366 records
+Reference Name: chrUn_DS485917v1 has 116 records
+Reference Name: chrUn_DS484320v1 has 1340 records
+Reference Name: chrUn_DS484480v1 has 16 records
+Reference Name: chrUn_DS484579v1 has 190 records
+Reference Name: chrUn_DS485980v1 has 30 records
+Reference Name: chrUn_DS485531v1 has 150 records
+Reference Name: chrUn_DS484806v1 has 3362 records
+Reference Name: chrUn_DS484782v1 has 164 records
+Reference Name: chrUn_DS484639v1 has 108 records
+Reference Name: chrUn_DS485494v1 has 40 records
+Reference Name: chrUn_DS484238v1 has 144 records
+Reference Name: chrUn_DS485965v1 has 28 records
+Reference Name: chrUn_DS484514v1 has 212 records
+Reference Name: chrUn_DS485092v1 has 134 records
+Reference Name: chrUn_DS485518v1 has 12 records
+Reference Name: chrUn_DS485453v1 has 16612 records
+Reference Name: chrUn_DS484542v1 has 1064 records
+Reference Name: chrUn_DS483970v1 has 1494 records
+Reference Name: chrUn_DS484632v1 has 450 records
+Reference Name: chrUn_DS485401v1 has 28 records
+Reference Name: chrUn_DS484193v1 has 196 records
+Reference Name: chrUn_DS484487v1 has 290 records
+Reference Name: chrUn_DS484087v1 has 578 records
+Reference Name: chrUn_DS485517v1 has 204 records
+Reference Name: chrUn_DS485742v1 has 454 records
+Reference Name: chrUn_DS483919v1 has 1558 records
+Reference Name: chrUn_DS484748v1 has 3884 records
+Reference Name: chrUn_DS484312v1 has 2304 records
+Reference Name: chrUn_DS485679v1 has 40 records
+Reference Name: chrUn_DS483797v1 has 1724 records
+Reference Name: chrUn_DS485803v1 has 346 records
+Reference Name: chrUn_DS484315v1 has 84 records
+Reference Name: chrUn_DS485912v1 has 340 records
+Reference Name: chrUn_DS484027v1 has 446 records
+Reference Name: chrUn_DS485122v1 has 1514 records
+Reference Name: chrUn_DS485847v1 has 204 records
+Reference Name: chrUn_DS484941v1 has 80 records
+Reference Name: chrUn_DS483734v1 has 2212 records
+Reference Name: chrUn_DS484510v1 has 380 records
+Reference Name: chrUn_DS484028v1 has 1366 records
+Reference Name: chrUn_DS484561v1 has 1122 records
+Reference Name: chrUn_DS485802v1 has 128 records
+Reference Name: chrUn_DS484118v1 has 1012 records
+Reference Name: chrUn_DS485915v1 has 190 records
+Reference Name: chrUn_DS485933v1 has 326 records
+Reference Name: chrUn_DS485371v1 has 702 records
+Reference Name: chrUn_DS484437v1 has 2582 records
+Reference Name: chrUn_DS484155v1 has 406 records
+Reference Name: chrUn_DS485298v1 has 418 records
+Reference Name: chrUn_DS485007v1 has 510 records
+Reference Name: chrUn_DS484899v1 has 174 records
+Reference Name: chrUn_DS485544v1 has 126 records
+Reference Name: chrUn_DS485841v1 has 46 records
+Reference Name: chrUn_DS485614v1 has 330 records
+Reference Name: chrUn_DS484651v1 has 872 records
+Reference Name: chrUn_DS485968v1 has 18568 records
+Reference Name: chrUn_DS484962v1 has 4962 records
+Reference Name: chrUn_DS483840v1 has 2658 records
+Reference Name: chrUn_DS483739v1 has 862 records
+Reference Name: chrUn_DS485903v1 has 18 records
+Reference Name: chrUn_DS485983v1 has 96 records
+Reference Name: chrUn_DS484984v1 has 44 records
+Reference Name: chrUn_DS485582v1 has 164 records
+Reference Name: chrUn_DS485880v1 has 452 records
+Reference Name: chrUn_DS485273v1 has 4 records
+Reference Name: chrUn_DS484967v1 has 138 records
+Reference Name: chrUn_DS484910v1 has 146 records
+Reference Name: chrUn_DS484550v1 has 224 records
+Reference Name: chrUn_DS485666v1 has 114 records
+Reference Name: chrUn_DS483944v1 has 5312 records
+Reference Name: chrUn_DS484894v1 has 1120 records
+Reference Name: chrUn_DS483908v1 has 6686 records
+Reference Name: chrUn_DS484244v1 has 1326 records
+Reference Name: chrUn_DS485632v1 has 96 records
+Reference Name: chrUn_DS485291v1 has 90 records
+Reference Name: chrUn_DS484472v1 has 2240 records
+Reference Name: chrUn_DS485045v1 has 506 records
+Reference Name: chrUn_DS483792v1 has 688 records
+Reference Name: chrUn_DS485986v1 has 102 records
+Reference Name: chrUn_DS485823v1 has 38 records
+Reference Name: chrUn_DS483848v1 has 1382 records
+Reference Name: chrUn_DS484886v1 has 226 records
+Reference Name: chrUn_DS484025v1 has 58 records
+Reference Name: chrUn_DS483856v1 has 550 records
+Reference Name: chrUn_DS485543v1 has 1712 records
+Reference Name: chrUn_DS485520v1 has 238 records
+Reference Name: chrUn_DS485725v1 has 194 records
+Reference Name: chrUn_DS485264v1 has 64 records
+Reference Name: chrUn_DS485497v1 has 38 records
+Reference Name: chrUn_DS485996v1 has 74 records
+Reference Name: chrUn_DS485025v1 has 7686 records
+Reference Name: chrUn_DS485118v1 has 350 records
+Reference Name: chrUn_DS485220v1 has 374 records
+Reference Name: chrUn_DS485569v1 has 490 records
+Reference Name: chrUn_DS484919v1 has 530 records
+Reference Name: chrUn_DS484149v1 has 416 records
+Reference Name: chrUn_DS485127v1 has 298 records
+Reference Name: chrUn_DS485439v1 has 368 records
+Reference Name: chrUn_DS483673v1 has 104 records
+Reference Name: chrUn_DS484929v1 has 64 records
+Reference Name: chrUn_DS485441v1 has 52 records
+Reference Name: chrUn_DS483701v1 has 458 records
+Reference Name: chrUn_DS485796v1 has 222 records
+Reference Name: chrUn_DS485218v1 has 146 records
+Reference Name: chrUn_DS485712v1 has 150 records
+Reference Name: chrUn_DS483979v1 has 1008 records
+Reference Name: chrUn_DS485087v1 has 90 records
+Reference Name: chrUn_DS484889v1 has 140 records
+Reference Name: chrUn_DS484291v1 has 32 records
+Reference Name: chrUn_DS485053v1 has 372 records
+Reference Name: chrUn_DS484093v1 has 1226 records
+Reference Name: chrUn_DS485850v1 has 62 records
+Reference Name: chrUn_DS485243v1 has 68 records
+Reference Name: chrUn_DS485215v1 has 110 records
+Reference Name: chrUn_DS485370v1 has 404 records
+Reference Name: chrUn_DS483825v1 has 384 records
+Reference Name: chrUn_DS484658v1 has 610 records
+Reference Name: chrUn_DS483820v1 has 288 records
+Reference Name: chrUn_DS484851v1 has 78 records
+Reference Name: chrUn_DS483688v1 has 92 records
+Reference Name: chrUn_DS485233v1 has 92 records
+Reference Name: chrUn_DS483853v1 has 7088 records
+Reference Name: chrUn_DS484847v1 has 174 records
+Reference Name: chrUn_DS485818v1 has 188 records
+Reference Name: chrUn_DS485383v1 has 70 records
+Reference Name: chrUn_DS484435v1 has 364 records
+Reference Name: chrUn_DS484565v1 has 136 records
+Reference Name: chrUn_DS485379v1 has 392 records
+Reference Name: chrUn_DS484403v1 has 356 records
+Reference Name: chrUn_DS483930v1 has 20 records
+Reference Name: chrUn_DS484370v1 has 138 records
+Reference Name: chrUn_DS484635v1 has 32 records
+Reference Name: chrUn_DS484231v1 has 378 records
+Reference Name: chrUn_DS485392v1 has 266 records
+Reference Name: chrUn_DS484098v1 has 28 records
+Reference Name: chrUn_DS484678v1 has 322 records
+Reference Name: chrUn_DS485521v1 has 38 records
+Reference Name: chrUn_DS485251v1 has 360 records
+Reference Name: chrUn_DS483675v1 has 20060 records
+Reference Name: chrUn_DS485775v1 has 562 records
+Reference Name: chrUn_DS484838v1 has 144 records
+Reference Name: chrUn_DS485263v1 has 670 records
+Reference Name: chrUn_DS484804v1 has 638 records
+Reference Name: chrUn_DS485571v1 has 410 records
+Reference Name: chrUn_DS484236v1 has 666 records
+Reference Name: chrUn_DS484954v1 has 118 records
+Reference Name: chrUn_DS484467v1 has 1426 records
+Reference Name: chrUn_DS484148v1 has 3820 records
+Reference Name: chrUn_DS484817v1 has 776 records
+Reference Name: chrUn_DS483741v1 has 150 records
+Reference Name: chrUn_DS485911v1 has 570 records
+Reference Name: chrUn_DS484157v1 has 968 records
+Reference Name: chrUn_DS484852v1 has 414 records
+Reference Name: chrUn_DS485636v1 has 516 records
+Reference Name: chrUn_DS484588v1 has 512 records
+Reference Name: chrUn_DS483769v1 has 842 records
+Reference Name: chrUn_DS484779v1 has 864 records
+Reference Name: chrUn_DS485326v1 has 34 records
+Reference Name: chrUn_DS485642v1 has 110 records
+Reference Name: chrUn_DS485184v1 has 618 records
+Reference Name: chrUn_DS485228v1 has 232 records
+Reference Name: chrUn_DS483663v1 has 448 records
+Reference Name: chrUn_DS483804v1 has 318 records
+Reference Name: chrUn_DS484169v1 has 254 records
+Reference Name: chrUn_DS485491v1 has 30 records
+Reference Name: chrUn_DS485657v1 has 384 records
+Reference Name: chrUn_DS484520v1 has 276 records
+Reference Name: chrUn_DS485780v1 has 106 records
+Reference Name: chrUn_DS484253v1 has 378 records
+Reference Name: chrUn_DS484591v1 has 360 records
+Reference Name: chrUn_DS484673v1 has 910 records
+Reference Name: chrUn_DS485528v1 has 1160 records
+Reference Name: chrUn_DS485656v1 has 342 records
+Reference Name: chrUn_DS483659v1 has 11212 records
+Reference Name: chrUn_DS485737v1 has 24 records
+Reference Name: chrUn_DS485160v1 has 130 records
+Reference Name: chrUn_DS485208v1 has 28 records
+Reference Name: chrUn_DS485717v1 has 210 records
+Reference Name: chrUn_DS484882v1 has 172 records
+Reference Name: chrUn_DS483686v1 has 584 records
+Reference Name: chrUn_DS485876v1 has 4012 records
+Reference Name: chrUn_DS484831v1 has 162 records
+Reference Name: chrUn_DS484205v1 has 296 records
+Reference Name: chrUn_DS485434v1 has 306 records
+Reference Name: chrUn_DS484003v1 has 192 records
+Reference Name: chrUn_DS485948v1 has 106 records
+Reference Name: chrUn_DS484340v1 has 290 records
+Reference Name: chrUn_DS483965v1 has 1076 records
+Reference Name: chrUn_DS485068v1 has 100 records
+Reference Name: chrUn_DS485533v1 has 110 records
+Reference Name: chrUn_DS484774v1 has 250 records
+Reference Name: chrUn_DS485292v1 has 254 records
+Reference Name: chrUn_DS484156v1 has 52 records
+Reference Name: chrUn_DS485947v1 has 210 records
+Reference Name: chrUn_DS484544v1 has 126 records
+Reference Name: chrUn_DS484524v1 has 126 records
+Reference Name: chrUn_DS485275v1 has 272 records
+Reference Name: chrUn_DS485527v1 has 294 records
+Reference Name: chrUn_DS484619v1 has 704 records
+Reference Name: chrUn_DS483801v1 has 170 records
+Reference Name: chrUn_DS484307v1 has 116 records
+Reference Name: chrUn_DS483687v1 has 104 records
+Reference Name: chrUn_DS484463v1 has 4086 records
+Reference Name: chrUn_DS485939v1 has 172 records
+Reference Name: chrUn_DS485146v1 has 60 records
+Reference Name: chrUn_DS485174v1 has 90 records
+Reference Name: chrUn_DS485194v1 has 830 records
+Reference Name: chrUn_DS484283v1 has 454 records
+Reference Name: chrUn_DS485500v1 has 154 records
+Reference Name: chrUn_DS484183v1 has 1494 records
+Reference Name: chrUn_DS484499v1 has 1400 records
+Reference Name: chrUn_DS485338v1 has 266 records
+Reference Name: chrUn_DS485036v1 has 12 records
+Reference Name: chrUn_DS484553v1 has 36 records
+Reference Name: chrUn_DS485587v1 has 218 records
+Reference Name: chrUn_DS485265v1 has 44 records
+Reference Name: chrUn_DS484425v1 has 278 records
+Reference Name: chrUn_DS484802v1 has 242 records
+Reference Name: chrUn_DS485538v1 has 56 records
+Reference Name: chrUn_DS483872v1 has 3266 records
+Reference Name: chrUn_DS485319v1 has 326 records
+Reference Name: chrUn_DS484752v1 has 46 records
+Reference Name: chrUn_DS485630v1 has 2 records
+Reference Name: chrUn_DS483915v1 has 530 records
+Reference Name: chrUn_DS485161v1 has 756 records
+Reference Name: chrUn_DS485482v1 has 300 records
+Reference Name: chrUn_DS484943v1 has 102 records
+Reference Name: chrUn_DS484722v1 has 940 records
+Reference Name: chrUn_DS485010v1 has 458 records
+Reference Name: chrUn_DS485952v1 has 1412 records
+Reference Name: chrUn_DS484869v1 has 1136 records
+Reference Name: chrUn_DS483749v1 has 2446 records
+Reference Name: chrUn_DS484799v1 has 60 records
+Reference Name: chrUn_DS484998v1 has 834 records
+Reference Name: chrUn_DS484041v1 has 1156 records
+Reference Name: chrUn_DS483841v1 has 3016 records
+Reference Name: chrUn_DS485031v1 has 15972 records
+Reference Name: chrUn_DS484254v1 has 1108 records
+Reference Name: chrUn_DS484279v1 has 5180 records
+Reference Name: chrUn_DS484503v1 has 434 records
+Reference Name: chrUn_DS483658v1 has 620 records
+Reference Name: chrUn_DS485397v1 has 58 records
+Reference Name: chrUn_DS485004v1 has 112 records
+Reference Name: chrUn_DS485046v1 has 358 records
+Reference Name: chrUn_DS485382v1 has 246 records
+Reference Name: chrUn_DS485728v1 has 6 records
+Reference Name: chrUn_DS485125v1 has 12 records
+Reference Name: chrUn_DS485200v1 has 62 records
+Reference Name: chrUn_DS484471v1 has 110 records
+Reference Name: chrUn_DS483750v1 has 1226 records
+Reference Name: chrUn_DS485946v1 has 126 records
+Reference Name: chrUn_DS484874v1 has 132 records
+Reference Name: chrUn_DS485258v1 has 160 records
+Reference Name: chrUn_DS485833v1 has 514 records
+Reference Name: chrUn_DS485944v1 has 334 records
+Reference Name: chrUn_DS485714v1 has 8 records
+Reference Name: chrUn_DS483920v1 has 3696 records
+Reference Name: chrUn_DS485464v1 has 656 records
+Reference Name: chrUn_DS484614v1 has 1694 records
+Reference Name: chrUn_DS484153v1 has 2948 records
+Reference Name: chrUn_DS484828v1 has 8 records
+Reference Name: chrUn_DS484834v1 has 138 records
+Reference Name: chrUn_DS483913v1 has 460 records
+Reference Name: chrUn_DS483670v1 has 1766 records
+Reference Name: chrUn_DS484427v1 has 478 records
+Reference Name: chrUn_DS485247v1 has 12 records
+Reference Name: chrUn_DS484083v1 has 224 records
+Reference Name: chrUn_DS485530v1 has 212 records
+Reference Name: chrUn_DS485020v1 has 12 records
+Reference Name: chrUn_DS484047v1 has 230 records
+Reference Name: chrUn_DS485149v1 has 140 records
+Reference Name: chrUn_DS484287v1 has 472 records
+Reference Name: chrUn_DS485655v1 has 6 records
+Reference Name: chrUn_DS485757v1 has 400 records
+Reference Name: chrUn_DS484062v1 has 1082 records
+Reference Name: chrUn_DS485932v1 has 612 records
+Reference Name: chrUn_DS484348v1 has 3730 records
+Reference Name: chrUn_DS484686v1 has 464 records
+Reference Name: chrUn_DS485253v1 has 184 records
+Reference Name: chrUn_DS485953v1 has 40 records
+Reference Name: chrUn_DS484812v1 has 60 records
+Reference Name: chrUn_DS484449v1 has 346 records
+Reference Name: chrUn_DS485032v1 has 122 records
+Reference Name: chrUn_DS484438v1 has 452 records
+Reference Name: chrUn_DS485923v1 has 18 records
+Reference Name: chrUn_DS484314v1 has 1956 records
+Reference Name: chrUn_DS485306v1 has 18 records
+Reference Name: chrUn_DS483975v1 has 672 records
+Reference Name: chrUn_DS485770v1 has 10 records
+Reference Name: chrUn_DS485204v1 has 1002 records
+Reference Name: chrUn_DS484502v1 has 428 records
+Reference Name: chrUn_DS485667v1 has 700 records
+Reference Name: chrUn_DS483679v1 has 858 records
+Reference Name: chrUn_DS484080v1 has 660 records
+Reference Name: chrUn_DS484712v1 has 102 records
+Reference Name: chrUn_DS484742v1 has 276 records
+Reference Name: chrUn_DS483939v1 has 1064 records
+Reference Name: chrUn_DS485535v1 has 316 records
+Reference Name: chrUn_DS484258v1 has 590 records
+Reference Name: chrUn_DS484285v1 has 598 records
+Reference Name: chrUn_DS484509v1 has 26 records
+Reference Name: chrUn_DS485211v1 has 14 records
+Reference Name: chrUn_DS483867v1 has 336 records
+Reference Name: chrUn_DS485066v1 has 76 records
+Reference Name: chrUn_DS484630v1 has 1250 records
+Reference Name: chrUn_DS484271v1 has 1504 records
+Reference Name: chrUn_DS484117v1 has 256 records
+Reference Name: chrUn_DS484042v1 has 2924 records
+Reference Name: chrUn_DS483746v1 has 16500 records
+Reference Name: chrUn_DS484932v1 has 204 records
+Reference Name: chrUn_DS485177v1 has 2108 records
+Reference Name: chrUn_DS485540v1 has 82 records
+Reference Name: chrUn_DS484815v1 has 98 records
+Reference Name: chrUn_DS483989v1 has 310 records
+Reference Name: chrUn_DS483767v1 has 346 records
+Reference Name: chrUn_DS485621v1 has 100 records
+Reference Name: chrUn_DS483782v1 has 794 records
+Reference Name: chrUn_DS485774v1 has 2 records
+Reference Name: chrUn_DS483862v1 has 586 records
+Reference Name: chrUn_DS484513v1 has 56 records
+Reference Name: chrUn_DS484878v1 has 12 records
+Reference Name: chrUn_DS483737v1 has 380 records
+Reference Name: chrUn_DS483689v1 has 222 records
+Reference Name: chrUn_DS484671v1 has 24 records
+Reference Name: chrUn_DS484255v1 has 734 records
+Reference Name: chrUn_DS485481v1 has 110 records
+Reference Name: chrUn_DS484528v1 has 410 records
+Reference Name: chrUn_DS484797v1 has 296 records
+Reference Name: chrUn_DS485874v1 has 200 records
+Reference Name: chrUn_DS484286v1 has 232 records
+Reference Name: chrUn_DS484177v1 has 160 records
+Reference Name: chrUn_DS483816v1 has 1528 records
+Reference Name: chrUn_DS484584v1 has 16 records
+Reference Name: chrUn_DS485574v1 has 12 records
+Reference Name: chrUn_DS485022v1 has 192 records
+Reference Name: chrUn_DS483815v1 has 292 records
+Reference Name: chrUn_DS484389v1 has 290 records
+Reference Name: chrUn_DS484656v1 has 124 records
+Reference Name: chrUn_DS485567v1 has 78 records
+Reference Name: chrUn_DS484692v1 has 14 records
+Reference Name: chrUn_DS483858v1 has 326 records
+Reference Name: chrUn_DS484458v1 has 4242 records
+Reference Name: chrUn_DS485628v1 has 1126 records
+Reference Name: chrUn_DS483961v1 has 22328 records
+Reference Name: chrUn_DS485966v1 has 2 records
+Reference Name: chrUn_DS484147v1 has 40 records
+Reference Name: chrUn_DS484378v1 has 38 records
+Reference Name: chrUn_DS485754v1 has 246 records
+Reference Name: chrUn_DS484017v1 has 126 records
+Reference Name: chrUn_DS485918v1 has 1040 records
+Reference Name: chrUn_DS485314v1 has 2 records
+Reference Name: chrUn_DS485692v1 has 232 records
+Reference Name: chrUn_DS484300v1 has 1452 records
+Reference Name: chrUn_DS483953v1 has 386 records
+Reference Name: chrUn_DS484138v1 has 994 records
+Reference Name: chrUn_DS485593v1 has 466 records
+Reference Name: chrUn_DS484342v1 has 666 records
+Reference Name: chrUn_DS484557v1 has 86 records
+Reference Name: chrUn_DS484685v1 has 48 records
+Reference Name: chrUn_DS484607v1 has 32 records
+Reference Name: chrUn_DS484189v1 has 654 records
+Reference Name: chrUn_DS485610v1 has 42 records
+Reference Name: chrUn_DS485151v1 has 22 records
+Reference Name: chrUn_DS484267v1 has 1972 records
+Reference Name: chrUn_DS484020v1 has 724 records
+Reference Name: chrUn_DS485525v1 has 208 records
+Reference Name: chrUn_DS485429v1 has 92 records
+Reference Name: chrUn_DS485088v1 has 224 records
+Reference Name: chrUn_DS485190v1 has 4126 records
+Reference Name: chrUn_DS485565v1 has 380 records
+Reference Name: chrUn_DS483870v1 has 1738 records
+Reference Name: chrUn_DS484022v1 has 4644 records
+Reference Name: chrUn_DS484836v1 has 188 records
+Reference Name: chrUn_DS484105v1 has 172 records
+Reference Name: chrUn_DS485889v1 has 52 records
+Reference Name: chrUn_DS484109v1 has 1604 records
+Reference Name: chrUn_DS485882v1 has 182 records
+Reference Name: chrUn_DS483824v1 has 762 records
+Reference Name: chrUn_DS485426v1 has 218 records
+Reference Name: chrUn_DS485083v1 has 302 records
+Reference Name: chrUn_DS485851v1 has 202 records
+Reference Name: chrUn_DS483945v1 has 348 records
+Reference Name: chrUn_DS484534v1 has 886 records
+Reference Name: chrUn_DS484901v1 has 750 records
+Reference Name: chrUn_DS484789v1 has 270 records
+Reference Name: chrUn_DS483904v1 has 1400 records
+Reference Name: chrUn_DS484264v1 has 578 records
+Reference Name: chrUn_DS484086v1 has 242 records
+Reference Name: chrUn_DS484089v1 has 2124 records
+Reference Name: chrUn_DS485792v1 has 266 records
+Reference Name: chrUn_DS485085v1 has 34 records
+Reference Name: chrUn_DS483773v1 has 3322 records
+Reference Name: chrUn_DS483837v1 has 70 records
+Reference Name: chrUn_DS485648v1 has 92 records
+Reference Name: chrUn_DS485105v1 has 224 records
+Reference Name: chrUn_DS485694v1 has 548 records
+Reference Name: chrUn_DS485389v1 has 144 records
+Reference Name: chrUn_DS484343v1 has 1236 records
+Reference Name: chrUn_DS483702v1 has 1066 records
+Reference Name: chrUn_DS485640v1 has 2 records
+Reference Name: chrUn_DS483868v1 has 1652 records
+Reference Name: chrUn_DS485806v1 has 56 records
+Reference Name: chrUn_DS484434v1 has 820 records
+Reference Name: chrUn_DS484888v1 has 182 records
+Reference Name: chrUn_DS484693v1 has 146 records
+Reference Name: chrUn_DS485627v1 has 16 records
+Reference Name: chrUn_DS485245v1 has 68 records
+Reference Name: chrUn_DS485595v1 has 112 records
+Reference Name: chrUn_DS484064v1 has 4510 records
+Reference Name: chrUn_DS485176v1 has 1498 records
+Reference Name: chrUn_DS485252v1 has 130 records
+Reference Name: chrUn_DS485152v1 has 108 records
+Reference Name: chrUn_DS484078v1 has 600 records
+Reference Name: chrUn_DS483814v1 has 908 records
+Reference Name: chrUn_DS484206v1 has 78 records
+Reference Name: chrUn_DS485071v1 has 838 records
+Reference Name: chrUn_DS484070v1 has 916 records
+Reference Name: chrUn_DS485584v1 has 46 records
+Reference Name: chrUn_DS483886v1 has 1890 records
+Reference Name: chrUn_DS484773v1 has 8 records
+Reference Name: chrUn_DS484004v1 has 2850 records
+Reference Name: chrUn_DS485393v1 has 118 records
+Reference Name: chrUn_DS484192v1 has 10 records
+Reference Name: chrUn_DS483891v1 has 198 records
+Reference Name: chrUn_DS484217v1 has 668 records
+Reference Name: chrUn_DS484055v1 has 160 records
+Reference Name: chrUn_DS484015v1 has 916 records
+Reference Name: chrUn_DS485848v1 has 1000 records
+Reference Name: chrUn_DS485221v1 has 156 records
+Reference Name: chrUn_DS485227v1 has 96 records
+Reference Name: chrUn_DS485579v1 has 494 records
+Reference Name: chrUn_DS485400v1 has 122 records
+Reference Name: chrUn_DS485154v1 has 20 records
+Reference Name: chrUn_DS483956v1 has 1354 records
+Reference Name: chrUn_DS483854v1 has 4554 records
+Reference Name: chrUn_DS485410v1 has 336 records
+Reference Name: chrUn_DS484718v1 has 1222 records
+Reference Name: chrUn_DS484412v1 has 258 records
+Reference Name: chrUn_DS484424v1 has 240 records
+Reference Name: chrUn_DS484213v1 has 146 records
+Reference Name: chrUn_DS485157v1 has 40 records
+Reference Name: chrUn_DS484940v1 has 58 records
+Reference Name: chrUn_DS484221v1 has 474 records
+Reference Name: chrUn_DS485746v1 has 172 records
+Reference Name: chrUn_DS484466v1 has 126 records
+Reference Name: chrUn_DS484306v1 has 198 records
+Reference Name: chrUn_DS485807v1 has 384 records
+Reference Name: chrUn_DS485591v1 has 22 records
+Reference Name: chrUn_DS484486v1 has 802 records
+Reference Name: chrUn_DS485030v1 has 432 records
+Reference Name: chrUn_DS484395v1 has 552 records
+Reference Name: chrUn_DS485216v1 has 278 records
+Reference Name: chrUn_DS483964v1 has 286 records
+Reference Name: chrUn_DS484750v1 has 82 records
+Reference Name: chrUn_DS484661v1 has 168 records
+Reference Name: chrUn_DS484621v1 has 122 records
+Reference Name: chrUn_DS485330v1 has 6 records
+Reference Name: chrUn_DS485988v1 has 4 records
+Reference Name: chrUn_DS485832v1 has 60 records
+Reference Name: chrUn_DS484159v1 has 1228 records
+Reference Name: chrUn_DS485041v1 has 34 records
+Reference Name: chrUn_DS484421v1 has 246 records
+Reference Name: chrUn_DS485091v1 has 94 records
+Reference Name: chrUn_DS485878v1 has 26 records
+Reference Name: chrUn_DS485140v1 has 4 records
+Reference Name: chrUn_DS485419v1 has 450 records
+Reference Name: chrUn_DS484887v1 has 46 records
+Reference Name: chrUn_DS485301v1 has 2 records
+Reference Name: chrUn_DS485002v1 has 218 records
+Reference Name: chrUn_DS484491v1 has 144 records
+Reference Name: chrUn_DS485589v1 has 224 records
+Reference Name: chrUn_DS485284v1 has 618 records
+Reference Name: chrUn_DS484525v1 has 116 records
+Reference Name: chrUn_DS484734v1 has 140 records
+Reference Name: chrUn_DS484212v1 has 798 records
+Reference Name: chrUn_DS483866v1 has 3126 records
+Reference Name: chrUn_DS484107v1 has 514 records
+Reference Name: chrUn_DS484930v1 has 12 records
+Reference Name: chrUn_DS484321v1 has 150 records
+Reference Name: chrUn_DS485134v1 has 66 records
+Reference Name: chrUn_DS484044v1 has 316 records
+Reference Name: chrUn_DS484066v1 has 214 records
+Reference Name: chrUn_DS484151v1 has 342 records
+Reference Name: chrUn_DS484242v1 has 250 records
+Reference Name: chrUn_DS484602v1 has 164 records
+Reference Name: chrUn_DS484762v1 has 50 records
+Reference Name: chrUn_DS484408v1 has 114 records
+Reference Name: chrUn_DS485067v1 has 22 records
+Reference Name: chrUn_DS485297v1 has 40 records
+Reference Name: chrUn_DS484700v1 has 172 records
+Reference Name: chrUn_DS484116v1 has 4966 records
+Reference Name: chrUn_DS484335v1 has 214 records
+Reference Name: chrUn_DS485169v1 has 114 records
+Reference Name: chrUn_DS485448v1 has 42 records
+Reference Name: chrUn_DS483822v1 has 1422 records
+Reference Name: chrUn_DS484792v1 has 20 records
+Reference Name: chrUn_DS483768v1 has 2626 records
+Reference Name: chrUn_DS483735v1 has 162 records
+Reference Name: chrUn_DS485653v1 has 136 records
+Reference Name: chrUn_DS484662v1 has 54 records
+Reference Name: chrUn_DS484097v1 has 1496 records
+Reference Name: chrUn_DS484001v1 has 678 records
+Reference Name: chrUn_DS485609v1 has 68 records
+Reference Name: chrUn_DS485323v1 has 172 records
+Reference Name: chrUn_DS483649v1 has 1082 records
+Reference Name: chrUn_DS484079v1 has 810 records
+Reference Name: chrUn_DS484065v1 has 142 records
+Reference Name: chrUn_DS485897v1 has 6 records
+Reference Name: chrUn_DS485503v1 has 34 records
+Reference Name: chrUn_DS484521v1 has 18 records
+Reference Name: chrUn_DS484104v1 has 204 records
+Reference Name: chrUn_DS483863v1 has 3322 records
+Reference Name: chrUn_DS484196v1 has 458 records
+Reference Name: chrUn_DS484318v1 has 14 records
+Reference Name: chrUn_DS485955v1 has 246 records
+Reference Name: chrUn_DS484729v1 has 66 records
+Reference Name: chrUn_DS484573v1 has 76 records
+Reference Name: chrUn_DS484464v1 has 26 records
+Reference Name: chrUn_DS483994v1 has 144 records
+Reference Name: chrUn_DS484013v1 has 80 records
+Reference Name: chrUn_DS484714v1 has 104 records
+Reference Name: chrUn_DS484649v1 has 84 records
+Reference Name: chrUn_DS484543v1 has 4 records
+Reference Name: chrUn_DS484308v1 has 6 records
+Reference Name: chrUn_DS485155v1 has 94 records
+Reference Name: chrUn_DS485107v1 has 326 records
+Reference Name: chrUn_DS483899v1 has 416 records
+Reference Name: chrUn_DS485162v1 has 138 records
+Reference Name: chrUn_DS484108v1 has 118 records
+Reference Name: chrUn_DS485536v1 has 86 records
+Reference Name: chrUn_DS485198v1 has 16 records
+Reference Name: chrUn_DS484699v1 has 6 records
+Reference Name: chrUn_DS484091v1 has 208 records
+Reference Name: chrUn_DS485144v1 has 28 records
+Reference Name: chrUn_DS485256v1 has 28 records
+Reference Name: chrUn_DS484616v1 has 70 records
+Reference Name: chrUn_DS484862v1 has 46 records
+Reference Name: chrUn_DS484754v1 has 56 records
+Reference Name: chrUn_DS484617v1 has 78 records
+Reference Name: chrUn_DS484917v1 has 56 records
+Reference Name: chrUn_DS483646v1 has 1306 records
+Reference Name: chrUn_DS485559v1 has 10 records
+Reference Name: chrUn_DS484120v1 has 178 records
+Reference Name: chrUn_DS483983v1 has 238 records
+Reference Name: chrUn_DS484853v1 has 108 records
+Reference Name: chrUn_DS484780v1 has 68 records
+Reference Name: chrUn_DS484145v1 has 224 records
+Reference Name: chrUn_DS484898v1 has 40 records
+Reference Name: chrUn_DS484926v1 has 16 records
+Reference Name: chrUn_DS484592v1 has 68 records
+Reference Name: chrUn_DS485230v1 has 12 records
+Reference Name: chrUn_DS484870v1 has 142 records
+Reference Name: chrUn_DS484581v1 has 164 records
+Reference Name: chrUn_DS485724v1 has 464 records
+Reference Name: chrUn_DS485695v2 has 388 records
+Reference Name: chrUn_DS484123v1 has 1178 records
+Reference Name: chrUn_DS483780v1 has 636 records
+Reference Name: chrUn_DS484007v1 has 18022 records
+Reference Name: chrUn_DS484230v1 has 976 records
+Reference Name: chrUn_DS483819v1 has 6280 records
+Reference Name: chrUn_DS483898v1 has 2016 records
+Reference Name: chrUn_DS483762v1 has 4778 records
+Reference Name: chrUn_DS483895v1 has 1786 records
+Reference Name: chrUn_DS483929v1 has 696 records
+Reference Name: chrUn_DS484038v1 has 244 records
+Reference Name: chrUn_DS483844v1 has 918 records
+Reference Name: chrUn_DS483806v1 has 670 records
+Reference Name: chrUn_DS483812v1 has 1364 records
+Reference Name: chrUn_DS483785v1 has 840 records
+Reference Name: chrUn_DS483943v1 has 938 records
+Reference Name: chrUn_DS483753v1 has 18142 records
+Reference Name: chrUn_DS484045v1 has 1038 records
+Reference Name: chrUn_DS484144v1 has 622 records
+Reference Name: chrUn_DS483925v1 has 116 records
+Reference Name: chrUn_DS483787v1 has 700 records
+Reference Name: chrUn_DS483865v1 has 3338 records
+Reference Name: chrUn_DS484090v1 has 940 records
+Reference Name: chrUn_DS483757v1 has 2262 records
+Reference Name: chrUn_DS484010v1 has 3158 records
+Reference Name: chrUn_DS484247v1 has 280 records
+Reference Name: chrUn_DS483751v1 has 13734 records
+Reference Name: chrUn_DS484280v1 has 2016 records
+Reference Name: chrUn_DS484167v1 has 344 records
+Reference Name: chrUn_DS483918v1 has 3884 records
+Reference Name: chrUn_DS484414v1 has 98 records
+Reference Name: chrUn_DS484134v1 has 806 records
+Reference Name: chrUn_DS483833v1 has 1360 records
+Reference Name: chrUn_DS483878v1 has 2406 records
+Reference Name: chrUn_DS484053v1 has 934 records
+Reference Name: chrUn_DS483859v1 has 430 records
+Reference Name: chrUn_DS483793v1 has 1042 records
+Reference Name: chrUn_DS483774v1 has 158 records
+Reference Name: chrUn_DS483770v1 has 10108 records
+Reference Name: chrUn_DS484225v1 has 908 records
+Reference Name: chrUn_DS483947v1 has 724 records
+Reference Name: chrUn_DS484006v1 has 254 records
+Reference Name: chrUn_DS483954v1 has 1178 records
+Reference Name: chrUn_DS483982v1 has 1724 records
+Reference Name: chrUn_DS484222v1 has 186 records
+Reference Name: chrUn_DS484092v1 has 262 records
+Reference Name: chrUn_DS483647v1 has 668 records
+Reference Name: chrUn_DS484095v1 has 262 records
+Reference Name: chrUn_DS483776v1 has 1510 records
+Reference Name: chrUn_DS484209v1 has 782 records
+Reference Name: chrUn_DS483927v1 has 2342 records
+Reference Name: chrUn_DS484234v1 has 6384 records
+Reference Name: chrUn_DS483992v1 has 954 records
+Reference Name: chrUn_DS484036v1 has 798 records
+Reference Name: chrUn_DS483986v1 has 952 records
+Reference Name: chrUn_DS484031v1 has 328 records
+Reference Name: chrUn_DS483813v1 has 30 records
+Reference Name: chrUn_DS483881v1 has 30 records
+Reference Name: chrUn_DS484296v1 has 266 records
+Reference Name: chrUn_DS483949v1 has 1294 records
+Reference Name: chrUn_DS484000v1 has 4784 records
+Reference Name: chrUn_DS483941v1 has 150 records
+Reference Name: chrUn_DS483985v1 has 252 records
+Reference Name: chrUn_DS484375v1 has 252 records
+Reference Name: chrUn_DS483998v1 has 492 records
+Reference Name: chrUn_DS484068v1 has 18478 records
+Reference Name: chrUn_DS484353v1 has 302 records
+Reference Name: chrUn_DS483810v1 has 1478 records
+Reference Name: chrUn_DS484018v1 has 730 records
+Reference Name: chrUn_DS483817v1 has 12530 records
+Reference Name: chrUn_DS483999v1 has 724 records
+Reference Name: chrUn_DS483724v1 has 10358 records
+Reference Name: chrUn_DS484256v1 has 262 records
+Reference Name: chrUn_DS484391v1 has 494 records
+Reference Name: chrUn_DS484539v1 has 198 records
+Reference Name: chrUn_DS483937v1 has 536 records
+Reference Name: chrUn_DS483828v1 has 572 records
+Reference Name: chrUn_DS484113v1 has 578 records
+Reference Name: chrUn_DS483811v1 has 1006 records
+Reference Name: chrUn_DS484432v1 has 220 records
+Reference Name: chrUn_DS483832v1 has 4190 records
+Reference Name: chrUn_DS484386v1 has 1970 records
+Reference Name: chrUn_DS483896v1 has 82 records
+Reference Name: chrUn_DS484294v1 has 440 records
+Reference Name: chrUn_DS484426v1 has 894 records
+Reference Name: chrUn_DS483800v1 has 1438 records
+Reference Name: chrUn_DS483763v1 has 1350 records
+Reference Name: chrUn_DS484289v1 has 1260 records
+Reference Name: chrUn_DS484865v1 has 88 records
+Reference Name: chrUn_DS483839v1 has 1152 records
+Reference Name: chrUn_DS483880v1 has 2662 records
+Reference Name: chrUn_DS483951v1 has 4004 records
+Reference Name: chrUn_DS483781v1 has 6364 records
+Reference Name: chrUn_DS483798v1 has 222 records
+Reference Name: chrUn_DS483641v1 has 23282 records
+Reference Name: chrUn_DS483861v1 has 836 records
+Reference Name: chrUn_DS484872v1 has 10 records
+Reference Name: chrUn_DS485098v1 has 280 records
+Reference Name: chrUn_DS484292v1 has 956 records
+Reference Name: chrUn_DS485935v1 has 106 records
+Reference Name: chrUn_DS483900v1 has 732 records
+Reference Name: chrUn_DS485601v1 has 138 records
+Reference Name: chrUn_DS484009v1 has 380 records
+Reference Name: chrUn_DS485385v1 has 10 records
+Reference Name: chrUn_DS485259v1 has 30 records
+Reference Name: chrUn_DS485182v1 has 34 records
+Reference Name: chrUn_DS483960v1 has 66 records
+Reference Name: chrUn_DS484735v1 has 94 records
+Reference Name: chrUn_DS484224v1 has 270 records
+Reference Name: chrUn_DS484363v1 has 668 records
+Reference Name: chrUn_DS483760v1 has 322 records
+Reference Name: chrUn_DS484652v1 has 368 records
+Reference Name: chrUn_DS485548v1 has 4 records
+Reference Name: chrUn_DS483910v1 has 80 records
+Reference Name: chrUn_DS485424v1 has 174 records
+Reference Name: chrUn_DS484848v1 has 48 records
+Reference Name: chrUn_DS484176v1 has 150 records
+Reference Name: chrUn_DS483807v1 has 230 records
+Reference Name: chrUn_DS483796v1 has 996 records
+Reference Name: chrUn_DS483754v1 has 200 records
+Reference Name: chrUn_DS483758v1 has 460 records
+Reference Name: chrUn_DS483846v1 has 1806 records
+Reference Name: chrUn_DS484317v1 has 388 records
+Reference Name: chrUn_DS483744v1 has 1408 records
+Reference Name: chrUn_DS483709v1 has 13262 records
+Reference Name: chrUn_DS483874v1 has 430 records
+Reference Name: chrUn_DS483629v1 has 9072 records
+Reference Name: chrUn_CP007071v1 has 1310 records
+Reference Name: chrUn_CP007072v1 has 7050 records
+Reference Name: chrUn_CP007073v1 has 5848 records
+Reference Name: chrUn_CP007074v1 has 17162 records
+Reference Name: chrUn_CP007075v1 has 7600 records
+Reference Name: chrUn_CP007076v1 has 16026 records
+Reference Name: chrUn_CP007077v1 has 32178 records
+Reference Name: chrUn_CP007078v1 has 5520 records
+Reference Name: chrUn_CP007079v1 has 8622 records
+Reference Name: chrUn_CP007082v1 has 3420 records
+Reference Name: chrUn_CP007083v1 has 1382 records
+Reference Name: chrUn_CP007084v1 has 3618 records
+Reference Name: chrUn_CP007085v1 has 23300 records
+Reference Name: chrUn_CP007086v1 has 2874 records
+Reference Name: chrUn_CP007087v1 has 13750 records
+Reference Name: chrUn_CP007088v1 has 9878 records
+Reference Name: chrUn_CP007089v1 has 2568 records
+Reference Name: chrUn_CP007090v1 has 2684 records
+Reference Name: chrUn_CP007091v1 has 9624 records
+Reference Name: chrUn_CP007092v1 has 2512 records
+Reference Name: chrUn_CP007093v1 has 4726 records
+Reference Name: chrUn_CP007094v1 has 10034 records
+Reference Name: chrUn_CP007095v1 has 1576 records
+Reference Name: chrUn_CP007096v1 has 2810 records
+Reference Name: chrUn_CP007080v1 has 14288 records
+Reference Name: chrUn_CP007097v1 has 1120 records
+Reference Name: chrUn_CP007098v1 has 4908 records
+Reference Name: chrUn_CP007099v1 has 1778 records
+Reference Name: chrUn_CP007100v1 has 21828 records
+Reference Name: chrUn_CP007101v1 has 4510 records
+Reference Name: chrUn_CP007081v1 has 37782 records
+Reference Name: chrUn_CP007105v1 has 23612 records
+Reference Name: chrUn_DS483562v1 has 26808 records
+Reference Name: chrUn_CP007120v1 has 1409328 records
+Reference Name: chrX has 15626692 records
+Reference Name: chrX_DS484701v1_random has 1078 records
+Reference Name: chrX_DS484968v1_random has 7960 records
+Reference Name: chrX_DS484668v1_random has 862 records
+Reference Name: chrX_DS484664v1_random has 1992 records
+Reference Name: chrX_DS484272v1_random has 1592 records
+Reference Name: chrX_DS485077v1_random has 790 records
+Reference Name: chrX_DS484084v1_random has 4172 records
+Reference Name: chrX_DS484161v1_random has 2472 records
+Reference Name: chrX_DS484284v1_random has 7060 records
+Reference Name: chrX_DS484459v1_random has 2968 records
+Reference Name: chrX_DS484765v1_random has 5712 records
+Reference Name: chrX_DS484622v1_random has 1936 records
+Reference Name: chrX_DS484526v1_random has 3544 records
+Reference Name: chrX_DS485994v1_random has 1432 records
+Reference Name: chrX_DS485235v1_random has 1778 records
+Reference Name: chrX_DS484745v1_random has 4860 records
+Reference Name: chrX_DS484507v1_random has 4352 records
+Reference Name: chrX_DS484074v1_random has 5858 records
+Reference Name: chrX_DS485618v1_random has 246 records
+Reference Name: chrX_DS485797v1_random has 482 records
+Reference Name: chrX_DS484367v1_random has 3268 records
+Reference Name: chrX_DS484809v1_random has 1254 records
+Reference Name: chrX_DS484965v1_random has 2370 records
+Reference Name: chrX_DS484585v1_random has 4568 records
+Reference Name: chrX_DS485172v1_random has 6818 records
+Reference Name: chrX_DS484219v1_random has 10524 records
+Reference Name: chrX_DS484650v1_random has 1136 records
+Reference Name: chrX_DS484730v1_random has 4426 records
+Reference Name: chrX_DS484200v1_random has 3884 records
+Reference Name: chrX_DS484512v1_random has 1808 records
+Reference Name: chrX_DS484582v1_random has 5114 records
+Reference Name: chrX_DS484529v1_random has 3614 records
+Reference Name: chrX_DS484429v1_random has 7466 records
+Reference Name: chrX_DS484518v1_random has 4628 records
+Reference Name: chrX_DS484833v1_random has 814 records
+Reference Name: chrX_DS484724v1_random has 1558 records
+Reference Name: chrX_DS485015v1_random has 868 records
+Reference Name: chrX_DS484594v1_random has 302 records
+Reference Name: chrX_DS485606v1_random has 2118 records
+Reference Name: chrX_DS484819v1_random has 1010 records
+Reference Name: chrX_DS484358v1_random has 1692 records
+Reference Name: chrX_DS484845v1_random has 2612 records
+Reference Name: chrX_DS484430v1_random has 3270 records
+Reference Name: chrX_DS484568v1_random has 1970 records
+Reference Name: chrX_DS485942v1_random has 466 records
+Reference Name: chrX_DS484583v1_random has 2072 records
+Reference Name: chrX_DS484428v1_random has 1748 records
+Reference Name: chrX_DS485266v1_random has 10444 records
+Reference Name: chrX_DS484399v1_random has 2596 records
+Reference Name: chrX_DS485514v1_random has 1524 records
+Reference Name: chrX_DS484012v1_random has 5424 records
+Reference Name: chrX_DS484552v1_random has 1644 records
+Reference Name: chrX_DS485074v1_random has 2282 records
+Reference Name: chrX_DS484576v1_random has 454 records
+Reference Name: chrX_DS484803v1_random has 3074 records
+Reference Name: chrX_DS485765v1_random has 2002 records
+Reference Name: chrX_DS484447v1_random has 2954 records
+Reference Name: chrX_DS485962v1_random has 1476 records
+Reference Name: chrX_DS485769v1_random has 570 records
+Reference Name: chrX_DS484533v1_random has 1714 records
+Reference Name: chrX_DS484388v1_random has 8828 records
+Reference Name: chrX_DS484564v1_random has 2516 records
+Reference Name: chrX_DS484126v1_random has 1750 records
+Reference Name: chrX_DS484450v1_random has 4162 records
+Reference Name: chrX_DS484610v1_random has 4550 records
+Reference Name: chrX_DS485238v1_random has 1056 records
+Reference Name: chrX_DS484402v1_random has 5342 records
+Reference Name: chrX_DS484558v1_random has 2788 records
+Reference Name: chrX_DS484684v1_random has 1810 records
+Reference Name: chrX_DS484951v1_random has 796 records
+Reference Name: chrX_DS484679v1_random has 2790 records
+Reference Name: chrX_DS484691v1_random has 1536 records
+Reference Name: chrX_DS484647v1_random has 4518 records
+Reference Name: chrX_DS485913v1_random has 676 records
+Reference Name: chrX_DS484608v1_random has 1878 records
+Reference Name: chrX_DS484913v1_random has 3954 records
+Reference Name: chrX_DS485358v1_random has 938 records
+Reference Name: chrX_DS485096v1_random has 1986 records
+Reference Name: chrX_DS485257v1_random has 1846 records
+Reference Name: chrX_DS484547v1_random has 1256 records
+Reference Name: chrX_DS484596v1_random has 4090 records
+Reference Name: chrX_DS484497v1_random has 5594 records
+Reference Name: chrX_DS485967v1_random has 1230 records
+Reference Name: chrX_DS484688v1_random has 3154 records
+Reference Name: chrX_DS485476v1_random has 1226 records
+Reference Name: chrX_DS485649v1_random has 1894 records
+Reference Name: chrX_DS484996v1_random has 1154 records
+Reference Name: chrX_DS485981v1_random has 2094 records
+Reference Name: chrX_DS484235v1_random has 3572 records
+Reference Name: chrX_DS484431v1_random has 4148 records
+Reference Name: chrX_DS484672v1_random has 2932 records
+Reference Name: chrX_DS484961v1_random has 1472 records
+Reference Name: chrX_DS483648v1_random has 6930 records
+Reference Name: chrX_DS484600v1_random has 2050 records
+Reference Name: chrX_DS485813v1_random has 760 records
+Reference Name: chrX_DS485104v1_random has 3024 records
+Reference Name: chrX_DS484785v1_random has 788 records
+Reference Name: chrX_DS484379v1_random has 1146 records
+Reference Name: chrX_DS485465v1_random has 2564 records
+Reference Name: chrX_DS485676v1_random has 882 records
+Reference Name: chrX_DS485735v1_random has 1758 records
+Reference Name: chrX_DS484023v1_random has 4472 records
+Reference Name: chrX_DS484401v1_random has 1420 records
+Reference Name: chrX_DS484354v1_random has 3002 records
+Reference Name: chrX_DS484298v1_random has 5990 records
+Reference Name: chrX_DS484723v1_random has 532 records
+Reference Name: chrX_DS485860v1_random has 1140 records
+Reference Name: chrX_DS484995v1_random has 2104 records
+Reference Name: chrX_DS484393v1_random has 5976 records
+Reference Name: chrX_DS484911v1_random has 2374 records
+Reference Name: chrX_DS485305v1_random has 1226 records
+Reference Name: chrX_DS484362v1_random has 1438 records
+Reference Name: chrX_DS484628v1_random has 1222 records
+Reference Name: chrX_DS484604v1_random has 2260 records
+Reference Name: chrX_DS484201v1_random has 1200 records
+Reference Name: chrX_DS484411v1_random has 3300 records
+Reference Name: chrX_DS485855v1_random has 1968 records
+Reference Name: chrX_DS484811v1_random has 866 records
+Reference Name: chrX_DS484504v1_random has 962 records
+Reference Name: chrX_DS484695v1_random has 406 records
+Reference Name: chrX_DS484670v1_random has 904 records
+Reference Name: chrX_DS484261v1_random has 4038 records
+Reference Name: chrX_DS485660v1_random has 1988 records
+Reference Name: chrX_DS485164v1_random has 930 records
+Reference Name: chrX_DS484609v1_random has 4158 records
+Reference Name: chrX_DS485941v1_random has 1408 records
+Reference Name: chrX_DS484545v1_random has 838 records
+Reference Name: chrX_DS484397v1_random has 1912 records
+Reference Name: chrX_DS484368v1_random has 3314 records
+Reference Name: chrX_DS484198v1_random has 6076 records
+Reference Name: chrX_DS485101v1_random has 960 records
+Reference Name: chrX_DS485141v1_random has 2374 records
+Reference Name: chrX_DS484625v1_random has 4044 records
+Reference Name: chrX_DS484626v1_random has 6620 records
+Reference Name: chrX_DS485723v1_random has 432 records
+Reference Name: chrX_DS484587v1_random has 4424 records
+Reference Name: chrX_DS485167v1_random has 282 records
+Reference Name: chrX_DS485934v1_random has 580 records
+Reference Name: chrX_DS484364v1_random has 4396 records
+Reference Name: chrX_DS485110v1_random has 2074 records
+Reference Name: chrX_DS484540v1_random has 594 records
+Reference Name: chrX_DS484879v1_random has 1672 records
+Reference Name: chrX_DS484182v1_random has 1396 records
+Reference Name: chrX_DS484850v1_random has 2314 records
+Reference Name: chrX_DS485785v1_random has 1380 records
+Reference Name: chrX_DS484215v1_random has 3916 records
+Reference Name: chrX_DS484337v1_random has 4622 records
+Reference Name: chrX_DS485126v1_random has 15182 records
+Reference Name: chrX_DS484737v1_random has 5884 records
+Reference Name: chrX_DS485909v1_random has 1266 records
+Reference Name: chrX_DS484703v1_random has 2684 records
+Reference Name: chrX_DS484740v1_random has 1440 records
+Reference Name: chrX_DS484660v1_random has 460 records
+Reference Name: chrX_DS484810v1_random has 1128 records
+Reference Name: chrX_DS485081v1_random has 2640 records
+Reference Name: chrX_DS484758v1_random has 434 records
+Reference Name: chrX_DS484763v1_random has 310 records
+Reference Name: chrX_DS484572v1_random has 1132 records
+Reference Name: chrX_DS484477v1_random has 3540 records
+Reference Name: chrX_DS485691v1_random has 3812 records
+Reference Name: chrX_DS485801v1_random has 4252 records
+Reference Name: chrX_DS485845v1_random has 1600 records
+Reference Name: chrX_DS484101v1_random has 27404 records
+Reference Name: chrX_DS485573v1_random has 510 records
+Reference Name: chrX_DS484690v1_random has 1918 records
+Reference Name: chrX_DS484598v1_random has 2532 records
+Reference Name: chrX_DS484406v1_random has 2482 records
+Reference Name: chrX_DS484349v1_random has 2290 records
+Reference Name: chrX_DS485987v1_random has 768 records
+Reference Name: chrX_DS484555v1_random has 4638 records
+Reference Name: chrX_DS485687v1_random has 82 records
+Reference Name: chrX_DS485109v1_random has 704 records
+Reference Name: chrX_DS484569v1_random has 1856 records
+Reference Name: chrX_DS484648v1_random has 2938 records
+Reference Name: chrX_DS484483v1_random has 2894 records
+Reference Name: chrX_DS485856v1_random has 2858 records
+Reference Name: chrX_DS484633v1_random has 3240 records
+Reference Name: chrX_DS484500v1_random has 3114 records
+Reference Name: chrX_DS484136v1_random has 6550 records
+Reference Name: chrX_DS484871v1_random has 1356 records
+Reference Name: chrX_DS484360v1_random has 2298 records
+Reference Name: chrX_DS485852v1_random has 308 records
+Reference Name: chrX_DS484415v1_random has 1172 records
+Reference Name: chrX_DS484570v1_random has 1280 records
+Reference Name: chrX_DS484783v1_random has 1008 records
+Reference Name: chrX_DS484288v1_random has 2904 records
+Reference Name: chrX_DS484778v1_random has 1320 records
+Reference Name: chrX_DS484955v1_random has 2234 records
+Reference Name: chrX_DS484252v1_random has 2058 records
+Reference Name: chrX_DS484935v1_random has 2242 records
+Reference Name: chrX_DS485620v1_random has 2696 records
+Reference Name: chrX_DS485898v1_random has 1402 records
+Reference Name: chrX_DS485782v1_random has 1280 records
+Reference Name: chrX_DS484880v1_random has 4020 records
+Reference Name: chrX_DS484840v1_random has 2686 records
+Reference Name: chrX_DS484837v1_random has 3046 records
+Reference Name: chrX_DS484698v1_random has 2384 records
+Reference Name: chrX_DS484442v1_random has 3948 records
+Reference Name: chrX_DS485771v1_random has 2526 records
+Reference Name: chrX_DS484644v1_random has 4836 records
+Reference Name: chrX_DS485084v1_random has 3968 records
+Reference Name: chrX_DS484323v1_random has 1194 records
+Reference Name: chrX_DS484457v1_random has 1968 records
+Reference Name: chrX_DS484112v1_random has 3288 records
+Reference Name: chrX_DS484741v1_random has 1110 records
+Reference Name: chrX_DS484786v1_random has 374 records
+Reference Name: chrX_DS485745v1_random has 52 records
+Reference Name: chrX_DS484409v1_random has 3320 records
+Reference Name: chrX_DS484590v1_random has 1488 records
+Reference Name: chrX_DS484890v1_random has 2640 records
+Reference Name: chrX_DS485043v1_random has 1356 records
+Reference Name: chrX_DS484731v1_random has 2036 records
+Reference Name: chrX_DS484768v1_random has 4276 records
+Reference Name: chrX_DS484114v1_random has 918 records
+Reference Name: chrX_DS484611v1_random has 7380 records
+Reference Name: chrX_DS484519v1_random has 50248 records
+Reference Name: chrX_DS485599v1_random has 15902 records
+Reference Name: chrX_DS485111v1_random has 22852 records
+Reference Name: chrX_DS485378v1_random has 516 records
+Reference Name: chrX_DS483963v1_random has 13472 records
+Reference Name: chrX_DS484605v1_random has 3382 records
+Reference Name: chrX_DS485471v1_random has 1724 records
+Reference Name: chrX_DS484657v1_random has 2436 records
+Reference Name: chrX_DS484305v1_random has 5102 records
+Reference Name: chrX_DS485635v1_random has 390 records
+Reference Name: chrX_DS485277v1_random has 2194 records
+Reference Name: chrX_DS484597v1_random has 1468 records
+Reference Name: chrX_DS484178v1_random has 27162 records
+Reference Name: chrX_DS485262v1_random has 158 records
+Reference Name: chrX_DS485478v1_random has 6776 records
+Reference Name: chrX_DS484683v1_random has 1768 records
+Reference Name: chrX_DS485334v1_random has 1522 records
+Reference Name: chrX_DS485112v1_random has 1616 records
+Reference Name: chrX_DS484506v1_random has 600 records
+Reference Name: chrX_DS485336v1_random has 834 records
+Reference Name: chrX_DS483669v1_random has 3172 records
+Reference Name: chrX_DS483655v1_random has 15744 records
+Reference Name: chrX_DS485959v1_random has 4676 records
+Reference Name: chrX_DS485300v1_random has 2052 records
+Reference Name: chrX_DS485050v1_random has 11960 records
+Reference Name: chrX_DS484260v1_random has 3136 records
+Reference Name: chrX_DS484444v1_random has 740 records
+Reference Name: chrX_DS484694v1_random has 3258 records
+Reference Name: chrX_DS484677v1_random has 3440 records
+Reference Name: chrX_DS484777v1_random has 5716 records
+Reference Name: chrX_DS485617v1_random has 652 records
+Reference Name: chrX_DS484839v1_random has 2056 records
+Reference Name: chrX_DS485080v1_random has 2300 records
+Reference Name: chrX_DS484560v1_random has 2214 records
+Reference Name: chrX_DS484928v1_random has 620 records
+Reference Name: chrX_DS484775v1_random has 1700 records
+Reference Name: chrX_DS484535v1_random has 822 records
+Reference Name: chrX_DS484725v1_random has 1080 records
+Reference Name: chrX_DS484682v1_random has 1650 records
+Reference Name: chrX_DS484618v1_random has 3322 records
+Reference Name: chrX_DS484952v1_random has 1128 records
+Reference Name: chrX_DS484599v1_random has 4002 records
+Reference Name: chrX_DS484072v1_random has 1838 records
+Reference Name: chrX_DS484137v1_random has 3236 records
+Reference Name: chrX_DS485836v1_random has 1800 records
+Reference Name: chrX_DS484419v1_random has 4614 records
+Reference Name: chrX_DS484357v1_random has 516 records
+Reference Name: chrX_DS485798v1_random has 3680 records
+Reference Name: chrX_DS484344v1_random has 2410 records
+Reference Name: chrX_DS484623v1_random has 1894 records
+Reference Name: chrX_DS485537v1_random has 8824 records
+Reference Name: chrX_DS484057v1_random has 19774 records
+Reference Name: chrX_DS485899v1_random has 322 records
+Reference Name: chrX_DS484832v1_random has 596 records
+Reference Name: chrX_DS485950v1_random has 942 records
+Reference Name: chrX_DS483995v1_random has 242 records
+Reference Name: chrX_DS485603v1_random has 1656 records
+Reference Name: chrX_DS484733v1_random has 1008 records
+Reference Name: chrX_DS484541v1_random has 5842 records
+Reference Name: chrX_DS484085v1_random has 4294 records
+Reference Name: chrX_DS484165v1_random has 4008 records
+Reference Name: chrX_DS485271v1_random has 422 records
+Reference Name: chrX_DS485790v1_random has 812 records
+Reference Name: chrX_DS484753v1_random has 1570 records
+Reference Name: chrX_DS484645v1_random has 1450 records
+Reference Name: chrX_DS484669v1_random has 1232 records
+Reference Name: chrX_DS484162v1_random has 5680 records
+Reference Name: chrX_DS484374v1_random has 476 records
+Reference Name: chrX_DS485189v1_random has 282 records
+Reference Name: chrX_DS484603v1_random has 958 records
+Reference Name: chrX_DS485195v1_random has 612 records
+Reference Name: chrX_DS484580v1_random has 2876 records
+Reference Name: chrX_DS485351v1_random has 1570 records
+Reference Name: chrX_DS484433v1_random has 852 records
+Reference Name: chrX_DS485738v1_random has 908 records
+Reference Name: chrX_DS484423v1_random has 1214 records
+Reference Name: chrX_DS485879v1_random has 1910 records
+Reference Name: chrX_DS484702v1_random has 4528 records
+Reference Name: chrX_DS484636v1_random has 524 records
+Reference Name: chrX_DS485762v1_random has 1176 records
+Reference Name: chrX_DS485012v1_random has 1282 records
+Reference Name: chrX_DS484474v1_random has 602 records
+Reference Name: chrX_DS485278v1_random has 2652 records
+Reference Name: chrX_DS484322v1_random has 6544 records
+Reference Name: chrX_DS484974v1_random has 8856 records
+Reference Name: chrX_DS484135v1_random has 5756 records
+Reference Name: chrX_DS484826v1_random has 3790 records
+Reference Name: chrX_DS485816v1_random has 606 records
+Reference Name: chrX_DS483665v1_random has 2600 records
+Reference Name: chrX_DS484067v1_random has 3360 records
+Reference Name: chrX_DS485672v1_random has 11048 records
+Reference Name: chrX_DS484005v1_random has 8630 records
+Reference Name: chrX_DS483971v1_random has 30030 records
+Reference Name: chrX_DS485303v1_random has 15814 records
+Reference Name: chrX_DS484143v1_random has 13954 records
+Reference Name: chrX_DS484346v1_random has 14296 records
+Reference Name: chrX_DS485299v1_random has 8184 records
+Reference Name: chrX_DS484384v1_random has 1600 records
+Reference Name: chrX_DS484767v1_random has 474 records
+Reference Name: chrX_DS485857v1_random has 358 records
+Reference Name: chrX_DS485072v1_random has 380 records
+Reference Name: chrX_DS484319v1_random has 7906 records
+Reference Name: chrX_DS485225v1_random has 13064 records
+Reference Name: chrX_DS485268v1_random has 8700 records
+Reference Name: chrX_DS484293v1_random has 894 records
+Reference Name: chrX_DS484715v1_random has 640 records
+Reference Name: chrX_DS485454v1_random has 642 records
+Reference Name: chrX_DS484130v1_random has 17032 records
+Reference Name: chrX_DS484359v1_random has 5360 records
+Reference Name: chrX_DS483784v1_random has 31930 records
+Reference Name: chrX_DS485119v1_random has 8252 records
+Reference Name: chrX_DS484462v1_random has 6876 records
+Reference Name: chrX_DS485592v1_random has 5170 records
+Reference Name: chrX_DS485647v1_random has 17040 records
+Reference Name: chrX_DS484088v1_random has 886 records
+Reference Name: chrX_DS485078v1_random has 6474 records
+Reference Name: chrX_DS483905v1_random has 33502 records
+Reference Name: chrX_DS484963v1_random has 7016 records
+Reference Name: chrX_DS483685v1_random has 4820 records
+Reference Name: chrX_DS484749v1_random has 448 records
+Reference Name: chrX_DS484356v1_random has 658 records
+Reference Name: chrX_DS485418v1_random has 1248 records
+Reference Name: chrX_DS484125v1_random has 9400 records
+Reference Name: chrX_DS484131v1_random has 24944 records
+Reference Name: chrX_DS484328v1_random has 9770 records
+Reference Name: chrX_DS483843v1_random has 31856 records
+Reference Name: chrX_DS484468v1_random has 580 records
+Reference Name: chrX_DS485978v1_random has 4966 records
+Reference Name: chrX_DS485054v1_random has 4948 records
+Reference Name: chrX_DS483955v1_random has 1210 records
+Reference Name: chrX_DS483897v1_random has 25294 records
+Reference Name: chrX_DS484361v1_random has 14404 records
+Reference Name: chrX_DS485049v1_random has 196 records
+Reference Name: chrX_DS484978v1_random has 5260 records
+Reference Name: chrX_DS484002v1_random has 7704 records
+Reference Name: chrX_DS485364v1_random has 6710 records
+Reference Name: chrX_DS484345v1_random has 13210 records
+Reference Name: chrX_DS485310v1_random has 3082 records
+Reference Name: chrX_DS485281v1_random has 13232 records
+Reference Name: chrX_DS485597v1_random has 4834 records
+Reference Name: chrX_DS485345v1_random has 4184 records
+Reference Name: chrX_DS484417v1_random has 1766 records
+Reference Name: chrX_DS483698v1_random has 11804 records
+Reference Name: chrX_DS484620v1_random has 562 records
+Reference Name: chrX_DS485360v1_random has 2968 records
+Reference Name: chrX_DS485562v1_random has 3764 records
+Reference Name: chrX_DS485186v1_random has 3216 records
+Reference Name: chrX_DS485778v1_random has 3124 records
+Reference Name: chrX_DS485201v1_random has 5080 records
+Reference Name: chrX_DS485384v1_random has 3450 records
+Reference Name: chrX_DS485707v1_random has 4392 records
+Reference Name: chrX_DS483809v1_random has 9016 records
+Reference Name: chrX_DS484857v1_random has 3978 records
+Reference Name: chrX_DS484268v1_random has 6470 records
+Reference Name: chrX_DS484203v1_random has 3516 records
+Reference Name: chrX_DS484970v1_random has 4368 records
+Reference Name: chrX_DS483789v1_random has 9462 records
+Reference Name: chrX_DS484719v1_random has 9292 records
+Reference Name: chrX_DS484297v1_random has 13944 records
+Reference Name: chrX_DS484124v1_random has 15278 records
+Reference Name: chrX_DS485044v1_random has 258 records
+Reference Name: chrX_DS484990v1_random has 808 records
+Reference Name: chrX_DS484273v1_random has 3382 records
+Reference Name: chrX_DS485017v1_random has 4358 records
+Reference Name: chrX_DS484997v1_random has 5498 records
+Reference Name: chrX_DS483888v1_random has 3852 records
+Reference Name: chrX_DS485459v1_random has 82 records
+Reference Name: chrX_DS485651v1_random has 2292 records
+Reference Name: chrX_DS484907v1_random has 5142 records
+Reference Name: chrX_DS485549v1_random has 3868 records
+Reference Name: chrX_DS484732v1_random has 734 records
+Reference Name: chrX_DS484953v1_random has 14 records
+Reference Name: chrX_DS483660v1_random has 28316 records
+Reference Name: chrX_DS484615v1_random has 526 records
+Reference Name: chrX_DS484697v1_random has 306 records
+Reference Name: chrX_DS484216v1_random has 2334 records
+Reference Name: chrX_DS485287v1_random has 266 records
+Reference Name: chrX_DS484382v1_random has 19738 records
+Reference Name: chrX_DS484187v1_random has 8306 records
+Reference Name: chrX_DS485756v1_random has 150 records
+Reference Name: chrX_DS484185v1_random has 1656 records
+Reference Name: chrX_DS485550v1_random has 436 records
+Reference Name: chrX_DS483795v1_random has 48 records
+Reference Name: chrX_DS484666v1_random has 620 records
+Reference Name: chrX_DS483666v1_random has 1496 records
+Reference Name: chrX_DS484371v1_random has 6630 records
+Reference Name: chrX_DS483907v1_random has 968 records
+Reference Name: chrX_DS484387v1_random has 1616 records
+Reference Name: chrX_DS484316v1_random has 2124 records
+Reference Name: chrX_DS483803v1_random has 1334 records
+Reference Name: chrX_DS483950v1_random has 4948 records
+Reference Name: chrX_DS483885v1_random has 31508 records
+Reference Name: chrX_DS483928v1_random has 13126 records
+Reference Name: chrX_DS484326v1_random has 2612 records
+Reference Name: chrX_DS483745v1_random has 16516 records
+Reference Name: chrX_DS483892v1_random has 38852 records
+Reference Name: chrX_DS484061v1_random has 19092 records
+Reference Name: chrX_DS484330v1_random has 2940 records
+Reference Name: chrX_DS484140v1_random has 4572 records
+Reference Name: chrX_DS484051v1_random has 4836 records
+Reference Name: chrX_DS483893v1_random has 6002 records
+Reference Name: chrX_DS484075v1_random has 9838 records
+Reference Name: chrX_DS483948v1_random has 1668 records
+Reference Name: chrX_DS484081v1_random has 1010 records
+Reference Name: chrX_DS484586v1_random has 3370 records
+Reference Name: chrX_DS484278v1_random has 1022 records
+Reference Name: chrX_DS484046v1_random has 2860 records
+Reference Name: chrX_DS484133v1_random has 4712 records
+Reference Name: chrX_DS483909v1_random has 5900 records
+Reference Name: chrX_DS484488v1_random has 1548 records
+Reference Name: chrX_DS483974v1_random has 17152 records
+Reference Name: chrX_DS483903v1_random has 4956 records
+Reference Name: chrX_DS484538v1_random has 242 records
+Reference Name: chrX_DS483946v1_random has 14758 records
+Reference Name: chrX_DS484556v1_random has 730 records
+Reference Name: chrX_DS483851v1_random has 24206 records
+Reference Name: chrX_DS483926v1_random has 15302 records
+Reference Name: chrX_DS484563v1_random has 12882 records
+Reference Name: chrX_DS483923v1_random has 12564 records
+Reference Name: chrX_DS484166v1_random has 1082 records
+Reference Name: chrX_DS484341v1_random has 796 records
+Reference Name: chrX_DS484099v1_random has 11366 records
+Reference Name: chrX_DS484060v1_random has 17834 records
+Reference Name: chrX_DS484132v1_random has 578 records
+Reference Name: chrX_DS483821v1_random has 1882 records
+Reference Name: chrX_DS483818v1_random has 1462 records
+Reference Name: chrX_DS484562v1_random has 162 records
+Reference Name: chrX_DS483969v1_random has 6656 records
+Reference Name: chrX_DS484026v1_random has 1006 records
+Reference Name: chrX_CP007104v1_random has 52136 records
+Reference Name: chrX_CP007103v1_random has 164126 records
+Reference Name: chrY has 1019604 records
+Reference Name: chrY_DS485113v1_random has 1118 records
+Reference Name: chrY_DS485267v1_random has 298 records
+Reference Name: chrY_DS484992v1_random has 192 records
+Reference Name: chrY_DS485594v1_random has 130 records
+Reference Name: chrY_DS484805v1_random has 124 records
+Reference Name: chrY_DS484021v1_random has 3604 records
+Reference Name: chrY_DS484184v1_random has 228 records
+Reference Name: chrY_DS485013v1_random has 396 records
+Reference Name: chrY_DS485016v1_random has 128 records
+Reference Name: chrY_DS484142v1_random has 454 records
+Reference Name: chrY_DS484530v1_random has 198 records
+Reference Name: chrY_DS485460v1_random has 2132 records
+Reference Name: chrY_DS486003v1_random has 338 records
+Reference Name: chrY_DS485375v1_random has 860 records
+Reference Name: chrY_DS484233v1_random has 274 records
+Reference Name: chrY_DS484270v1_random has 136 records
+Reference Name: chrY_DS485865v1_random has 344 records
+Reference Name: chrY_DS484643v1_random has 1036 records
+Reference Name: chrY_DS484351v1_random has 1224 records
+Reference Name: chrY_DS484146v1_random has 752 records
+Reference Name: chrY_DS483959v1_random has 1886 records
+Reference Name: chrY_DS485795v1_random has 96 records
+Reference Name: chrY_DS484259v1_random has 524 records
+Reference Name: chrY_DS483778v1_random has 466 records
+Reference Name: chrY_DS484681v1_random has 336 records
+Reference Name: chrY_DS485927v1_random has 3966 records
+Reference Name: chrY_DS484986v1_random has 174 records
+Reference Name: chrY_DS484164v1_random has 492 records
+Reference Name: chrY_DS485534v1_random has 126 records
+Reference Name: chrY_DS484250v1_random has 252 records
+Reference Name: chrY_DS485070v1_random has 524 records
+Reference Name: chrY_DS485423v1_random has 2086 records
+Reference Name: chrY_DS485873v1_random has 100 records
+Reference Name: chrY_DS485736v1_random has 902 records
+Reference Name: chrY_DS485051v1_random has 810 records
+Reference Name: chrY_DS483987v1_random has 1384 records
+Reference Name: chrY_DS485159v1_random has 2636 records
+Reference Name: chrY_DS484266v1_random has 1766 records
+Reference Name: chrY_DS485646v1_random has 6 records
+Reference Name: chrY_DS484781v1_random has 486 records
+Reference Name: chrY_DS485561v1_random has 778 records
+Reference Name: chrY_DS484056v1_random has 844 records
+Reference Name: chrY_DS485166v1_random has 314 records
+Reference Name: chrY_DS485427v1_random has 668 records
+Reference Name: chrY_DS485894v1_random has 160 records
+Reference Name: chrY_DS484631v1_random has 558 records
+Reference Name: chrY_DS485840v1_random has 458 records
+Reference Name: chrY_DS485492v1_random has 414 records
+Reference Name: chrY_DS485875v1_random has 644 records
+Reference Name: chrY_DS484492v1_random has 234 records
+Reference Name: chrY_DS485483v1_random has 152 records
+Reference Name: chrY_DS485250v1_random has 908 records
+Reference Name: chrY_DS485388v1_random has 214 records
+Reference Name: chrY_DS484818v1_random has 664 records
+Reference Name: chrY_DS485575v1_random has 2018 records
+Reference Name: chrY_DS485696v1_random has 348 records
+Reference Name: chrY_DS484675v1_random has 948 records
+Reference Name: chrY_DS484665v1_random has 444 records
+Reference Name: chrY_DS483966v1_random has 2204 records
+Reference Name: chrY_DS485749v1_random has 690 records
+Reference Name: chrY_DS485752v1_random has 320 records
+Reference Name: chrY_DS484197v1_random has 650 records
+Reference Name: chrY_DS485158v1_random has 60 records
+Reference Name: chrY_DS484706v1_random has 580 records
+Reference Name: chrY_DS484574v1_random has 530 records
+Reference Name: chrY_DS484637v1_random has 1288 records
+Reference Name: chrY_DS485732v1_random has 632 records
+Reference Name: chrY_DS485374v1_random has 94 records
+Reference Name: chrY_DS485359v1_random has 850 records
+Reference Name: chrY_DS485523v1_random has 684 records
+Reference Name: chrY_DS485236v1_random has 172 records
+Reference Name: chrY_DS485399v1_random has 342 records
+Reference Name: chrY_DS484049v1_random has 228 records
+Reference Name: chrY_DS485767v1_random has 78 records
+Reference Name: chrY_DS484037v1_random has 440 records
+Reference Name: chrY_DS485975v1_random has 3050 records
+Reference Name: chrY_DS485560v1_random has 998 records
+Reference Name: chrY_DS484249v1_random has 24 records
+Reference Name: chrY_DS485938v1_random has 238 records
+Reference Name: chrY_DS485329v1_random has 1742 records
+Reference Name: chrY_DS484523v1_random has 286 records
+Reference Name: chrY_DS485042v1_random has 426 records
+Reference Name: chrY_DS485901v1_random has 130 records
+Reference Name: chrY_DS484863v1_random has 710 records
+Reference Name: chrY_DS485343v1_random has 2394 records
+Reference Name: chrY_DS485772v1_random has 140 records
+Reference Name: chrY_DS484994v1_random has 1048 records
+Reference Name: chrY_DS485328v1_random has 960 records
+Reference Name: chrY_DS484336v1_random has 1216 records
+Reference Name: chrY_DS485178v1_random has 1140 records
+Reference Name: chrY_DS485409v1_random has 1020 records
+Reference Name: chrY_DS485764v1_random has 742 records
+Reference Name: chrY_DS484128v1_random has 640 records
+Reference Name: chrY_DS485739v1_random has 148 records
+Reference Name: chrY_DS485452v1_random has 96 records
+Reference Name: chrY_DS484909v1_random has 2586 records
+Reference Name: chrY_DS485641v1_random has 346 records
+Reference Name: chrY_DS484956v1_random has 1152 records
+Reference Name: chrY_DS485320v1_random has 166 records
+Reference Name: chrY_DS485302v1_random has 2348 records
+Reference Name: chrY_DS485440v1_random has 998 records
+Reference Name: chrY_DS485685v1_random has 838 records
+Reference Name: chrY_DS483967v1_random has 430 records
+Reference Name: chrY_DS484908v1_random has 1300 records
+Reference Name: chrY_DS484945v1_random has 384 records
+Reference Name: chrY_DS485718v1_random has 136 records
+Reference Name: chrY_DS485099v1_random has 1060 records
+Reference Name: chrY_DS485839v1_random has 480 records
+Reference Name: chrY_DS484589v1_random has 4820 records
+Reference Name: chrY_DS485048v1_random has 3160 records
+Reference Name: chrY_DS485363v1_random has 360 records
+Reference Name: chrY_DS484103v1_random has 3054 records
+Reference Name: chrY_DS485532v1_random has 910 records
+Reference Name: chrY_DS484942v1_random has 398 records
+Reference Name: chrY_DS484983v1_random has 256 records
+Reference Name: chrY_DS484680v1_random has 382 records
+Reference Name: chrY_DS484441v1_random has 210 records
+Reference Name: chrY_DS485604v1_random has 140 records
+Reference Name: chrY_DS485960v1_random has 110 records
+Reference Name: chrY_DS485974v1_random has 26 records
+Reference Name: chrY_DS484063v1_random has 356 records
+Reference Name: chrY_DS485972v1_random has 306 records
+Reference Name: chrY_DS484043v1_random has 420 records
+Reference Name: chrY_DS485625v1_random has 404 records
+Reference Name: chrY_DS485318v1_random has 160 records
+Reference Name: chrY_DS485963v1_random has 1214 records
+Reference Name: chrY_DS485776v1_random has 24 records
+Reference Name: chrY_DS485137v1_random has 440 records
+Reference Name: chrY_DS485315v1_random has 594 records
+Reference Name: chrY_DS484696v1_random has 3132 records
+Reference Name: chrY_DS483742v1_random has 324 records
+Reference Name: chrY_DS483790v1_random has 1524 records
+Reference Name: chrY_DS484171v1_random has 1886 records
+Reference Name: chrY_DS485097v1_random has 436 records
+Reference Name: chrY_DS484181v1_random has 324 records
+Reference Name: chrY_CP007119v1_random has 370 records
+Reference Name: chrY_DS485888v1_random has 602 records
+Reference Name: chrY_DS484531v1_random has 156 records
+Reference Name: chrY_DS485470v1_random has 560 records
+Reference Name: chrY_DS485473v1_random has 360 records
+Reference Name: chrY_DS485755v1_random has 440 records
+Reference Name: chrY_DS485892v1_random has 542 records
+Reference Name: chrY_DS485552v1_random has 2906 records
+Reference Name: chrY_DS485288v1_random has 134 records
+Reference Name: chrY_DS485014v1_random has 506 records
+Reference Name: chrY_DS484757v1_random has 344 records
+Reference Name: chrY_DS484820v1_random has 450 records
+Reference Name: chrY_DS485422v1_random has 2074 records
+Reference Name: chrY_DS484876v1_random has 210 records
+Reference Name: chrY_DS485858v1_random has 244 records
+Reference Name: chrY_DS485512v1_random has 628 records
+Reference Name: chrY_DS485143v1_random has 1850 records
+Reference Name: chrY_DS484390v1_random has 420 records
+Reference Name: chrY_DS485416v1_random has 22 records
+Reference Name: chrY_DS484674v1_random has 386 records
+Reference Name: chrY_DS484465v1_random has 368 records
+Reference Name: chrY_DS485436v1_random has 1776 records
+Reference Name: chrY_DS485450v1_random has 432 records
+Reference Name: chrY_DS484830v1_random has 90 records
+Reference Name: chrY_DS483988v1_random has 1660 records
+Reference Name: chrY_DS484807v1_random has 384 records
+Reference Name: chrY_DS485956v1_random has 482 records
+Reference Name: chrY_DS485283v1_random has 872 records
+Reference Name: chrY_DS485335v1_random has 784 records
+Reference Name: chrY_DS485698v1_random has 466 records
+Reference Name: chrY_DS484641v1_random has 504 records
+Reference Name: chrY_DS485430v1_random has 152 records
+Reference Name: chrY_DS485316v1_random has 96 records
+Reference Name: chrY_DS484377v1_random has 740 records
+Reference Name: chrY_DS485786v1_random has 62 records
+Reference Name: chrY_DS484924v1_random has 148 records
+Reference Name: chrY_DS485885v1_random has 432 records
+Reference Name: chrY_DS485849v1_random has 354 records
+Reference Name: chrY_DS485219v1_random has 370 records
+Reference Name: chrY_DS484875v1_random has 550 records
+Reference Name: chrY_DS484175v1_random has 1438 records
+Reference Name: chrY_DS485028v1_random has 138 records
+Reference Name: chrY_DS483725v1_random has 482 records
+Reference Name: chrY_DS483931v1_random has 244 records
+Reference Name: chrY_DS483996v1_random has 350 records
+Reference Name: chrY_DS483875v1_random has 1552 records
+Reference Name: chrY_DS483889v1_random has 490 records
+Reference Name: chrY_DS484029v1_random has 3260 records
+Reference Name: chrY_DS484094v1_random has 6206 records
+Reference Name: chrY_DS483677v1_random has 13644 records
+Reference Name: chrY_DS483788v1_random has 1848 records
+Reference Name: chrY_DS483690v1_random has 28916 records
+Reference Name: chrY_CP007109v1_random has 16234 records
+Reference Name: chrY_CP007110v1_random has 3296 records
+Reference Name: chrY_CP007111v1_random has 17510 records
+Reference Name: chrY_CP007112v1_random has 7786 records
+Reference Name: chrY_CP007113v1_random has 2902 records
+Reference Name: chrY_CP007114v1_random has 14422 records
+Reference Name: chrY_CP007115v1_random has 9788 records
+Reference Name: chrY_CP007116v1_random has 3580 records
+Reference Name: chrY_CP007117v1_random has 3836 records
+Reference Name: chrY_CP007118v1_random has 6312 records
+Reference Name: chrY_CP007107v1_random has 17956 records
+Reference Name: chrY_CP007108v1_random has 7868 records
+Number of records = 109617960
+Returning: 0 (SUCCESS)
+[bam_sort_core] merging from 13 files...
+[bam_sort_core] merging from 15 files...
+[bam_sort_core] merging from 15 files...
+[bam_sort_core] merging from 19 files...
+[bam_sort_core] merging from 11 files...
+[Tue Dec  3 21:28:41 2019]
+Finished job 7.
+10 of 17 steps (59%) done
+
+[Tue Dec  3 21:28:41 2019]
+rule iPCR_bam2bedpe:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L.bam, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.log
+    jobid: 3
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, c=chr3L
+    resources: ram=20
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L.bam  -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.bedpe.gz -c 'chr3L' -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.log; 
+
+[Tue Dec  3 21:28:41 2019]
+rule iPCR_bam2bedpe:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R.bam, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.log
+    jobid: 4
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, c=chr3R
+    resources: ram=20
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R.bam  -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.bedpe.gz -c 'chr3R' -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.log; 
+
+[Tue Dec  3 21:28:41 2019]
+rule iPCR_bam2bedpe:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4.bam, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.log
+    jobid: 5
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, c=chr4
+    resources: ram=20
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4.bam  -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.bedpe.gz -c 'chr4' -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.log; 
+
+[Tue Dec  3 21:28:41 2019]
+rule iPCR_bam2bedpe:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L.bam, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.log
+    jobid: 1
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, c=chr2L
+    resources: ram=20
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L.bam  -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.bedpe.gz -c 'chr2L' -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.log; 
+
+[Tue Dec  3 21:28:41 2019]
+rule iPCR_bam2bedpe:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R.bam, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.log
+    jobid: 2
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, c=chr2R
+    resources: ram=20
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R.bam  -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.bedpe.gz -c 'chr2R' -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.log; 
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4.bam -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.bedpe.gz -c chr4 -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.log
+opening bam file /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr4.bam
+bam file opened
+importing vcf file /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+import of vcf done
+opening bedpe file for output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.bedpe.gz
+output opened
+start processing reads
+processing done
+output closed
+done
+[Tue Dec  3 21:30:04 2019]
+Finished job 5.
+11 of 17 steps (65%) done
+
+[Tue Dec  3 21:30:04 2019]
+rule iPCR_bam2bedpe:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM.bam, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.log
+    jobid: 6
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM.bam
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR, smpl=DGRP-362_B1_T01, c=chrM
+    resources: ram=20
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM.bam  -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.bedpe.gz -c 'chrM' -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.log; 
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM.bam -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.bedpe.gz -c chrM -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.log
+opening bam file /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chrM.bam
+bam file opened
+importing vcf file /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+import of vcf done
+opening bedpe file for output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.bedpe.gz
+output opened
+start processing reads
+processing done
+output closed
+done
+[Tue Dec  3 21:30:10 2019]
+Finished job 6.
+12 of 17 steps (71%) done
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L.bam -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.bedpe.gz -c chr3L -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.log
+opening bam file /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3L.bam
+bam file opened
+importing vcf file /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+import of vcf done
+opening bedpe file for output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.bedpe.gz
+output opened
+start processing reads
+processing done
+output closed
+done
+[Tue Dec  3 22:46:15 2019]
+Finished job 3.
+13 of 17 steps (76%) done
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L.bam -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.bedpe.gz -c chr2L -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.log
+opening bam file /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2L.bam
+bam file opened
+importing vcf file /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+import of vcf done
+opening bedpe file for output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.bedpe.gz
+output opened
+start processing reads
+processing done
+output closed
+done
+[Tue Dec  3 22:47:28 2019]
+Finished job 1.
+14 of 17 steps (82%) done
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R.bam -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.bedpe.gz -c chr2R -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.log
+opening bam file /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr2R.bam
+bam file opened
+importing vcf file /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+import of vcf done
+opening bedpe file for output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.bedpe.gz
+output opened
+start processing reads
+processing done
+output closed
+done
+[Tue Dec  3 22:48:32 2019]
+Finished job 2.
+15 of 17 steps (88%) done
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_bam_to_annotBed.py -b /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R.bam -v /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz -o /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.bedpe.gz -c chr3R -l /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.log
+opening bam file /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/05_split_bam/DGRP-362_B1_T01_chr3R.bam
+bam file opened
+importing vcf file /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-362_homoz.vcf.gz
+import of vcf done
+opening bedpe file for output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.bedpe.gz
+output opened
+start processing reads
+processing done
+output closed
+done
+[Tue Dec  3 23:06:52 2019]
+Finished job 4.
+16 of 17 steps (94%) done
+
+[Tue Dec  3 23:06:52 2019]
+localrule bedpe:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.bedpe.gz
+    jobid: 0
+    reason: Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/iPCR/DGRP-362_B1_T01/06_bedpe/DGRP-362_B1_T01_chr3L.bedpe.gz
+
+[Tue Dec  3 23:06:52 2019]
+Finished job 0.
+17 of 17 steps (100%) done
+Complete log: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/log/2019-12-03T104814.558336.snakemake.log
+SuRE-seq pipeline version:  0.14.feature_SNP-usr-config 
+ git commit hash:  21b33400bc65803741496393d1265eaaa98b7305 
+
+
+['/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/coverage/DGRP-362.norm.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/coverage/DGRP-362.norm.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/coverage/DGRP-362.norm.minus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/coverage/DGRP-362.normflat.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/coverage/DGRP-362.normflat.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm05_DGRP-362_pipelineOutput/coverage/DGRP-362.normflat.minus.bw']
+	Command being timed: "nice -19 snakemake -prs ../../code/pipeline/SuRE-snakemake --use-conda --resources ram=100 --configfile config-Dm05_DGRP-362_LP20191128.yml --cores 15 bedpe"
+	User time (seconds): 121002.07
+	System time (seconds): 8418.55
+	Percent of CPU this job got: 292%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:18:37
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 55356080
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 225
+	Minor (reclaiming a frame) page faults: 918237575
+	Voluntary context switches: 22147984
+	Involuntary context switches: 131745509
+	Swaps: 0
+	File system inputs: 269007496
+	File system outputs: 481384560
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
