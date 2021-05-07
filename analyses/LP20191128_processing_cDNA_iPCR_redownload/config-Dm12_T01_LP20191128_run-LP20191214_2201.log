@@ -1,0 +1,566 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 15
+Rules claiming more threads will be scaled down.
+Provided resources: ram=100
+Job counts:
+	count	jobs
+	1	addBC2bedpe_multi
+	1	cDNA
+	1	iPCR_merge_bedpe_genomeWide
+	6	merge_ipcr_cdna
+	6	reverse_liftover
+	6	sort_cnt_tbls
+	1	sorted_cnt_tbls
+	22
+
+[Sat Dec 14 22:01:41 2019]
+rule cDNA:
+    input: /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/CDRJ7ANXX_SuRE_III_b_19s003657-1-1_Perino_lane8Dm12_sequence.txt.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+    jobid: 19
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+    wildcards: s=T01_B1_T1
+
+/DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/cDNA-plDNA-count-BC.bash -l -b 'T01_B1_T1' -o '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1' -a 'CCTAGCTAACTATAACGGTCCTAAGGTAGCGAA' /home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download/CDRJ7ANXX_SuRE_III_b_19s003657-1-1_Perino_lane8Dm12_sequence.txt.gz
+
+[Sat Dec 14 22:01:41 2019]
+rule addBC2bedpe_multi:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/01_fastq_trimmed/T01_B1_T01_forw.info.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01.log, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01.stats
+    jobid: 21
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chrM.bedpe.gz
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR, smpl=T01_B1_T01
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_addBC2bedpe.py --bedpe /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chrM.bedpe.gz --info /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/01_fastq_trimmed/T01_B1_T01_forw.info.gz --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chrM.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01.log --stats /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01.stats
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Read 757 records
+[Sat Dec 14 22:04:22 2019]
+Finished job 19.
+1 of 22 steps (5%) done
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/iPCR_addBC2bedpe.py --bedpe /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/06_bedpe/T01_B1_T01_chrM.bedpe.gz --info /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/01_fastq_trimmed/T01_B1_T01_forw.info.gz --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chrM.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01.log --stats /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01.stats
+[Sun Dec 15 00:24:31 2019]
+Finished job 21.
+2 of 22 steps (9%) done
+
+[Sun Dec 15 00:24:31 2019]
+rule iPCR_merge_bedpe_genomeWide:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chrM.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/merged.log
+    jobid: 20
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chrM.bedpe.gz
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR
+    threads: 15
+    resources: ram=60
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_bedpe_over_samples_genomeWide.R '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/.bedpe.gz' /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/merged.log 15 /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/07_bedpe_BC/T01_B1_T01_chrM.bedpe.gz
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+[Sun Dec 15 08:09:42 2019]
+Finished job 20.
+3 of 22 steps (14%) done
+
+[Sun Dec 15 08:09:42 2019]
+rule merge_ipcr_cdna:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.log
+    jobid: 15
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz
+    wildcards: c=chr3L
+    resources: ram=40
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_iPCR_cDNA.R /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+
+[Sun Dec 15 08:09:42 2019]
+rule merge_ipcr_cdna:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.log
+    jobid: 16
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz
+    wildcards: c=chr3R
+    resources: ram=40
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_iPCR_cDNA.R /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+Loading required package: R.oo
+Loading required package: R.methodsS3
+Loading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.7.1 (2016-02-15) successfully loaded. See ?R.methodsS3 for help.
+R.methodsS3 v1.7.1 (2016-02-15) successfully loaded. See ?R.methodsS3 for help.
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+R.oo v1.22.0 (2018-04-21) successfully loaded. See ?R.oo for help.
+
+Attaching package: 'R.oo'
+
+The following objects are masked from 'package:methods':
+
+    getClasses, getMethods
+
+The following objects are masked from 'package:base':
+
+    attach, detach, gc, load, save
+
+R.oo v1.22.0 (2018-04-21) successfully loaded. See ?R.oo for help.
+
+Attaching package: 'R.oo'
+
+The following objects are masked from 'package:methods':
+
+    getClasses, getMethods
+
+The following objects are masked from 'package:base':
+
+    attach, detach, gc, load, save
+
+R.utils v2.8.0 successfully loaded. See ?R.utils for help.
+
+Attaching package: 'R.utils'
+
+The following object is masked from 'package:utils':
+
+    timestamp
+
+The following objects are masked from 'package:base':
+
+    cat, commandArgs, getOption, inherits, isOpen, nullfile, parse,
+    warnings
+
+R.utils v2.8.0 successfully loaded. See ?R.utils for help.
+
+Attaching package: 'R.utils'
+
+The following object is masked from 'package:utils':
+
+    timestamp
+
+The following objects are masked from 'package:base':
+
+    cat, commandArgs, getOption, inherits, isOpen, nullfile, parse,
+    warnings
+
+[Sun Dec 15 08:12:02 2019]
+Finished job 15.
+4 of 22 steps (18%) done
+
+[Sun Dec 15 08:12:02 2019]
+rule merge_ipcr_cdna:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.log
+    jobid: 13
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+    wildcards: c=chr2L
+    resources: ram=40
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_iPCR_cDNA.R /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+Loading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.7.1 (2016-02-15) successfully loaded. See ?R.methodsS3 for help.
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+R.oo v1.22.0 (2018-04-21) successfully loaded. See ?R.oo for help.
+
+Attaching package: 'R.oo'
+
+The following objects are masked from 'package:methods':
+
+    getClasses, getMethods
+
+The following objects are masked from 'package:base':
+
+    attach, detach, gc, load, save
+
+R.utils v2.8.0 successfully loaded. See ?R.utils for help.
+
+Attaching package: 'R.utils'
+
+The following object is masked from 'package:utils':
+
+    timestamp
+
+The following objects are masked from 'package:base':
+
+    cat, commandArgs, getOption, inherits, isOpen, nullfile, parse,
+    warnings
+
+[Sun Dec 15 08:12:21 2019]
+Finished job 16.
+5 of 22 steps (23%) done
+
+[Sun Dec 15 08:12:21 2019]
+rule merge_ipcr_cdna:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.log
+    jobid: 14
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+    wildcards: c=chr2R
+    resources: ram=40
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_iPCR_cDNA.R /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+Loading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.7.1 (2016-02-15) successfully loaded. See ?R.methodsS3 for help.
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+R.oo v1.22.0 (2018-04-21) successfully loaded. See ?R.oo for help.
+
+Attaching package: 'R.oo'
+
+The following objects are masked from 'package:methods':
+
+    getClasses, getMethods
+
+The following objects are masked from 'package:base':
+
+    attach, detach, gc, load, save
+
+R.utils v2.8.0 successfully loaded. See ?R.utils for help.
+
+Attaching package: 'R.utils'
+
+The following object is masked from 'package:utils':
+
+    timestamp
+
+The following objects are masked from 'package:base':
+
+    cat, commandArgs, getOption, inherits, isOpen, nullfile, parse,
+    warnings
+
+[Sun Dec 15 08:14:10 2019]
+Finished job 13.
+6 of 22 steps (27%) done
+
+[Sun Dec 15 08:14:10 2019]
+rule reverse_liftover:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.bedpe.gz, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.log
+    jobid: 9
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.bedpe.gz
+    wildcards: c=chr3L
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.log
+
+[Sun Dec 15 08:14:10 2019]
+rule reverse_liftover:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.bedpe.gz, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.log
+    jobid: 10
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.bedpe.gz
+    wildcards: c=chr3R
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.log
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Sun Dec 15 08:14:27 2019]
+Finished job 14.
+7 of 22 steps (32%) done
+
+[Sun Dec 15 08:14:27 2019]
+rule reverse_liftover:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.bedpe.gz, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.log
+    jobid: 7
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.bedpe.gz
+    wildcards: c=chr2L
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.log
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2L.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.log
+[Sun Dec 15 08:24:29 2019]
+Finished job 7.
+8 of 22 steps (36%) done
+
+[Sun Dec 15 08:24:29 2019]
+rule reverse_liftover:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.bedpe.gz, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.log
+    jobid: 8
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.bedpe.gz
+    wildcards: c=chr2R
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.log
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3L.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.log
+[Sun Dec 15 08:24:45 2019]
+Finished job 9.
+9 of 22 steps (41%) done
+
+[Sun Dec 15 08:24:45 2019]
+rule merge_ipcr_cdna:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.log
+    jobid: 17
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz
+    wildcards: c=chr4
+    resources: ram=40
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_iPCR_cDNA.R /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+Loading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.7.1 (2016-02-15) successfully loaded. See ?R.methodsS3 for help.
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+R.oo v1.22.0 (2018-04-21) successfully loaded. See ?R.oo for help.
+
+Attaching package: 'R.oo'
+
+The following objects are masked from 'package:methods':
+
+    getClasses, getMethods
+
+The following objects are masked from 'package:base':
+
+    attach, detach, gc, load, save
+
+R.utils v2.8.0 successfully loaded. See ?R.utils for help.
+
+Attaching package: 'R.utils'
+
+The following object is masked from 'package:utils':
+
+    timestamp
+
+The following objects are masked from 'package:base':
+
+    cat, commandArgs, getOption, inherits, isOpen, nullfile, parse,
+    warnings
+
+[Sun Dec 15 08:24:48 2019]
+Finished job 17.
+10 of 22 steps (45%) done
+
+[Sun Dec 15 08:24:48 2019]
+rule reverse_liftover:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.bedpe.gz, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.log
+    jobid: 11
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.bedpe.gz
+    wildcards: c=chr4
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.log
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr4.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.log
+[Sun Dec 15 08:24:59 2019]
+Finished job 11.
+11 of 22 steps (50%) done
+
+[Sun Dec 15 08:24:59 2019]
+rule merge_ipcr_cdna:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.log
+    jobid: 18
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+    wildcards: c=chrM
+    resources: ram=40
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_iPCR_cDNA.R /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/cDNA/T01_B1_T1/T01_B1_T1_trimmed_table.txt.gz
+Loading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.7.1 (2016-02-15) successfully loaded. See ?R.methodsS3 for help.
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+R.oo v1.22.0 (2018-04-21) successfully loaded. See ?R.oo for help.
+
+Attaching package: 'R.oo'
+
+The following objects are masked from 'package:methods':
+
+    getClasses, getMethods
+
+The following objects are masked from 'package:base':
+
+    attach, detach, gc, load, save
+
+R.utils v2.8.0 successfully loaded. See ?R.utils for help.
+
+Attaching package: 'R.utils'
+
+The following object is masked from 'package:utils':
+
+    timestamp
+
+The following objects are masked from 'package:base':
+
+    cat, commandArgs, getOption, inherits, isOpen, nullfile, parse,
+    warnings
+
+[Sun Dec 15 08:25:00 2019]
+Finished job 18.
+12 of 22 steps (55%) done
+
+[Sun Dec 15 08:25:00 2019]
+rule reverse_liftover:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.bedpe.gz, /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.log
+    jobid: 12
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.bedpe.gz
+    wildcards: c=chrM
+    resources: ram=30
+
+python /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.log
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chrM.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.log
+[Sun Dec 15 08:25:04 2019]
+Finished job 12.
+13 of 22 steps (59%) done
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr3R.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.log
+[Sun Dec 15 08:25:50 2019]
+Finished job 10.
+14 of 22 steps (64%) done
+
+[Sun Dec 15 08:25:50 2019]
+rule sort_cnt_tbls:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3R.bedpe.gz
+    jobid: 4
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.bedpe.gz
+    wildcards: c=chr3R
+    threads: 5
+    resources: ram=50
+
+zcat /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3R.bedpe.gz | /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/sort_cnt_tbls.sh > /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3R.bedpe.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Sun Dec 15 08:29:26 2019]
+Finished job 4.
+15 of 22 steps (68%) done
+
+[Sun Dec 15 08:29:26 2019]
+rule sort_cnt_tbls:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3L.bedpe.gz
+    jobid: 3
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.bedpe.gz
+    wildcards: c=chr3L
+    threads: 5
+    resources: ram=50
+
+zcat /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr3L.bedpe.gz | /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/sort_cnt_tbls.sh > /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3L.bedpe.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Sun Dec 15 08:32:30 2019]
+Finished job 3.
+16 of 22 steps (73%) done
+
+[Sun Dec 15 08:32:30 2019]
+rule sort_cnt_tbls:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2L.bedpe.gz
+    jobid: 1
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2L.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.bedpe.gz
+    wildcards: c=chr2L
+    threads: 5
+    resources: ram=50
+
+zcat /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2L.bedpe.gz | /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/sort_cnt_tbls.sh > /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2L.bedpe.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+command: /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/liftover_reverse.py --inn /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/09_ipcr_cdna_merged/chr2R.bedpe.gz --chainfile /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/T01_LP20191028_reverse.chain --out /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.bedpe.gz --log /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.log
+[Sun Dec 15 08:34:20 2019]
+Finished job 8.
+17 of 22 steps (77%) done
+
+[Sun Dec 15 08:34:20 2019]
+rule sort_cnt_tbls:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2R.bedpe.gz
+    jobid: 2
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2R.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.bedpe.gz
+    wildcards: c=chr2R
+    threads: 5
+    resources: ram=50
+
+zcat /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr2R.bedpe.gz | /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/sort_cnt_tbls.sh > /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2R.bedpe.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Sun Dec 15 08:35:18 2019]
+Finished job 1.
+18 of 22 steps (82%) done
+
+[Sun Dec 15 08:35:18 2019]
+rule sort_cnt_tbls:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr4.bedpe.gz
+    jobid: 5
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr4.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.bedpe.gz
+    wildcards: c=chr4
+    threads: 5
+    resources: ram=50
+
+zcat /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chr4.bedpe.gz | /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/sort_cnt_tbls.sh > /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr4.bedpe.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Sun Dec 15 08:35:22 2019]
+Finished job 5.
+19 of 22 steps (86%) done
+
+[Sun Dec 15 08:35:22 2019]
+rule sort_cnt_tbls:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chrM.bedpe.gz
+    jobid: 6
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chrM.bedpe.gz; Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.bedpe.gz
+    wildcards: c=chrM
+    threads: 5
+    resources: ram=50
+
+zcat /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/10_reverse_liftover/chrM.bedpe.gz | /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/sort_cnt_tbls.sh > /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chrM.bedpe.gz
+Activating conda environment: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/conda/d9506415
+[Sun Dec 15 08:35:23 2019]
+Finished job 6.
+20 of 22 steps (91%) done
+[Sun Dec 15 08:37:08 2019]
+Finished job 2.
+21 of 22 steps (95%) done
+
+[Sun Dec 15 08:37:08 2019]
+localrule sorted_cnt_tbls:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chrM.bedpe.gz
+    jobid: 0
+    reason: Input files updated by another job: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr4.bedpe.gz
+
+[Sun Dec 15 08:37:08 2019]
+Finished job 0.
+22 of 22 steps (100%) done
+Complete log: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/log/2019-12-14T220141.217375.snakemake.log
+SuRE-seq pipeline version:  0.14.feature_SNP-usr-config 
+ git commit hash:  89f832e39470ec9895e4b01a1f800a5c74520d69 
+
+
+['/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/coverage/T01.norm.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/coverage/T01.norm.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/coverage/T01.norm.minus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/coverage/T01.normflat.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/coverage/T01.normflat.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm12_T01_pipelineOutput/coverage/T01.normflat.minus.bw']
+	Command being timed: "nice -19 snakemake -prs ../../code/pipeline/SuRE-snakemake --use-conda --resources ram=100 --configfile config-Dm12_T01_LP20191128.yml --cores 15 sorted_cnt_tbls"
+	User time (seconds): 279787.51
+	System time (seconds): 3792.75
+	Percent of CPU this job got: 743%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 10:35:27
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 53398360
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 119
+	Minor (reclaiming a frame) page faults: 3483167207
+	Voluntary context switches: 32403963
+	Involuntary context switches: 1629366
+	Swaps: 0
+	File system inputs: 38980608
+	File system outputs: 152061904
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

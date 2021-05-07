@@ -1,0 +1,86 @@
+# uncomment next variable if the git state is not to be assessed
+# IGNORE_GIT_STATE
+
+
+
+
+#SNP_DIR: "/DATA/home/ludo/projects/LP140430_SureSeq_JvArensbergen/data/LP170210_SuRE42-45_1000Genomes/"
+BOWTIE2_REFSEQ: ""
+  
+  # directory for all generated output
+OUTDIR: "/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20200813_Dm03_DGRP-324_pipelineOutput"
+# expected adapter sequence in cDNA reads
+ADPT_SEQ: "CCTAGCTAACTATAACGGTCCTAAGGTAGCGAA"
+# expected adapter sequence in forward iPCR reads
+ADPTR_IPCR_FORW_SEQ: "CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT"
+# expected adapter sequence in reverse iPCR reads
+ADPTR_IPCR_REV_SEQ: "CCAGTCGT"
+
+
+# location of reference sequence index file for bowtie2
+# BOWTIE2_REFSEQ: "$HOME/data/bowtie2-indexes/hg19_ch1-22_XYM"
+BOWTIE2_INDEX_DIR: "/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/DGRP-324/"
+BOWTIE2_PARENTAL:
+  DGRP-324: DGRP-324
+
+VCF_DIR: "/home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/"
+VCF_PARENTAL:
+  DGRP-324: Haplotype_joint_call_SuRe_lines_lenient_filtering_DGRP-324_homoz.vcf.gz
+REVCHAIN:
+  DGRP-324: "chain/DGRP-324_LP20191028_reverse.chain"
+
+CHR_TARGET:
+  - chr2L
+  - chr2R
+  - chr3L
+  - chr3R
+  - chr4
+  - chrM
+
+ASSEMBLY: "dm6"
+MAX_INSERT_LENGTH: 500
+NCORES: 30
+ALLELE_SPECIFIC: "yes"
+# ALLELE_SPECIFIC: 0
+
+###################################################
+# The above settings are 'general' ################
+# Below are settings to specify input data files ##
+###################################################
+
+# section specifying genome specific info
+# genotype selection for a particular dataset
+GID: DGRP-324
+  # in snakemake file: BOWTIE2_REFSEQ=join.path(config["BOWTIE2_INDEX_DIR"],config["BOWTIE2_PARENTAL"][config["GID"]]["PATERNAL"/"MATERNAL"]
+
+cDNA:
+  FASTQ_DIR:
+    "/home/ludo/projects/LP190425_flySuRE/data/raw/"
+  OUTDIR:
+    "cDNA"
+  SAMPLES:
+    DGRP-324_B1_T1:
+      - LP20191127_iPCR_cDNA_resequencing_I_2nd_download/CDRJ7ANXX_SuRE_III_a_19s003656-1-1_Perino_lane7Dm4_sequence.txt.gz
+    DGRP-324_B2_T1:
+      - LP20200812_cDNA_repl2/raw_data/HF3KTBGXG_SuREseq_Round2_mix1_20s002291-1-1_Perino_lane1SureIIDm3_sequence.txt.gz
+  REPLICATES:
+    DGRP-324:
+      - DGRP-324_B1_T1
+      - DGRP-324_B2_T1
+
+plDNA:
+  FASTQ_DIR:
+    ""
+  OUTDIR:
+    ""
+  SAMPLES:
+
+iPCR:
+  FASTQ_DIR:
+    "/home/ludo/projects/LP190425_flySuRE/data/raw/LP20191127_iPCR_cDNA_resequencing_I_2nd_download"
+  OUTDIR:
+    "iPCR"
+  SAMPLES:
+    DGRP-324_B1_T01: 
+      R1: H3C3HBGXC_iPCR_mix1_19s003538-1-1_Perino_lane1DM03DGRP324_1_sequence.txt.gz
+      R2: H3C3HBGXC_iPCR_mix1_19s003538-1-1_Perino_lane1DM03DGRP324_2_sequence.txt.gz

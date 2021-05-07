@@ -1,0 +1,22 @@
+---
+title: "count2SNPtest"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Steps
+
+* read data per chromosome
+* downsample subset of the data, using predefined subsampling vectors
+* discard:
+  * SNPidx=="" (removes all data not containing SNPs)
+* de-convolute data if multiple SNPs are annotated in a single data-row
+* normalize cDNA/iPCR counts
+* combine data from different libraries into single table
+* sum and scale cDNA counts over all replicates
+* normalize cDNA counts (cDNA/iPCR)
+* split +/- strands
+* save data

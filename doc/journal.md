@@ -548,11 +548,13 @@ for f in chr2L.fa chr2R.fa chr3L.fa chr3R.fa chr4.fa chrM.fa chrX*.fa chrY*.fa c
 rm -f chr*fa
 samtools faidx dm6.AE017196_karyoSort.fasta
 picard CreateSequenceDictionary R=dm6.AE017196_karyoSort.fasta O=dm6.AE017196_karyoSort.dict
+```
 
 # remove empty lines from VCF files:
+```
 cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia
 for f in *filtering_*vcf; do mv $f tmp; awk NF tmp > $f; rm -f tmp; done
-
+```
 # create refseq fasta files
 
 **BELOW CODE IS WRONG!!** As it turns out GATK creates genome sequences taking
@@ -708,7 +710,7 @@ DGRP-304).
 Here is an overview of strains and sample numbers:
 
 | sample nr (based on github wiki) | strain short name | strain name in outputdir | strain long name in iPCR fastq| cDNA fastq fname | processing started | processing finished |
-| --------- | ----------------- | --------------------- | ---------------- | --- |
+| --------- | ----------------- | --------------------- | ---------------- | --- | --- | --- |
 | 03  | DGRP-324 | Dm03_DGRP-324  | DM03DGRP324  | SuRE_III_Dm3  |   |   |
 | 04  | DGRP-360 | Dm04_DGRP-360  | DM04DGRP360  | SuRE_III_Dm4  |   |   |
 | 05  | DGRP-362 | Dm05_DGRP-362  | DM05DGRP362  | SuRE_III_Dm5  |   |   |
@@ -754,7 +756,7 @@ done
 
 ## Sample *are* swapped
 
-I finished processing all data. I checked the cDNA-iPCR sample correspondence in R (`../analyses/LP20191017_processing_cDNA_iPCR/check_cDNA-iPCR_SampleCorrelation_20191031.R', run in `../data/intermediate`) and found that only in 3 cases the barcodes of cDNA and iPCR data have a high overlap. For in total 6 strains there is a obvious correspondence between cDNA and iPCR samples (median overlap is 5e-5, high overlap >0.5, this includes the three correct samples). The remaining 4 strains have max overlap scores of:
+I finished processing all data. I checked the cDNA-iPCR sample correspondence in R (`../analyses/LP20191017_processing_cDNA_iPCR/check_cDNA-iPCR_SampleCorrelation_20191031.R`, run in `../data/intermediate`) and found that only in 3 cases the barcodes of cDNA and iPCR data have a high overlap. For in total 6 strains there is a obvious correspondence between cDNA and iPCR samples (median overlap is 5e-5, high overlap >0.5, this includes the three correct samples). The remaining 4 strains have max overlap scores of:
 ```
 0.02080964
 0.06932100
@@ -876,9 +878,8 @@ There are two types of swaps, and a possible contamination:
 - iPCR samples Dm08_B04 and Dm13_ZH23 (filename Dm12_T01) may have been cross-contaminated
 
 
-| ------------ | ------------- | ------------- |
 | sample       | iPCR filename | cDNA filename |
-| ------------ | ------------- | ------------- |
+| ------------ | :-----------: | :-----------: |
 | Dm03_DGRP324 | Dm03          | Dm04          |
 | Dm04_DGRP360 | Dm04          | Dm05          |
 | Dm05_DGRP362 | Dm05          | Dm06          |
@@ -889,5 +890,334 @@ There are two types of swaps, and a possible contamination:
 | Dm11_N02     | Dm11          | Dm11          |
 | Dm12_T01     | Dm13          | Dm12          |
 | Dm13_ZH23    | Dm12          | Dm13          |
-| ------------ | ------------- | ------------- |
+
+
+# 20191126
+
+## Proportion of cDNA 'seen' in iPCR
+
+```
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate
+for d in LP20191128*ut; do awk -v sample="$d" ' FNR==NR{a[$2]=1; next} {if($1 in a){c++}} END{print sample"\t"c"\t"length(a)}' <( zcat $d/cDNA/*_B1_T1/*_B1_T1_trimmed_table.txt.gz) <( for f in $d/count_tables*/09_ipcr_cdna_merged/ch*.bedpe.gz ; do zcat $f | awk 'NR>1'; done ); done > /tmp/tt
+mv /tmp/tt /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191108_review_results_processing_LP20191106/cDNA_in_iPCR_LP20191126.txt
+```
+
+# 20200114
+
+## Processing SuRE count data to SNP siginificance calling
+
+Using work of prior work of Joris and Noud Klaassen. These are the processing steps to do:
+
+1. determine total iPCR and cDNA counts per replicate
+2. remove data without SNPs
+3. downsample samples with too large total counts
+4. separate SNPs read in a single read
+5. remove SNPs read twice in a single read (in forward and reverse direction)
+6. remove rows with NA values (occurred in hg19 position columns in SuRE42-45 data)
+7. (discard data if SNP parent is ambiguous or otherwise uncertain)
+8. normalize iPCR and cDNA counts to reads per billion (note that some samples may have been downsampled in which case the total counts for these samples should be adapted as well)
+9. compute mean cDNA counts over all biological replicates
+10. normalize cDNA counts to iPCR counts
+
+11. (order data by SNP)
+12. discard SNP for whic only 1 allele (eg only alt allele) is seen
+13. do wilcox test (this step consists of several which I need to specify later)
+
+whole genome steps:  
+3. (given the total genome-wide count you can generate a binary vector of length total_count indicating which of the reads should be included in the sample)
+
+I think I can do some preparation work (steps 1&2) in eg. python.  
+Then downsample in **R** (step 3)  
+Then do more steps in python (steps 4-7)  
+Not sure yet about the computational steps (steps 8,9,10,13)
+
+**NOTE:**  
+Although Noud's script first removes data if no SNP's are present, Joris' script first dos downsampling. I will follow the latter approach as it is more logical.
+
+## Step 1 in bash
+
+* example data eg. 
+    * `data/intermediate/LP20191128_Dm10_I33_pipelineOutput/count_tables/11_sorted/*`
+    * `data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/*`
+  IE. data from 6 chromosomes for two cel-lines
+* bash script [`analyses/LP20200114_counts2pval_pipeline_devel/getTotalSuREcounts.sh`](https://github.com/vansteensellab/LP20191016_flySuRE_project/commit/491a62838876a180616cd17f1b94b86e6726280b)
+
+# 20200117
+
+## Step 1 script finished
+
+The script `getTotalSuREcounts.sh` works, usage:
+```
+bash /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20200114_counts2pval_pipeline_devel/getTotalSuREcounts.sh -o /tmp/out -i count -l /tmp/log -c DGRP-324_B1 chr3L.bedpe.gz
+```
+
+The output is a single tabular text file with only a header (No_fragments
+iPCR-counts cDNA-sample-count(s)), and a single data line with values for each
+column.
+
+## Step 2: Downsampling cDNA data
+
+This step I will not yet implement because currently the data is not of high quality anyway.  
+The input/output specifications are:
+
+INPUT:
+
+* cDNA counts in tabular text files, compressed
+* Text file with target total counts, per sample
+
+OUTPUT:
+* cDNA counts, same format, down-sampled
+
+
+The downs-ampling procedure used in the ... paper is descriped as follows:
+```
+Equalization of cDNA barcode sequencing depth
+To minimize biases that might be caused by excessive differences in sequencing
+depth, cDNA reads of some samples were sub-sampled. First, for each
+transfection replicate the relative sequencing depth of cDNA barcodes was
+determined as the total cDNA barcode counts divided by the corresponding
+library complexity (i.e. the number of unique fragments identified in the
+library). Then, samples with a relative cDNA sequencing depth that exceeded the
+mean of all samples by more than one standard deviation (i.e., all K562 and
+HepG2 transfection replicates for genome HG02601 library 1, and all HepG2
+transfection replicates for genome HG02601 library 2) were down-sampled to the
+mean relative cDNA read depth.
+```
+
+Thus:  
+
+* determine relative cDNA sequencing depth as: `total-cDNA-counts/number-unique-iPCR-fragments`
+* per sample determine deviation from sample-mean
+* samples targeted for downsampling are samples with deviation from mean > 1stdev
+
+The relative cDNA sequencing depth is directly available from the output of step 1.  
+This needs to be computed for all samples.  
+Then I can select samples for downsampling.  
+The output with be the same SuRE counts files but downsampled  
+I may need to record new total counts at this point for the normalization step below
+
+## Step 3: filtering and reformatting count data
+
+At this point I can do the following steps:
+
+2. remove data without SNPs
+4. separate SNPs read in a single read
+5. remove SNPs read twice in a single read (in forward and reverse direction)
+6. remove rows with NA values (occurred in hg19 position columns in SuRE42-45 data)
+7. (discard data if SNP parent is ambiguous or otherwise uncertain)
+
+
+
+8. normalize iPCR and cDNA counts to reads per billion (note that some samples may have been downsampled in which case the total counts for these samples should be adapted as well)
+9. compute mean cDNA counts over all biological replicates
+10. normalize cDNA counts to iPCR counts
+
+Some thoughts about above step:
+
+1. The scaling to reads per billion, and the normalization of cDNA counts relative to iPCR counts, can be simplified:  
+    * Discard scaling
+    * Determine the total-iPCR fraction/total-cDNA
+    * Normalize by cDNA_i/iPCR_i times above fraction
+
+Originally first step is downsample, this is correct  
+Second step is scaling to billion reads:  
+
+$$ cDNA_{i,scaled} = \frac{cDNA_i}{\sum_{i}cDNA_i} \times 1e9 , \forall (cDNA, iPCR) $$
+
+Next step is to normalize cDNA relative to iPCR counts:
+
+$$ cDNA_{i,norm} = \frac{cDNA_{i,scaled}}{iPCR_{i,scaled}} $$
+
+But this means:
+
+$$ \frac{\frac{cDNA_i}{\sum_{i}cDNA_i} \times 1e9} {\frac{iPCR_i}{\sum_{i}iPCR_i} \times 1e9} $$
+
+ie
+
+$$ {\frac{cDNA_i}{\sum_{i}cDNA_i} \times 1e9} \times {\frac{\sum_{i}iPCR_i}{iPCR_i} \times \frac{1}{1e9}} $$
+
+equals
+
+$$ {\frac{cDNA_i}{\sum_{i}cDNA_i}} \times {\frac{\sum_{i}iPCR_i}{iPCR_i}} $$
+
+or
+
+$$ {\frac{cDNA_i}{iPCR_i}} \times {\frac{\sum_{i}iPCR_i}{\sum_{i}cDNA_i}} $$
+
+**CONCLUSION:**  
+Normalization can be done by:
+
+1. determine total-iPCR-count/total-cDNA-count proportion at first step
+2. during second pass through all data individual cDNA counts can directly be
+   normalized using associated iPCR count and the previously calculated
+   cDNA/iPCR proportion
+
+---
+
+# 20200129
+
+## Script normalization step finished
+
+Based on above considerations I first implemented a script which computes the normalized SuRE-score for each SuRE fragment.
+
+* script: `normalizeSuREcounts.sh`
+* location: `analyses/LP20200114_counts2pval_pipeline_devel`
+* usage: 
+```
+# INTRO / BACKGROUND                                                                                                                                                                                                                   
+#   script to perform the second step of the SuREcounts2SNPcalls pipeline:                                                                                                                                                             
+#   1. go through single input data (bedpe file for a single cell-line,                                                                                                                                                                
+#     single bio-rep)                                                                                                                                                                                                                  
+#   2. computed SuRE score,                                                                                                                                                                                                            
+#      ie (cDNA-count/iPCR-count)*(total-iPCR-count/total-cDNA-count)                                                                                                                                                                  
+#   3. write new tabular text file with annotation columns (seqname, start,                                                                                                                                                            
+#      end, SNPs, etc) and computed SuRE-score                                                                                                                                                                                         
+#   The input data is a tabular text files. The counts are in 2 or more                                                                                                                                                                
+#      columns:                                                                                                                                                                                                                        
+#   1. column with iPCR counts (mostly called 'iPCR' or 'counts')                                                                                                                                                                      
+#   2. One or more collumns with cDNA counts, called anything but generally                                                                                                                                                            
+#      combinations of sample name and bio-rep nr                                                                                                                                                                                      
+#   The count columns should be specified by the user as follows:                                                                                                                                                                      
+#   - name of column with iPCR counts: '-i column-name'                                                                                                                                                                                
+#   - name(s) of the column(s) with cDNA count(s): '"-c col-name1 col-name2 ..."'                                                                                                                                                      
+#   This means that the latter (possibly long) string should be constructed in                                                                                                                                                         
+#     the Snakemake file.                                                                                                                                                                                                              
+#   Additional input is the file generated in pipeline-step1, with the total                                                                                                                                                           
+#     cDNA/iPCR-counts
+```
+
+## Next steps
+
+Next steps include filtering and deconvolute SNPs per fragment:
+
+* Remove data without SNPs
+* Separate SNPs present in a single fragment
+* Remove SNPs which are read in both directions in a single fragment
+* Remove NAs (in position columns; due to liftover)
+* Discard ambiguous SNP data (eg. if parental assignment is ambiguous)
+
+* ~~Merge data per SNPid~~ (merging requires sorting which I want to do in a
+separate step since it requires lots of RAM resources which need to be
+controlled)
+
+## Pipeline script 3; filter and deconvolute
+
+* script: `filterDecon_SNPs.sh`
+* location: `analyses/LP20200114_counts2pval_pipeline_devel`
+* usage:  
+  input = tabular text files with normalized SuRE-scores (and original annotation data)  
+  output = tabular text file;  
+  	- same data
+  	- filtered and deconvoluted
+  	- extra columns:
+  		- number of fragments underlying SNP
+  		- summed iPCR and cDNA counts
+  		- mean/median iPCR and cDNA counts
+  		- min/max iPCR and cDNA counts
+  example usage: `python filterDecon_SNPs.py -i
+  /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/count_tables/11_sorted/chr3L.bedpe.gz
+  -o /tmp/o.gz -l /tmp/log -c bla`  
+  Note that the argument '-c' is actually not used; at this point the counts are not used or anything.
+
+# 20200221
+
+## Script #3 finished
+
+Which step have been implemented at this point:
+
+* [x]   1. determine total iPCR and cDNA counts per replicate
+* [x]   2. remove data without SNPs
+* [ ] 3. downsample samples with too large total counts
+* [x]   4. separate SNPs read in a single read
+* [x]   5. remove SNPs read twice in a single read (in forward and reverse direction)
+* [x]   6. remove rows with NA values (occurred in hg19 position columns in SuRE42-45 data)
+* [x]   7. (discard data if SNP parent is ambiguous or otherwise uncertain)
+* [x]   8. normalize iPCR and cDNA counts to reads per billion (note that some samples may have been downsampled in which case the total counts for these samples should be adapted as well)
+* [ ] 9. compute mean cDNA counts over all biological replicates
+* [x]   10. normalize cDNA counts to iPCR counts
+* [ ] 
+* [ ] 11. (order data by SNP)
+* [ ] 12. discard SNP for whic only 1 allele (eg only alt allele) is seen
+* [ ] 13. do wilcox test (this step consists of several which I need to specify later)
+
+Now all data sets need to be processed etc. I will now develop a snakemake file for this.
+
+## Snakemake file for pipeline SuREcounts2SNPcalls
+
+Config:
+
+Meta:  
+* samples: DM03, DM04, etc
+* OUTDIR
+
+CODEBASE=""
+OUTDIR: "/DATA/..."
+CHRS:
+  - chr2L
+  - chr2R
+  - chr3L
+  - chr3R
+  - chr4
+  - chrM
+
+SAMPLENAMES:
+  - Dm03_DGRP-324
+  - Dm04_DGRP-360
+  - Dm05_DGRP-362
+  - Dm06_DGRP-714
+  - Dm08_B04     
+  - Dm09_I02     
+  - Dm10_I33     
+  - Dm11_N02     
+  - Dm12_T01     
+  - Dm13_ZH23    
+
+SAMPLES:
+  Dm03_DGRP-324:
+    INDIR: "/DATA/..."
+    cDNA:
+      SAMPLENAMES:
+        - "DGRP-324_B1_T1"
+      REPLICATES:
+        DGRP-324_B1:
+          - "DGRP-324_B1_T1"
+  Dm04_DGRP-360:
+    INDER: ""
+    cDNA:
+      SAMPLENAMES:
+        - ""
+      REPLICATES:
+        ....:
+          - ""
+
+Rules:
+
+* getTotalCounts
+```
+rule 01_getTotalCounts:
+  input:
+    expand(os.path.join(config[{{sample}}]['INDIR'],"count_tables","11_sorted","{chr}.bedpe.gz"), chr=config['CHRS'])
+  output:
+    # txt file with total counts for all samples in current genotype
+    os.path.join(config["OUTDIR"],{sample},"sampleTotalCounts.txt")
+  params:
+    # bla
+  conda: CONDA_ENV
+  log: os.path.join(config["OUTDIR"],{sample},"sampleTotalCounts.log")
+  shell:
+    "{GET_TOTAL_COUNTS} -l {log} -o {output} -i "count" -c  {input};"
+```
+* normalizeCounts
+```
+rule 02_normalizeCounts
+```
+* filterDeconvolute
+
+Scripts:
+
+* getTotalSuREcounts.sh
+* normalizeSuREcounts.sh
+* filterDecon_SNPs.py
+
+
 

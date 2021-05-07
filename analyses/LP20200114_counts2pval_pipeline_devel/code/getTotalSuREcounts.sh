@@ -16,7 +16,7 @@
 #      combinations of sample name and bio-rep nr
 #   The count columns should be specified by the user as follows:
 #   - name of column with iPCR counts: '-i column-name'
-#   - name(s) of the column(s) with cDNA count(s): '"-c col-name1 col-name2 ..."'
+#   - name(s) of the column(s) with cDNA count(s): '-c col-name1 -c col-name2 -c ...'
 #   The means that the latter (possibly long) string should be constructed in
 #     the Snakemake file.
 #
@@ -26,20 +26,19 @@
 #   - trailing arguments: (multiple) input data files (columns: BC chrom start end strand SNP_ABS_POS SNP_REL_POS SNP_ID SNP_SEQ SNP_VAR SNP_PARENT SNP_TYPE SNP_SUBTYPE count I33_B1 start_hg19 end_hg19 SNP_ABS_POS_hg19)
 #   -o: output file for total counts
 #   -i: name of coilumn with iPCR counts
-#   -c: name(s) of column(s) with cDNA counts, in single, double quoted string separated by spaces
+#   -c: name(s) of column(s) with cDNA counts. Multiple column-names should be given using multiple "-c colname" 
 #   optional:
 #   -l: write to logfile instead of stdout
-#   -n: number of cores used in parallel processes (10)
+#   example usage: bash /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20200114_counts2pval_pipeline_devel/getTotalSuREcounts.sh -o /tmp/out -i count -l /tmp/log -c DGRP-324_B1 chr3L.bedpe.gz
 # INPUT:
-#   trimmed fastq files
+#   tabular text files, compressed. Including columns with names set by user (options -i/-c)
 # OUTPUT:
-#   bam files with aligned reads
-#
-# VERSIONS:
-#   -170206: initial version, VERSION set to 0.0.1
+#   1 text file: 
+#   - 1 header line; FRAGM_COUNT  iPCR-column cDNA-column
+#   - 1 data line; 3 x count
 #
 # TODO
-#   - parameterize filter criteria (min MAPQ score, BC length, etc)
+#   - 
 
 SCRIPTNAME=getTotalSuREcounts.sh
 
@@ -47,7 +46,7 @@ SCRIPTNAME=getTotalSuREcounts.sh
 AWK=gawk
 
 # GLOBAL VARIABLES
-# LOG="false"
+# 
 
 # ERROR_EXIT FUNCTION
 error_exit()
@@ -91,7 +90,9 @@ usage() {
   echo >&2 "OPTIONS:"
   echo >&2 "  -o: filename; output file for total counts [required]"
   echo >&2 "  -i: string; name of column with iPCR counts [required]"
-  echo >&2 "  -c: string; names(s) of column(s) with cDNA counts in double quoted string [required]"
+  echo >&2 "  -c: string; name of column with cDNA counts [required];"
+  echo >&2 "      multiple names can be specified using the option multiple times"
+  echo >&2 "      eg. '-c colname1 -c colname2 ..'"
   echo >&2 "  -l: filename; write messages to file [default: stdout]"
   echo >&2 "  -h: flag; print this message"
   echo >&2 ""
@@ -109,7 +110,8 @@ while getopts "h?o:l:n:i:c:" opt; do
       IPCR=$OPTARG;
       ;;
     c)
-      CDNA=$OPTARG;
+      # this option may be used repeatedly, therefor built an array
+      CDNA+=("$OPTARG");
       ;;
     h)
       usage;
@@ -163,12 +165,22 @@ done
 # check all required options are set
 if [ -z ${OUT+x} ]; then error_exit 1 "$LINENO: option -o not set (directory for output files)"; fi
 OUTDIR=$( dirname $OUT ) || error_exit 1 "$LINENO: dirname ($OUT)"
-# check required subdirectories existte if not or error_exit
+# check required subdirectories exist, if not create it; if fail error_exit
 [[ -d $( dirname ${OUT} ) ]] || mkdir -p $( dirname "${OUT}" ) || error_exit $? "$LINENO: can't create directory for output (${OUT})"
 # make path to OUT absolute
 OUT=$( make_path_absolute "${OUT}" )
 if [ -z ${IPCR+x} ]; then error_exit 1 "$LINENO: option -i not set (name of column in input file with iPCR counts)"; fi
 if [ -z ${CDNA+x} ]; then error_exit 1 "$LINENO: option -c not set (name(s) of column(s) in input file with cDNA counts)"; fi
+
+# check all required column names (iPCR and cDNA columns) are present in all input files
+for (( i=0; i<${#BEDPE[@]}; i++ )); do
+  HEADER=$( zcat ${BEDPE[$i]} | head -1 ) # extract header line from input file
+  for c in ${IPCR} ${CDNA[@]}; do # loop over all required column names
+    if [[ ${HEADER} != *"$c"* ]]; then # test whether sub-string '$c' is contained in HEADER (https://stackoverflow.com/a/229606)
+      error_exit $? "$LINENO: error; column name '$c' not found in input-header (${HEADER})"
+    fi
+  done
+done
 
 ######################################
 # write stdout to stdout or a log file
@@ -229,27 +241,29 @@ INPUT="<( gzip -dc ${BEDPE[0]} )"
 for ((i = 1; i < ${#BEDPE[@]}; i++)); do
   INPUT+=" <( gzip -dc ${BEDPE[$i]} )"
 done
-echo "INPUT = ${INPUT}"
+echo -e "INPUT = ${INPUT}\n"
+
+COLNAMES="${IPCR}"
+for c in ${CDNA[@]}; do
+  COLNAMES+=","${c}
+done
+echo -e "COLNAMES = ${COLNAMES}\n"
 
 read -r -d '' CMD<<-'EOS'
-awk -F"\t" -v ipcr=${IPCR} -v cdna="${CDNA}" '
+awk -F"\t" -v colnames_str=${COLNAMES} '
   BEGIN{
-    counts["ipcr"]=0
-    split(cdna, cdnanames)
-    for (c in cdnanames) {
-      counts[c]=0
+    split(colnames_str, colnames, ",")
+    for (i=1; i<=length(colnames); i++) {
+      counts[colnames[i]]=0
     }
-    split("",cdnacols," ")
+    split("",cols)
   }
   NR==1 { # read header line first time; set correct column indices
-    for (i=1; i<=NF; i++) {
-      if ($i==ipcr) {
-        ipcr=i
-        continue
-      }
-      for (c=1; c<=length(cdnanames); c++) {
-        if ($i==cdnanames[c]) {
-          cdnacols[cdnanames[c]]=i
+    for (f=1; f<=NF; f++) {
+      # for (i=1; i<=length(colnames); i++) {
+      for (cname in counts) {
+        if ($f==cname) {
+          cols[cname]=f
           continue
         }
       }
@@ -260,19 +274,20 @@ awk -F"\t" -v ipcr=${IPCR} -v cdna="${CDNA}" '
     next
   }
   { # read data, add counts to counters
-    counts["ipcr"]+=$ipcr
-    for (c in cdnanames) {
-      counts[cdnanames[c]]+=$cdnacols[cdnanames[c]]
+    # counts["ipcr"]+=$ipcr
+    for (cname in counts) {
+      counts[cname]+=$cols[cname]
+      # print cname, counts[cname], cols[cname]
     }
   }
   END {
     # print header
-    header = "FRAGM_COUNT\tiPCR"
-    values = (NR-ARGC+1)"\t"counts["ipcr"] # FRAGM_COUNT is number of records read, minus number of input files to account for headers
+    header = "FRAGM_COUNT\t"colnames[1]
+    values = (NR-ARGC+1)"\t"counts[colnames[1]] # FRAGM_COUNT is number of records read, minus number of input files to account for headers
     PROCINFO["sorted_in"] = "@ind_str_asc"
-    for (c in cdnanames) {
-      header = header"\t"cdnanames[c]
-      values = values"\t"counts[cdnanames[c]]
+    for (i=2;i<=length(colnames); i++) {
+      header = header"\t"colnames[i]
+      values = values"\t"counts[colnames[i]]
     }
     print header
     print values

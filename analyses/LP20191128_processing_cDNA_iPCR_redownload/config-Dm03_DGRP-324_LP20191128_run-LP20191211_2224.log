@@ -1,0 +1,73 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 15
+Rules claiming more threads will be scaled down.
+Provided resources: ram=100
+Job counts:
+	count	jobs
+	1	iPCR_merge_bedpe_genomeWide
+	6	merge_ipcr_cdna
+	6	reverse_liftover
+	6	sort_cnt_tbls
+	1	sorted_cnt_tbls
+	20
+
+[Wed Dec 11 22:24:29 2019]
+rule iPCR_merge_bedpe_genomeWide:
+    input: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chrM.bedpe.gz
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/merged.log
+    jobid: 20
+    reason: Missing output files: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz
+    wildcards: path=/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR
+    threads: 15
+    resources: ram=60
+
+/usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_bedpe_over_samples_genomeWide.R '{/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR}/samples_merged/08_bedpe_merged/.bedpe.gz' /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/merged.log 15 /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chrM.bedpe.gz
+Registered S3 method overwritten by 'R.oo':
+  method        from       
+  throw.default R.methodsS3
+Error in fwrite(x = bedpe[chrom == c], file = outfile, quote = FALSE,  : 
+  No such file or directory: 'chr2L{/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR}/samples_merged/08_bedpe_merged/.bedpe.gz'. Unable to create new file for writing (it does not exist already). Do you have permission to write here, is there space on the disk and does the path exist?
+Execution halted
+[Thu Dec 12 04:35:51 2019]
+Error in rule iPCR_merge_bedpe_genomeWide:
+    jobid: 20
+    output: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr2R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3L.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr3R.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chr4.bedpe.gz, /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/chrM.bedpe.gz
+    log: /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/merged.log (check log file(s) for error message)
+    shell:
+        /usr/bin/Rscript --vanilla /DATA/usr/ludo/projects/LP190425_flySuRE/code/pipeline/code/merge_bedpe_over_samples_genomeWide.R '{/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR}/samples_merged/08_bedpe_merged/.bedpe.gz' /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/samples_merged/08_bedpe_merged/merged.log 15 /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr2L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr2R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr3L.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr3R.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chr4.bedpe.gz /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/iPCR/DGRP-324_B1_T01/07_bedpe_BC/DGRP-324_B1_T01_chrM.bedpe.gz
+        (exited with non-zero exit code)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191128_processing_cDNA_iPCR_redownload/.snakemake/log/2019-12-11T222429.169465.snakemake.log
+SuRE-seq pipeline version:  0.14.feature_SNP-usr-config 
+ git commit hash:  b93f17c5301b2ff0de20e73346ed6c0bf2bc92e2 
+
+
+['/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.norm.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.norm.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.norm.minus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.normflat.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.normflat.plus.bw', '/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20191128_Dm03_DGRP-324_pipelineOutput/coverage/DGRP-324.normflat.minus.bw']
+Command exited with non-zero status 1
+	Command being timed: "nice -19 snakemake -prs ../../code/pipeline/SuRE-snakemake --use-conda --resources ram=100 --configfile config-Dm03_DGRP-324_LP20191128.yml --cores 15 sorted_cnt_tbls"
+	User time (seconds): 201101.48
+	System time (seconds): 2792.11
+	Percent of CPU this job got: 915%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 6:11:22
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 45064052
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 3138016648
+	Voluntary context switches: 9728200
+	Involuntary context switches: 638115
+	Swaps: 0
+	File system inputs: 17677832
+	File system outputs: 63007944
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

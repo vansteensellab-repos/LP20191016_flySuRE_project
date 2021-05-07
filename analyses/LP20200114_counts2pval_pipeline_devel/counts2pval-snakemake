@@ -1,0 +1,165 @@
+# vim: syntax=python expandtab
+# coding: utf-8
+
+import glob
+import os.path
+import sys
+from itertools import compress
+from os import listdir
+import fnmatch
+import inspect
+import subprocess
+
+# check if snakefile originates from a 'clean' git repos
+snakefilename = workflow.snakefile
+repospath = os.path.dirname(os.path.abspath(snakefilename))
+repos_state = subprocess.run('cd '+repospath+'; [ -z "$( git status --porcelain )" ] && exit 0 || exit 1', stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+# if repos_state.returncode != 0:
+#         print("\nYour snakefile is modified relative to the git repos", file=sys.stderr)
+#         print("Either undo your changes, or commit them", file=sys.stderr)
+#         print("Aborting\n\n", file=sys.stderr)
+#         sys.exit("")
+
+# set code_base directory and retrieve hash of git commit
+CODE_BASE = os.path.join(repospath, "code")
+CODE_BASE = repospath
+repos_state = subprocess.run('cd '+repospath+'; git log --pretty=format:"%H" -n 1', stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+GIT_COMMIT_HASH = repos_state.stdout
+
+# print pipeline VERSION to stdout
+# VERSIONFILE = os.path.join(CODE_BASE, "../", "VERSION")
+# with open(VERSIONFILE, 'r') as myfile:
+#     VERSION=myfile.read().replace('\n', '')
+# print ("SuRE-seq pipeline version: ", VERSION, "\n", "git commit hash: ", GIT_COMMIT_HASH, "\n\n")
+
+
+# copy all parameters (for readability)
+CONDA_ENV               = os.path.join(CODE_BASE, 'SuRE_Counts2Pval_CondaEnv.yml')
+# CONDA_ENV_PY2           = os.path.join(CODE_BASE, 'conda-env-py2.yml')
+# SAMTOOLS                = "samtools"
+# WASP_DIR                = os.path.join(CODE_BASE, "WASP/mapping")
+# PY2_WASP                = "PYTHONPATH=$PYTHONPATH:" + WASP_DIR + " python2.7 "
+#SNP_DIR                 = "/DATA/home/ludo/projects/LP140430_SureSeq_JvArensbergen/data/LP170210_SuRE42-45_1000Genomes/"
+# SPLITBAM                = "bam splitChromosome "
+R                       = "/usr/bin/Rscript --vanilla"
+
+GET_TOTAL_COUNTS          = os.path.join(CODE_BASE, "getTotalSuREcounts.sh")
+NORMALIZE_COUNTS          = os.path.join(CODE_BASE, "normalizeSuREcounts.sh")
+FILTER_DECON              = os.path.join(CODE_BASE, "filterDecon_SNPs.py")
+
+
+NCORES                  = config["NCORES"]
+OUTDIR                  = config["OUTDIR"]
+# ALLELE_SPECIFIC         = config["ALLELE_SPECIFIC"]
+# CHR_TARGET              = config["CHR_TARGET"]
+
+# CHR_ALL                 = ["chr"+str(i) for i in range(1,23)]+['chrX','chrY','chrM']
+# CHR_AVAIL=list(compress(CHR_ALL, [os.path.isfile(f) for f in expand(os.path.join(config["OUTDIR"], config["iPCR"]["OUTDIR"], "bed-annot", "iPCR-combined-bedpe_{c}_SNPannot.txt.gz"), c=CHR_ALL)]))
+
+# cDNA_SAMPLES=config["cDNA"]["SAMPLES"]
+# if cDNA_SAMPLES is None:
+#   cDNA_SAMPLES={}
+# cDNA_FASTQ_DIR=config["cDNA"]["FASTQ_DIR"]
+# cDNA_OUTDIR=os.path.join(config["OUTDIR"], config["cDNA"]["OUTDIR"])
+# cDNA_TARGETS=expand(os.path.join(cDNA_OUTDIR, "{s}", "{s}_trimmed_table.txt.gz"), s=cDNA_SAMPLES.keys())
+# 
+# iPCR_SAMPLES=config["iPCR"]["SAMPLES"]
+# if iPCR_SAMPLES is None:
+#   iPCR_SAMPLES={}
+# iPCR_SAMPLE2FILES={sample:[iPCR_SAMPLES[sample]["R1"],iPCR_SAMPLES[sample]["R2"]] for sample in iPCR_SAMPLES.keys()}
+# iPCR_FASTQ_DIR=config["iPCR"]["FASTQ_DIR"]
+# iPCR_OUTDIR=os.path.join(OUTDIR, config["iPCR"]["OUTDIR"])
+# BEDPE_FILES=expand(os.path.join(iPCR_OUTDIR, "{s}", "{s}.bedpe.gz"), s=iPCR_SAMPLES.keys())
+# iPCR_TARGETS=expand(os.path.join(OUTDIR, "SuRE-counts_{c}.txt.gz"), c=CHR_TARGET+CHR_AVAIL)
+
+# if (ALLELE_SPECIFIC is None) or (ALLELE_SPECIFIC == 0):
+#   GID = None
+#   # SNP_DIR=""
+#   # VCF_DIR=""
+#   print("processing in non-allele specific manner")
+# else:
+#   GID = config["GID"]
+#   if GID is None:
+#     sys.exit("ALLELE_SPECIFIC processing requested but no GID specified")
+#   # if SNP_DIR is None:
+#   #   sys.exit("ALLELE_SPECIFIC processing requested but no SNP_DIR specified")
+#   # VCF_DIR=SNP_DIR
+#   # SNP_DIR=os.path.join(SNP_DIR, "SNPs")
+#   # if not(os.path.exists(SNP_DIR)):
+#   #   sys.exit("GID is defined but SNP directory doesn't exist")
+#   # print("reading SNPs from " + SNP_DIR)
+#   # print("reading VCF from " + VCF_DIR)
+
+# target rules:
+
+# print(config.keys())
+print(config["SAMPLENAMES"])
+print(config["OUTDIR"])
+print(config["SAMPLES"].keys())
+print(expand(os.path.join(config["OUTDIR"],"{sample}","sampleTotalCounts.txt"), sample=config["SAMPLENAMES"]))
+
+
+rule all:
+  input: expand(os.path.join(config["OUTDIR"],"{sample}","sampleTotalCounts.txt"), sample=config["SAMPLENAMES"])
+
+rule T01_getTotalCounts:
+  input: expand(os.path.join(config["OUTDIR"],"{sample}","sampleTotalCounts.txt"), sample=config["SAMPLENAMES"])
+
+T2_input = expand(os.path.join(config["OUTDIR"],"{sample}","02_normalized","{chr}.bedpe.norm.gz"), sample=config["SAMPLENAMES"], chr=config['CHRS'])
+print("T2 = "+",".join(T2_input))
+
+rule T02_normalizeCounts:
+  input: T2_input
+
+rule T05_FilterDeconvolute:
+  input:
+    expand(os.path.join(config["OUTDIR"],"{sample}","05_filterDecon","{chr}.bedpe.fltr.gz"), sample=config["SAMPLENAMES"], chr=config['CHRS'])
+
+def count_tables_input(wildcards):
+  return expand(os.path.join(config["SAMPLES"][wildcards.sample]["INDIR"], "count_tables","11_sorted","{chr}.bedpe.gz"), chr=config["CHRS"])
+
+def count_colnames(wildcards):
+  return(" ".join(["-c"+s for s in config["SAMPLES"][wildcards.sample]["REPLICATES"]]))
+
+rule R01_getTotalCounts:
+  input:
+    count_tables_input
+  output:
+    # txt file with total counts for all samples in current genotype
+    os.path.join(config["OUTDIR"],"{sample}","01_totalCounts","sampleTotalCounts.txt")
+  params:
+    count_cols = count_colnames
+#  conda: CONDA_ENV
+  log: os.path.join(config["OUTDIR"],"{sample}","01_totalCounts","sampleTotalCounts.log")
+  shell:
+    "bash {GET_TOTAL_COUNTS} -l {log} -o {output} -i count '{params.count_cols}' {input};"
+
+def count_tables_input_chr(wildcards):
+  return expand(os.path.join(config["SAMPLES"][wildcards.sample]["INDIR"], "count_tables","11_sorted",wildcards.chr+".bedpe.gz"))
+
+
+rule R02_NormalizeSuREcounts:
+  input:
+    counts = count_tables_input_chr,
+    totals = os.path.join(config["OUTDIR"],"{sample}","01_totalCounts","sampleTotalCounts.txt")
+  output: 
+    os.path.join(config["OUTDIR"],"{sample}","02_normalized","{chr}.bedpe.norm.gz")
+  params:
+    ipcr_col = "count",
+    cdna_col = count_colnames
+#  conda: CONDA_ENV
+  log: os.path.join(config["OUTDIR"],"{sample}","02_normalized","{chr}.normalizedCounts.log")
+  shell:
+    "bash {NORMALIZE_COUNTS} -l {log} -o {output} -i '{params.ipcr_col}' '{params.cdna_col}' -d {input.counts} -t {input.totals};"
+    
+rule R05_FilterDeconvolute:
+  input:
+    os.path.join(config["OUTDIR"],"{sample}","02_normalized","{chr}.bedpe.norm.gz")
+  output: 
+    os.path.join(config["OUTDIR"],"{sample}","05_filterDecon","{chr}.bedpe.fltr.gz")
+#  params:
+#  conda: CONDA_ENV
+  log: os.path.join(config["OUTDIR"],"{sample}","05_filterDecon","{chr}.filterDecon.log")
+  shell:
+    "python {FILTER_DECON} -i {input} -o {output} -l {log}"
+

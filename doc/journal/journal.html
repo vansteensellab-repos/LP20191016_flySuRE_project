@@ -69,9 +69,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -102,8 +100,6 @@ summary {
 </style>
 
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -178,6 +174,15 @@ $(document).ready(function () {
 
 
 
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
 
 <div class="fluid-row" id="header">
 
@@ -197,6 +202,1089 @@ $(document).ready(function () {
 <div id="fastqc" class="section level2">
 <h2>Fastqc</h2>
 <pre><code>procHTS_LP170705.sh -c 20</code></pre>
+</div>
+</div>
+<div id="section-1" class="section level1">
+<h1>190426</h1>
+<p>I wrote an email to Matteo, Mattia to establish clear overview of project details.</p>
+<p>Also talked to Marcel about the project. He pointed out an overview of the iPCR samples for the 10 fly strains in his labguru journal: <a href="https://nki.labguru.com/knowledge/projects/14/milestones/24" class="uri">https://nki.labguru.com/knowledge/projects/14/milestones/24</a>.</p>
+<p>Also talked to Joris. He explained that the “drop in complexity” mentioned in an email by Matteo probably referred to the sequencing machine they used being incapable of dealing with the low sequence complexity in the read structure due to the plasmid backbone in the reads.</p>
+</div>
+<div id="section-2" class="section level1">
+<h1>190429</h1>
+<div id="fastqc-multiqc" class="section level2">
+<h2>Fastqc / multiqc</h2>
+<p>Running <code>fastqc</code> took some investment in setting up a new conda env, <code>NGS_QC</code>, as fastqc was generating errors (missing font) in the base env.</p>
+<p>After this fastqc ran just fine:</p>
+<pre><code>procHTS_LP170705.sh -c 20</code></pre>
+<p>Next, <code>multiqc</code> also ran without probels:</p>
+<pre><code>multiqc ../../data/LP190425_iPCR_67/</code></pre>
+<p>The resulting report (analyses/LP190425_check_iPCR_fastq/multiqc_report.html) suggests there might be some problems with a few samples: * Some samples have relatively high adapter content (Illumina universal adapter) * For all samples adapter content appears to increase significantly after position 102 or so! * Some sample have somewhat higher duplication levels.</p>
+<p>The indicated samples are all the GRP samples!</p>
+<p>One possibility might be that the GRP samples have somewhat shorter fragments. This explains that they tend to read into adapter more frequently.<br />
+To confirm I need to parse the reads to check the gDNA length distribution of the samples.</p>
+</div>
+</div>
+<div id="section-3" class="section level1">
+<h1>190606</h1>
+<div id="data-looks-very-bad" class="section level2">
+<h2>Data looks very bad</h2>
+<div id="fastq-files" class="section level3">
+<h3>FASTQ files</h3>
+<p>I looked at fastq files and eye-balled the expected fixed read structure. I can see that the expected sequences are hardly present, and if present mostly not at expected position. I revisited the FASTQC reports and the overal read quality is lower than normal (max 35, dropping to 18 at the regions where fixed backbone is expected. Normally we see ~38, slowly dropping to 24 over the readlength).</p>
+<p>It seems to me that the reported problems wrt the sequencing machine and the lack of complexity in the sequences (due to fixed backbone sequence) was very detrimental.</p>
+</div>
+<div id="alignments" class="section level3">
+<h3>Alignments</h3>
+<p>I aligned some sequences using BLAST and they perfectly align with Dme, so no problem there.</p>
+<p>Also aligned 1e6 reads using bowtie against dm5 and the results look good:</p>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP190425_iPCR_67/raw_data
+bowtie2 -s 10000 -u 1000000 -5 10 -x /DATA/data/bowtie2/dmel_r5_genome_2L_YHet -U 67_SuREseq_DM09_GDL_I02_2.fastq.gz -p 30 | samtools view - -b -o /tmp/tt.bam                                                                                                                                                                                                  
+1000000 reads; of these:
+  1000000 (100.00%) were unpaired; of these:
+    254188 (25.42%) aligned 0 times
+    645797 (64.58%) aligned exactly 1 time
+    100015 (10.00%) aligned &gt;1 times
+74.58% overall alignment rate</code></pre>
+</div>
+<div id="coverage" class="section level3">
+<h3>Coverage</h3>
+<p>I can estimate the coverage of the data over the genome. I use the 1e6 alignments of the reverse reads only:</p>
+<pre><code>samtools depth -a /tmp/tt.srt.bam | awk ' {depth[$3]++} END{for(d in depth){print d, depth[d];tot+=d*depth[d]} print tot/NR}'
+
+.
+.
+.
+511 2
+513 1
+514 4
+517 3
+519 3
+520 2
+521 1
+0.801608</code></pre>
+<p>Roughly 50% of the genome is not at all covered. The average coverage is 0.8, and the overall distribution looks good to me.</p>
+<p>Actual coverage: * actual fragment length is ~ twice the readlength in calculation above, so cov=1.6 * total number of reads is 25e6, with a unique alignment rate of 65%: 16e6 reads in total, so cov=25</p>
+</div>
+</div>
+</div>
+<div id="section-4" class="section level1">
+<h1>190726</h1>
+<div id="new-data-after-phi-x-spike-in" class="section level2">
+<h2>New data after Phi-X spike in</h2>
+<p>I received a mail from Matteo (dd 20190723 and subsequent days) announcing that the sequencing is finished. There were some issues downloading the data as the remote ftp server was updated or something.\ I downloaded the data into a new data dir, checked file checksums, checked fastqc html reports, etc:</p>
+<pre><code>cd /home/ludo/projects/LP190425_flySuRE/data/raw/
+mkdir LP190724_iPCR_complexity_test
+cd LP190724_iPCR_complexity_test
+wget  -r ftp://ftp-exchange.embl.de/pub/exchange/perino/iPCR/
+mv ./ftp-exchange.embl.de/pub/exchange/perino/iPCR/ .
+rm -rf ftp-exchange.embl.de</code></pre>
+</div>
+<div id="estimate-barcode-complexity-of-new-data" class="section level2">
+<h2>Estimate barcode complexity of new data</h2>
+<p>The reads are 66bp long. The only things I can do is:</p>
+<ul>
+<li>check the fixed backbone sequence</li>
+<li>check the diversity (complexity) of the barcode sequence</li>
+</ul>
+<div id="fixed-backbone-sequence" class="section level3">
+<h3>Fixed backbone sequence</h3>
+<p>First I will trim the reads on the backbone sequence ‘CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT’</p>
+<pre><code>cd /home/ludo/projects/LP190425_flySuRE/data/intermediate
+mkdir LP190726_iPCR_190724_trimmed_fastq
+cd LP190726_iPCR_190724_trimmed_fastq
+for f in ../../raw/LP190724_iPCR_complexity_test/*_sequence.txt.gz; do
+  fnew=$( basename $f )
+  echo $fnew
+  cutadapt --discard-trimmed -j 1 -O5 -g CCTAGCTAACTATAACGGTCCTAAGGTAGCGAACCAGTGAT -o ${fnew%.txt.gz}.fq $f --info-file ${fnew%.txt.gz}.info &amp;&gt; ${fnew%.txt.gz}.stats
+done</code></pre>
+<ul>
+<li>number of untrimmed per sample Approximately 2% of the reads do not contain a (good enough) backbone sequence</li>
+<li>~95% of all reads contain a recognizabble barcode of exactly 20bp <code>for f in *info; do echo $f; cat $f | awk -F&quot;\t&quot; ' $3==20{c++} END{print 100*(1-(c/NR))} '; done | awk 'NR%2==1{nm=$1; next}{print nm&quot;\t&quot;$1}' &gt; LP20190726_percentage_untrimmed.txt</code></li>
+</ul>
+</div>
+<div id="barcode-complexity" class="section level3">
+<h3>Barcode complexity</h3>
+<pre><code>echo -e &quot;file\t#reads\t#BC_20\tperc_uniq_BC\tBC_count_distrib&quot; &gt; LP20190726_barcode_complexity.txt
+for f in *info; do
+  awk -F&quot;\t&quot; ' 
+  BEGIN{OFS=&quot;\t&quot;} 
+  $2==-1{next} 
+  { if($5~/[ACGT]{20}/){c++; a[$5]++} } 
+  END{
+    for(k in a){b[a[k]]++}
+    st=&quot;1:&quot;b[1];
+    for(k=2;k&lt;=length(b);k++){st=st&quot;,&quot;k&quot;:&quot;b[k]} 
+    print FILENAME,NR,c,100*(length(a)/c),st
+  } ' $f
+done &gt;&gt; LP20190726_barcode_complexity.txt</code></pre>
+<p>Approximately 2-3% of barcodes are duplicated. This seems very good.</p>
+</div>
+<div id="conclusion" class="section level3">
+<h3>Conclusion</h3>
+<p>The data looks very good, with good complexity of barcodes.</p>
+</div>
+</div>
+</div>
+<div id="section-5" class="section level1">
+<h1>20190805</h1>
+<div id="report-to-matteo" class="section level2">
+<h2>Report to Matteo</h2>
+<p>Matteo sent me an email and asked about the results. I sent him an email saying all is perfect and he should continue with the sequencing.</p>
+</div>
+</div>
+<div id="section-6" class="section level1">
+<h1>20190906</h1>
+<p>Matteo sent me an email saying new data is available, both iPCR data (mail dd Sep 3, 2019, 11:21 AM) and cDNA data (mail dd Sep 5, 2019, 2:47 PM)!</p>
+<div id="ipcr-data" class="section level2">
+<h2>iPCR data</h2>
+<pre><code>mkdir /DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I
+dos2unix iPCR_ftp
+cat  iPCR_ftp.txt | grep iPCR_mix | while read -r f ; do echo $f; wget $f; done</code></pre>
+</div>
+<div id="cdna-data" class="section level2">
+<h2>cDNA data</h2>
+<pre><code>mkdir /DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I
+dos2unix SuRE_ftp.txt
+cat  SuRE_ftp.txt | while read -r f ; do echo $f; wget $f; done</code></pre>
+</div>
+</div>
+<div id="section-7" class="section level1">
+<h1>20190909</h1>
+<p>At first the data was not world-readable, which Matteo fixed. I downloaded the data over the weekend.</p>
+<div id="multiqc" class="section level2">
+<h2>MultiQC</h2>
+<p>I ran multiQC on the fastQC files which Matteo already generated, and the data looks good. The only thing that strikes me is that there appears to be quite high level of duplicate data, but I’m not sure if it is higher than normal???</p>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_iPCR_resequencing_I
+# sent output to the analysis directory so that it will be put under git control
+multiqc -o /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20190909_resequencing-I_1st_samples/ . 
+
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/raw/LP20190906_cDNA_resequencing_I
+multiqc -o /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20190909_resequencing-I_1st_samples/cDNA_resequencing_I_multiQC/ .</code></pre>
+</div>
+<div id="retrieve-vcf-data-from-embl" class="section level2">
+<h2>Retrieve VCF data from EMBL</h2>
+<p>Mattia sent me a link to a dropbox file. I downloaded the vcf and the tbi file to spinel and moved it to <code>lovelace:/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia</code>.</p>
+</div>
+<div id="genome-refrence-sequence" class="section level2">
+<h2>Genome refrence sequence</h2>
+<p>Mattia used a specific ref seq for his variant analysis; <code>dm6.AE017196.fasta</code>. I sent him an email requesting a copy.</p>
+</div>
+</div>
+<div id="section-8" class="section level1">
+<h1>20190912</h1>
+<div id="retrieve-ref-seq" class="section level2">
+<h2>Retrieve ref seq</h2>
+<p>I received an email from Mattia (dd Wed, Sep 11, 11:06 AM). He explained that he used a combination of dm6 and a Wolbachia genome sequence for the variant annotation. I don’t know why he did so.</p>
+<p>He included a link for the download of the combined fasta:</p>
+<pre><code>mkdir /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia
+wget ftp://ftp-exchange.embl.de/pub/exchange/forneris/Ludo/dm6.AE017196.fasta</code></pre>
+<p>Aha; i see from the fasta file that Wolbachia is a: <em>endosymbiont of Drosophila melanogaster</em>\ Now it makes more sense.</p>
+</div>
+</div>
+<div id="section-9" class="section level1">
+<h1>20190913</h1>
+<div id="bowtie2-indices" class="section level2">
+<h2>Bowtie2 indices</h2>
+<pre><code>mkdir /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20190913_Dmel_Wolb_bowtie2Indices
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/LP20190913_Dmel_Wolb_bowtie2Indices
+bowtie2-build ../../external/LP20190912_DM6_Wolbachia_refSeq_Mattia/dm6.AE017196.fasta DM6_Wolbachia</code></pre>
+</div>
+</div>
+<div id="section-10" class="section level1">
+<h1>20190916</h1>
+<div id="generate-parental-reference-sequences-for-each-of-the-cell-lines" class="section level2">
+<h2>Generate parental reference sequences for each of the cell lines</h2>
+<p>I need to follow the methodology I used for the INDEL pipeline on the SuRE42-54 data in <code>projects/LP140430_SureSeq_JvArensbergen/analyses/LP171023_createAltRefs</code>.</p>
+<p>This work is done in <code>projects/LP190425_flySuRE/analyses/LP20190916_generateParentalRefSeq</code>.</p>
+</div>
+</div>
+<div id="section-11" class="section level1">
+<h1>20190925</h1>
+<div id="generate-parental-seqs-cont" class="section level2">
+<h2>Generate parental seq’s, con’t</h2>
+<p>I fuond that the VCF files are not phased. But after discussing with Joris and with Mattia it is clear that the flies are (near) homozygous. So, the idea will be to generate a single ref seq per fly strain. Before doing this I want to filter the VCF files such that all non-homozygous loci are discarded.</p>
+</div>
+<div id="filter-vcf-files" class="section level2">
+<h2>Filter VCF files</h2>
+<p>There is a single VCF file, containing 13 columns with GT specs. The format of the columns is specified in the column ‘GT’, and is: <code>GT:AD:DP:GQ:PL</code>. The data is not phased so the separator is <code>/</code>. I need to split the sample columns using the pattern (from <a href="https://github.com/lpagie/SuRE-K562-pipeline/commit/65a6bd1799d1e17d0a9a705d9af2cedace72351a" class="uri">https://github.com/lpagie/SuRE-K562-pipeline/commit/65a6bd1799d1e17d0a9a705d9af2cedace72351a</a>):</p>
+<pre><code>  gt=gensub(/([^:]+):.*/,&quot;\\1&quot;,&quot;g&quot;,$GT)
+  split(gt, alleles, /[|\\]/)</code></pre>
+<p>To discard the heterozygous SNPs I will loop through all, check the sample column for all 13 samples, check for heterozygosity, and discard the heterozygous ones.</p>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia
+
+zcat Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz | \
+gawk -F&quot;\t&quot; '
+# copy header lines to output
+/^#/ { 
+  # print; 
+  next 
+}
+{
+  homoz=1 # homozygosity flag for current SNP
+  for (i=10; i&lt;=NF; i++) { # loop over sample columns
+    gt=gensub(/([^:]+):.*/,&quot;\\1&quot;,&quot;g&quot;,$i) # discard all fields except first
+    split(gt, alleles, /[|\/]/) # split GT into alleles
+    if (alleles[1] != alleles[2]) {
+      print
+      next
+    }
+  }
+  # print
+  # exit
+} '
+</code></pre>
+<div id="some-stats-on-vcf-and-filtering" class="section level3">
+<h3>Some stats on VCF and filtering</h3>
+<p>The number of heterozygous SNPs is ~1e6:</p>
+<pre><code>zcat Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz | gawk -F&quot;\t&quot; '
+# copy header lines to output
+/^#/ {  
+  # print;
+  next 
+}
+{
+  homoz=1 # homozygosity flag for current SNP
+  for (i=10; i&lt;=NF; i++) { # loop over sample columns
+    gt=gensub(/([^:]+):.*/,&quot;\\1&quot;,&quot;g&quot;,$i) # discard all fields except first
+    split(gt, alleles, /[|\/]/) # split GT into alleles
+    if (alleles[1] != alleles[2]) {
+      print
+      next
+    }
+  } 
+  # print
+  # exit
+} ' | wc -l
+# 905559</code></pre>
+<p>The total number of SNPs is less than 3e6:</p>
+<pre><code>zcat Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz | wc -l
+# 2707597</code></pre>
+<p>So, it is a bit much to discard 33% of all SNPs</p>
+</div>
+</div>
+</div>
+<div id="section-12" class="section level1">
+<h1>20190926</h1>
+<div id="cont-stats-of-vcf-and-discarding-snps" class="section level2">
+<h2>Con’t stats of VCF and discarding SNPs</h2>
+<p>The number and percentage of SNPs that will be discarded per sample, with the percentage of SNPs left after combining all (assuming independent overlapping heterozygous SNPs):</p>
+<pre><code>zcat Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz | gawk -F&quot;\t&quot; '
+# copy header lines to output
+/^#/ {  
+  # print;
+  next 
+}         
+{         
+  homoz=1 # homozygosity flag for current SNP
+  for (i=10; i&lt;=NF; i++) { # loop over sample columns
+    gt=gensub(/([^:]+):.*/,&quot;\\1&quot;,&quot;g&quot;,$i) # discard all fields except first
+    split(gt, alleles, /[|\/]/) # split GT into alleles
+    if (alleles[1] != alleles[2]) {
+      print i
+      #next
+    }
+  } 
+  # print
+  # exit
+} ' | sort | uniq -c | awk ' BEGIN{left=100} { p=$1/2707597; left=left*(1-p); print $1&quot;\t&quot;$2&quot;\t&quot;p*100 } END{print left}'
+34724   10      1.28247
+18078   11      0.667677
+17719   12      0.654418
+220849  13      8.15664
+202699  14      7.48631
+15969   15      0.589785
+55019   16      2.03202
+51531   17      1.9032
+68844   18      2.54262
+158633  19      5.85881
+35979   20      1.32882
+305927  21      11.2988
+15263   22      0.56371
+63.1417</code></pre>
+<p>The predicted 63.14% left after discarding all SNPs heterozygous in any of the samples is very close to the observed <code>(1-905559/2707597)*100 = 66.55%</code></p>
+<div id="conclusion-1" class="section level3">
+<h3>CONCLUSION</h3>
+<p>I need to discard SNPs per sample. When analyzing significance of SNPs the number of underlying samples will differ per SNP. I guess this is not a real problem, as the loss of power will affect the statistical significance exactly the same as if there are fewer gDNA fragments overlapping the SNP in the library.</p>
+</div>
+</div>
+<div id="allele-frequency-stats" class="section level2">
+<h2>Allele frequency stats</h2>
+<p>Per SNP; how many samples and how many reference and alternative alleles are available:</p>
+<pre><code>zcat Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz | gawk -F&quot;\t&quot; '
+BEGIN {
+  ORS=&quot;\t&quot;
+}
+# copy header lines to output
+/^#/ {
+  # print;
+  next
+}
+{
+  for(i=0;i&lt;100;i++){cnt[i]=0}
+  for (i=10; i&lt;=NF; i++) { # loop over sample columns
+    gt=gensub(/([^:]+):.*/,&quot;\\1&quot;,&quot;g&quot;,$i) # discard all fields except first
+    split(gt, alleles, /[|\/]/) # split GT into alleles
+    if (alleles[1]!=&quot;.&quot; &amp;&amp; alleles[1] == alleles[2]) {
+      cnt[alleles[1]]++
+    }
+  }
+  split($5,alt,&quot;,&quot;)
+  nalleles=length(alt)+1
+  ORS=&quot;\t&quot;
+  print nalleles
+  for(k=0;k &lt; nalleles;k++) {print cnt[k]}
+  ORS=&quot;&quot;
+  print &quot;\n&quot;
+} ' | sort | uniq -c | sort -gr | gawk ' {c+=$1; print c&quot;\t&quot;(c/2705697)*100&quot;\t&quot;$0} '
+742436  27.4397  742436 2       12      1       
+989174  36.5589  246738 2       11      2       
+1157339 42.7742  168165 2       12      0       
+1306742 48.2959  149403 2       10      3       
+1413194 52.2303  106452 2       11      1       
+1518180 56.1105  104986 2       9       4       
+1598757 59.0885   80577 2       8       5       
+1675120 61.9108   76363 2       10      2       
+1742302 64.3938   67182 2       7       6       
+1806495 66.7663   64193 2       9       3       
+1861637 68.8043   55142 2       6       7       
+1915227 70.785    53590 2       8       4       
+1963657 72.5749   48430 2       5       8       
+2009312 74.2623   45655 2       7       5       
+2053020 75.8777   43708 2       4       9       
+2093087 77.3585   40067 2       3       10      
+2131993 78.7964   38906 2       6       6       
+2170436 80.2173   38443 2       2       11      
+2208714 81.632    38278 2       1       12      
+2241676 82.8502   32962 2       5       7       
+2268720 83.8497   27044 2       4       8       
+2290423 84.6519   21703 2       3       9       
+2312078 85.4522   21655 2       11      0       
+2331918 86.1855   19840 2       10      1       
+.
+.
+.
+.</code></pre>
+<p>By far most SNPs have ref/alt allele distribution stronly skewed towards ref being overrepresented in fly strains.</p>
+</div>
+</div>
+<div id="section-13" class="section level1">
+<h1>20191004</h1>
+<div id="generate-per-sample-vcf-files" class="section level2">
+<h2>Generate per sample VCF files</h2>
+<p>Given the distribution of the heterozygous SNPs I need to discard the heterozygous SNPs per sample. Not, as I planned inititally, for the entire set of fly-strains. So, first I’ll split the VCF per strain and then remove heterozygous SNPs.</p>
+<div id="split-vcf-file-per-sample" class="section level3">
+<h3>Split VCF file per sample</h3>
+<p><strong>Note:</strong> Later (dd 20191008) I found that the VCFs contain a blank line before the #CHROM line. I fixed that below but for future reference I should print the header (all ^## lines) without an additional newline, probably by changing ORS to “”)</p>
+<pre><code>awk -F&quot;\t&quot; '
+BEGIN {
+  OFS=&quot;\t&quot;
+}
+/^##/ {
+  header=header&quot;&quot;$0&quot;\n&quot;
+  next
+}
+/^#CHROM/ {
+  for (i=1; i&lt;=NF; i++) {
+    if ( index(&quot;#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT&quot;, $i)==0 ) {
+      sampleCol[$i]=i
+    }
+  }
+  for (k in sampleCol) {
+    print header &gt; &quot;Haplotype_joint_call_SuRe_lines_lenient_filtering_&quot; k &quot;.vcf&quot;
+    print &quot;#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t&quot; k &gt;&gt; &quot;Haplotype_joint_call_SuRe_lines_lenient_filtering_&quot; k &quot;.vcf&quot;
+  }
+  next
+}
+{
+  for (k in sampleCol) {
+    print $1,$2,$3,$4,$5,$6,$7,$8,$9,$sampleCol[k] &gt;&gt; &quot;Haplotype_joint_call_SuRe_lines_lenient_filtering_&quot; k &quot;.vcf&quot;
+  }
+}
+' &lt;( zcat Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz )
+
+for f in *vcf; do
+  cat $f | awk -F&quot;\t&quot; '
+    BEGIN { OFS=&quot;\t&quot; }
+    /#/ { print; next }
+    {
+      sample=gensub(/([^:]+):.*/,&quot;\\1&quot;,&quot;g&quot;,$10)
+      split(sample, allele, /[|\/]/)
+      if (allele[1] == allele[2]) {print}
+    }
+  ' &gt; ${f%.vcf}_homoz.vcf
+done
+
+parallel gzip ::: *vcf
+
+find -name \*gz -not -name &quot;*homo*&quot; -not -name Haplotype_joint_call_SuRe_lines_lenient_filtering.vcf.gz -delete</code></pre>
+</div>
+</div>
+</div>
+<div id="section-14" class="section level1">
+<h1>20191008</h1>
+<div id="generate-ref-sequences-per-sample" class="section level2">
+<h2>Generate ref sequences per sample</h2>
+<p>Follow recipe from <a href="https://olgabotvinnik.com/blog/how-to-create-a-custom-genome-fasta-from-a-vcf-file/" class="uri">https://olgabotvinnik.com/blog/how-to-create-a-custom-genome-fasta-from-a-vcf-file/</a></p>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia
+cat dm6.AE017196.fasta | awk '/Wolbachia/{OUT=&quot;wolbachia.fa&quot;;print &gt;OUT; next} /^&gt;chr/{OUT=substr($0,2) &quot;.fa&quot;}; OUT{print &gt;OUT}'
+for f in chr2L.fa chr2R.fa chr3L.fa chr3R.fa chr4.fa chrM.fa chrX*.fa chrY*.fa chrUn*.fa; do cat $f &gt;&gt; dm6.AE017196_karyoSort.fasta; done
+rm -f chr*fa
+samtools faidx dm6.AE017196_karyoSort.fasta
+picard CreateSequenceDictionary R=dm6.AE017196_karyoSort.fasta O=dm6.AE017196_karyoSort.dict</code></pre>
+</div>
+</div>
+<div id="remove-empty-lines-from-vcf-files" class="section level1">
+<h1>remove empty lines from VCF files:</h1>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia
+for f in *filtering_*vcf; do mv $f tmp; awk NF tmp &gt; $f; rm -f tmp; done</code></pre>
+</div>
+<div id="create-refseq-fasta-files" class="section level1">
+<h1>create refseq fasta files</h1>
+<p><strong>BELOW CODE IS WRONG!!</strong> As it turns out GATK creates genome sequences taking the alternative allele at every SNP position, regardless haplotype. BCFtools consensus can do what I want it to do. See dd20191015 for continued processing.</p>
+<pre><code>mkdir /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta
+
+conda activate gatk
+REFSEQ=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia/dm6.AE017196_karyoSort.fasta
+declare -a SAMPLES=(&quot;B04&quot; &quot;DGRP-304&quot; &quot;DGRP-324&quot; &quot;DGRP-360&quot; &quot;DGRP-362&quot; &quot;DGRP-57&quot; &quot;DGRP-714&quot; &quot;I02&quot; &quot;I33&quot; &quot;N02&quot; &quot;T01&quot; &quot;ZH23&quot; &quot;vgn&quot;)
+
+for sample in &quot;${SAMPLES[@]}&quot;; do
+  echo &quot;$sample&quot;
+  VAR=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia/Haplotype_joint_call_SuRe_lines_lenient_filtering_${sample}_homoz.vcf
+  OUT=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/${sample}_LP20191008.fa
+  gatk3 -T FastaAlternateReferenceMaker -R ${REFSEQ} --variant ${VAR} -o ${OUT}
+done</code></pre>
+</div>
+<div id="section-15" class="section level1">
+<h1>20191015</h1>
+<div id="create-refseq-fastta-using-bcftools-consensus" class="section level2">
+<h2>Create refseq fastta, using bcftools consensus</h2>
+<pre><code># clean up previous data which are wrong
+rm -rf /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/*
+
+conda activate vcftools
+REFSEQ=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia/dm6.AE017196.fasta
+declare -a SAMPLES=(&quot;B04&quot; &quot;DGRP-304&quot; &quot;DGRP-324&quot; &quot;DGRP-360&quot; &quot;DGRP-362&quot; &quot;DGRP-57&quot; &quot;DGRP-714&quot; &quot;I02&quot; &quot;I33&quot; &quot;N02&quot; &quot;T01&quot; &quot;ZH23&quot; &quot;vgn&quot;)
+
+for sample in &quot;${SAMPLES[@]}&quot;; do
+  echo &quot;$sample&quot;
+  VAR=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190909_VCF_fly_Mattia/Haplotype_joint_call_SuRe_lines_lenient_filtering_${sample}_homoz.vcf
+  OUT=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/${sample}_LP20191015.fa
+
+  # compress vcf using bgzip/tabix
+  bgzip ${VAR}
+  tabix ${VAR}.gz
+
+  CMD=&quot;bcftools consensus -H 1 -s ${sample}  -f ${REFSEQ} ${VAR}.gz -o ${OUT} 2&gt; ${OUT%.fa}.err&quot;
+  echo ${CMD}
+  eval ${CMD}
+done
+</code></pre>
+</div>
+<div id="create-bowtie2-indices" class="section level2">
+<h2>Create bowtie2 indices</h2>
+<pre><code># set some paths to data files and runfiles
+DATE=$(date +&quot;%Y%m%d&quot;)
+INDIR=&quot;/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/fasta/&quot;
+OUTDIR=&quot;/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices&quot;
+CHRS=( $(seq 1 22) 'X' )
+BOWTIE=bowtie2-build
+echo &quot;BOWTIE VERSION:&quot;
+${BOWTIE} --version
+echo -e &quot;\n\n&quot;
+
+declare -a SAMPLES=(&quot;B04&quot; &quot;DGRP-304&quot; &quot;DGRP-324&quot; &quot;DGRP-360&quot; &quot;DGRP-362&quot; &quot;DGRP-57&quot; &quot;DGRP-714&quot; &quot;I02&quot; &quot;I33&quot; &quot;N02&quot; &quot;T01&quot; &quot;ZH23&quot; &quot;vgn&quot;)
+
+NCORES=1
+# loop pver samples and create all ref sequences
+for sample in &quot;${SAMPLES[@]}&quot;; do
+    indir=&quot;${INDIR}/${sample}&quot;
+    infile=&quot;${INDIR}/${sample}_LP20191015.fa&quot;
+    CMD=( &quot;${BOWTIE}&quot; --threads ${NCORES} &quot;${infile}&quot; &quot;${OUTDIR}/${sample}/${sample}&quot; ) 
+    echo &quot;CMD = ${CMD[@]}&quot;
+    mkdir -p &quot;${OUTDIR}/${sample}&quot;
+    eval &quot;${CMD[@]}&quot;
+done</code></pre>
+</div>
+</div>
+<div id="section-16" class="section level1">
+<h1>20191028</h1>
+<div id="generate-chain-and-reverse-chain-files" class="section level2">
+<h2>Generate chain and reverse chain files</h2>
+<pre><code>cd /home/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/
+
+declare -a SAMPLES=(&quot;B04&quot; &quot;DGRP-304&quot; &quot;DGRP-324&quot; &quot;DGRP-360&quot; &quot;DGRP-362&quot; &quot;DGRP-57&quot; &quot;DGRP-714&quot; &quot;I02&quot; &quot;I33&quot; &quot;N02&quot; &quot;T01&quot; &quot;ZH23&quot; &quot;vgn&quot;)
+REFSEQ=/DATA/usr/ludo/projects/LP190425_flySuRE/data/external/LP20190912_DM6_Wolbachia_refSeq_Mattia/dm6.AE017196.fasta
+mkdir -p /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/
+for sample in &quot;${SAMPLES[@]}&quot;; do
+  echo &quot;$sample&quot;
+  VAR=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/Haplotype_joint_call_SuRe_lines_lenient_filtering_${sample}_homoz.vcf.gz
+  OUT=/DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_VCF_per_sample/chain/${sample}_LP20191028.chain
+
+  CMD=&quot;bcftools consensus -H 1 -s ${sample} -f ${REFSEQ} ${VAR} -c ${OUT} 2&gt; ${OUT%.chain}.err &gt; /dev/null&quot;
+  conda activate vcftools
+  echo &quot;CMD = ${CMD[@]}&quot;
+  eval &quot;${CMD[@]}&quot;
+
+  CMD=&quot;chainSwap &lt;( grep -v \&quot;^0 0 0\&quot; ${OUT} ) ${OUT%.chain}_reverse.chain&quot;
+  conda activate base
+  echo &quot;CMD = ${CMD[@]}&quot;
+  eval &quot;${CMD[@]}&quot;
+done</code></pre>
+</div>
+</div>
+<div id="section-17" class="section level1">
+<h1>20191029</h1>
+<div id="overview-of-adapting-the-pipeline-for-current-fly-data" class="section level2">
+<h2>Overview of adapting the pipeline for current fly data</h2>
+<p>I adapted the pipeline from commit <code>84097a803e405a233a4b9ed25d930354581216e8</code> onward, in branch <code>fly-embl</code>.</p>
+<p>The adaptations revolved around two aspects:</p>
+<ul>
+<li>adapting for input data, eg ref seq, VCF files, etc</li>
+<li>adapting for the homozygosity of the fly data</li>
+</ul>
+<p>The adaptations start with commit <code>0aef3d3</code> and continue (at least) to commit <code>8bf8731</code>.</p>
+</div>
+<div id="overview-of-workflow-for-processing-data" class="section level2">
+<h2>Overview of workflow for processing data</h2>
+<p>The processing is done from directory <code>../analyses/LP20191017_processing_cDNA_iPCR</code>. The entire project directory (<code>../../</code>) is under git control, in the github repos <a href="https://github.com/vansteensellab-repos/LP20191016_flySuRE_project">LP20191016_flySuRE_project</a>.</p>
+<p>Wrt the processing I commit the command wrapper (eg <code>cmd_I02_LP20191028.sh</code>) and the resulting log file(s) (eg <code>config-Dm08_B04_LP20191028_run-LP20191028_0957.log</code>) to the repos.</p>
+<p>The output is stored per fly strain in <code>../../data/intermediate/</code>, eg. <code>LP20191017_Dm12_T01_pipelineOutput</code>.</p>
+</div>
+<div id="overview-of-current-results." class="section level2">
+<h2>Overview of current results.</h2>
+<p>The testing of the pipeline was done while processing the data of Dm12_T01. Now that it is finished I checked the results, basically checking the counts for iPCR and cDNA in the counts table (<code>../../data/intermediate/LP20191017_Dm12_T01_pipelineOutput/count_tables/11_sorted/chr2R.bedpe.gz</code>).</p>
+<p>I find that there are nearly no cDNA counts!!</p>
+<p>The cDNA trimmed-table file suggests there are plenty of cDNAs, and the count distribution looks good. Also the count distribution of the iPCR counts looks good. It appears as if the cDNA counts in the final counts table is only due to random matches. This could indicate that the samples are mixed…</p>
+<div id="checking-whether-cdna-samples-are-mixed" class="section level3">
+<h3>Checking whether (cDNA) samples are mixed</h3>
+<p>I want to parse all cDNA data, extract frequent barcode sequences from each, and check overlap of each with the iPCR barcodes I have so far (T01, B04, DGRP-304).</p>
+</div>
+<div id="prep-config-and-cmd-wrappers-for-all-strains" class="section level3">
+<h3>Prep config and cmd wrappers for all strains</h3>
+<p>Here is an overview of strains and sample numbers:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="12%"></col>
+<col width="22%"></col>
+<col width="27%"></col>
+<col width="21%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>sample nr (based on github wiki)</th>
+<th>strain short name</th>
+<th>strain name in outputdir</th>
+<th>strain long name in iPCR fastq</th>
+<th>cDNA fastq fname</th>
+<th>processing started</th>
+<th>processing finished</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>03</td>
+<td>DGRP-324</td>
+<td>Dm03_DGRP-324</td>
+<td>DM03DGRP324</td>
+<td>SuRE_III_Dm3</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>04</td>
+<td>DGRP-360</td>
+<td>Dm04_DGRP-360</td>
+<td>DM04DGRP360</td>
+<td>SuRE_III_Dm4</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>05</td>
+<td>DGRP-362</td>
+<td>Dm05_DGRP-362</td>
+<td>DM05DGRP362</td>
+<td>SuRE_III_Dm5</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>06</td>
+<td>DGRP-714</td>
+<td>Dm06_DGRP-714</td>
+<td>DM06DGRP714</td>
+<td>SuRE_III_Dm6</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08</td>
+<td>B04</td>
+<td>Dm08_B04</td>
+<td>DM08GDLB04</td>
+<td>SuRE_III_Dm8</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09</td>
+<td>I02</td>
+<td>Dm09_I02</td>
+<td>DM09GDLI02</td>
+<td>SuRE_III_Dm9</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>I33</td>
+<td>Dm10_I33</td>
+<td>DM10GDLI33</td>
+<td>SuRE_III_Dm10</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>N02</td>
+<td>Dm11_N02</td>
+<td>DM11GDLN02</td>
+<td>SuRE_III_Dm11</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>T01</td>
+<td>Dm12_T01</td>
+<td>DM12GDLT01</td>
+<td>SuRE_III_Dm12</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td>ZH23</td>
+<td>Dm13_ZH23</td>
+<td>DM13GDLZH23</td>
+<td>SuRE_III_Dm13</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>No libraries:</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>–</td>
+<td>DGRP-304</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>–</td>
+<td>DGRP-57</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>–</td>
+<td>vgn</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>I created all remaining config files and command wrappers, among others with below code qbut also with lots of manual editing.</p>
+<pre><code>declare -a SAMPLES=(&quot;Dm03_DGRP-324&quot; &quot;Dm04_DGRP-360&quot; &quot;Dm05_DGRP-362&quot; &quot;Dm06_DGRP-714&quot; &quot;Dm10_I33&quot; &quot;Dm11_N02&quot; &quot;Dm13_ZH23&quot;)
+
+pushd /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191017_processing_cDNA_iPCR
+for sample in &quot;${SAMPLES[@]}&quot;; do
+  # copy template config file
+  cp config-Dm08_B04_LP20191028.yml config-${sample}_LP20191029.yml
+  # create new command wrapper from template, including replacing the correct config file
+  sed 's/config-Dm08_B04_LP20191028.yml/config-'&quot;${sample}&quot;'_LP20191029.yml/g' cmd_B04_LP20191028.sh | sed 's/TARGET=&quot;bedpe&quot;/TARGET=&quot;trim_cDNA&quot;/g' - &gt; cmd_${sample#Dm*_}_LP20191029.sh
+done
+popd</code></pre>
+<pre><code>declare -a SAMPLES=(&quot;Dm03_DGRP-324&quot; &quot;Dm04_DGRP-360&quot; &quot;Dm05_DGRP-362&quot; &quot;Dm06_DGRP-714&quot; &quot;Dm10_I33&quot; &quot;Dm11_N02&quot; &quot;Dm13_ZH23&quot;)
+for sample in &quot;${SAMPLES[@]}&quot;; do
+  smpl=${sample#Dm*_}
+  sed -i 's#T01: &quot;chain/T01_LP20191028_reverse.chain&quot;#'&quot;${smpl}&quot;': &quot;chain/'&quot;${smpl}&quot;'_LP20191028_reverse.chain&quot;#' config-${sample}_LP20191029.yml
+done</code></pre>
+</div>
+</div>
+</div>
+<div id="section-18" class="section level1">
+<h1>20191031</h1>
+<div id="sample-are-swapped" class="section level2">
+<h2>Sample <em>are</em> swapped</h2>
+<p>I finished processing all data. I checked the cDNA-iPCR sample correspondence in R (<code>../analyses/LP20191017_processing_cDNA_iPCR/check_cDNA-iPCR_SampleCorrelation_20191031.R</code>, run in <code>../data/intermediate</code>) and found that only in 3 cases the barcodes of cDNA and iPCR data have a high overlap. For in total 6 strains there is a obvious correspondence between cDNA and iPCR samples (median overlap is 5e-5, high overlap &gt;0.5, this includes the three correct samples). The remaining 4 strains have max overlap scores of:</p>
+<pre><code>0.02080964
+0.06932100
+0.09863326
+0.33418182</code></pre>
+<p>Not so good.</p>
+<p>Strains with lower overlap tend to have worse sequencing depth of the cDNA.</p>
+<p>I sent an email to Matteo/Mattia with the bad news.</p>
+</div>
+</div>
+<div id="section-19" class="section level1">
+<h1>20191104</h1>
+<div id="need-for-cross-correlating-ipcr-data-sets" class="section level2">
+<h2>Need for cross correlating iPCR data sets</h2>
+<p>Matteo replied he doesn’t know what happened. He can’t say whether either the cDNA or the iPCR samples are swapped. So, I need to check the iPCR samples as well.</p>
+<p>For the iPCR data sets I want to extract reads for a single chromosome from the bam files with previously aligned reads. Then re-align these reads to all other 9 genome sequences. I assume that the alignment against the correct genome sequence will have the maximal alignment scores.</p>
+</div>
+<div id="extract-reads-from-chr3l-for-t01" class="section level2">
+<h2>Extract reads from chr3L, for T01</h2>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/
+mkdir -p LP20191104_iPCR_cross_correlation
+cd LP20191104_iPCR_cross_correlation
+
+for f in ../LP2019*_pipelineOutput/iPCR/*_B1_T01/05_split_bam/*chr3L.bam; do
+# for f in &quot;../LP20191017_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/05_split_bam/*chr3L.bam&quot;; do
+  tt=$( basename ${f} )
+  f1=${tt%.bam}_forw.fq
+  f2=${tt%.bam}_rev.fq
+  CMD=&quot;samtools bam2fq -1 ${f1} -2 ${f2} -F 2304 -@ 4 ${f}&quot;
+  echo &quot;CMD = ${CMD[@]}&quot;
+  eval &quot;${CMD[@]}&quot;
+  for b in /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/*; do
+    index=${b}/$( basename ${b} )
+
+    CMD=&quot;(bowtie2  --sam-no-qname-trunc -p 35 -x ${index} -1 ${f1} -2 ${f2} -X 500 | samtools view -S - | awk -F\&quot;\t\&quot; '{as=gensub(\&quot;AS:i:(.*)\$\&quot;,\&quot;\\\\1\&quot;,\&quot;g\&quot;,\$12); print \$1\&quot;\t\&quot;as}' &gt; ${tt%.bam}_$( basename $index ).tsv) 2&gt;&gt;${tt%.bam}.stats&quot;
+    echo &quot;CMD = ${CMD[@]}&quot;
+    eval &quot;${CMD[@]}&quot;
+  done
+done</code></pre>
+<p>I made a mistake: The B04 sample used T01 as label. I renamed all files and dirs in <code>data/intermediate/LP20191028_Dm08_B04_pipelineOutput/iPCR/T01_B1_T01/05_split_bam/</code> from T01 to B04!!!</p>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/
+# mkdir -p LP20191104_iPCR_cross_correlation
+cd LP20191104_iPCR_cross_correlation
+
+for f in ../LP2019*_[BT]0[14]_pipelineOutput/iPCR/*_B1_T01/05_split_bam/*chr3L.bam; do
+# for f in &quot;../LP20191017_Dm12_T01_pipelineOutput/iPCR/T01_B1_T01/05_split_bam/*chr3L.bam&quot;; do
+  tt=$( basename ${f} )
+  f1=${tt%.bam}_forw.fq
+  f2=${tt%.bam}_rev.fq
+  CMD=&quot;samtools bam2fq -1 ${f1} -2 ${f2} -F 2304 -@ 4 ${f}&quot;
+  echo &quot;CMD = ${CMD[@]}&quot;
+  eval &quot;${CMD[@]}&quot;
+  for b in /DATA/usr/ludo/projects/LP190425_flySuRE/data/processed/LP20191008_refseq_per_sample/bowtie2-indices/*; do
+    index=${b}/$( basename ${b} )
+
+    CMD=&quot;(bowtie2  --sam-no-qname-trunc -p 35 -x ${index} -1 ${f1} -2 ${f2} -X 500 | samtools view -S - | awk -F\&quot;\t\&quot; '{as=gensub(\&quot;AS:i:(.*)\$\&quot;,\&quot;\\\\1\&quot;,\&quot;g\&quot;,\$12); print \$1\&quot;\t\&quot;as}' &gt; ${tt%.bam}_$( basename $index ).tsv) 2&gt;&gt;${tt%.bam}.stats&quot;
+    echo &quot;CMD = ${CMD[@]}&quot;
+    eval &quot;${CMD[@]}&quot;
+  done
+done</code></pre>
+</div>
+</div>
+<div id="section-20" class="section level1">
+<h1>20191106</h1>
+<div id="checking-cross-contamination-of-ipcr-samples" class="section level2">
+<h2>Checking cross contamination of iPCR samples</h2>
+<p>Analysis of correspondence of iPCR samples shows that B04 and ZH23 have lower correspondence to the appearent correct data files than other samples. One possibility is that samples got cross contaminated. I want to check whether I see a larger overlap of iPCR barcodes of the B04/ZH23 samples with other data sets, as compared to the other samples. For this I will collect barcodes of the iPCR data sets anddetermine overlap with other data sets, for all samples.</p>
+<pre><code>cd data/intermediate/LP20191106_iPCR_cross_contamination
+for f in ../*_pipelineOutput/iPCR/*T01/01*/*for*info*; do 
+  (strain=$(bn=$( basename $f ); 
+   echo ${bn%_B1_T01_forw.info.gz}); 
+   zcat $f | \
+     awk -F&quot;\t&quot; '$5~/[ACGT]+/{print $5}' | \
+     sort | \
+     uniq -c | \
+     sort -rg &gt; ${strain}_BC.tbl&amp; ) ; 
+done
+</code></pre>
+<pre><code>for t1 in *tbl; do 
+  for t2 in *tbl; do 
+    [ $t1 == $t2 ] &amp;&amp; continue; 
+    awk ' length($2)!=20{next} 
+          NR==FNR{a[$2]=1; next} 
+          {if($2 in a){a[$2]+=2}else{a[$2]=2}} 
+          END{for(k in a){b[a[k]]++} 
+              for(k in b){print k, b[k]}}' $t1 $t2 &gt; ${t1%_BC.tbl}_${t2%_BC.tbl}.tbl; 
+  done; 
+done</code></pre>
+</div>
+<div id="fixing-swaps" class="section level2">
+<h2>Fixing swaps</h2>
+<p>There are two types of swaps, and a possible contamination: - cDNA samples 3,4,5,6,8 are swapped to 8,3,4,5,6 - iPCR samples 12, 13 are swapped to 13,12 - iPCR samples Dm08_B04 and Dm13_ZH23 (filename Dm12_T01) may have been cross-contaminated</p>
+<table>
+<thead>
+<tr class="header">
+<th>sample</th>
+<th align="center">iPCR filename</th>
+<th align="center">cDNA filename</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Dm03_DGRP324</td>
+<td align="center">Dm03</td>
+<td align="center">Dm04</td>
+</tr>
+<tr class="even">
+<td>Dm04_DGRP360</td>
+<td align="center">Dm04</td>
+<td align="center">Dm05</td>
+</tr>
+<tr class="odd">
+<td>Dm05_DGRP362</td>
+<td align="center">Dm05</td>
+<td align="center">Dm06</td>
+</tr>
+<tr class="even">
+<td>Dm06_DGRP714</td>
+<td align="center">Dm06</td>
+<td align="center">Dm08</td>
+</tr>
+<tr class="odd">
+<td>Dm08_B04</td>
+<td align="center">Dm08</td>
+<td align="center">Dm03</td>
+</tr>
+<tr class="even">
+<td>Dm09_I02</td>
+<td align="center">Dm09</td>
+<td align="center">Dm09</td>
+</tr>
+<tr class="odd">
+<td>Dm10_I33</td>
+<td align="center">Dm10</td>
+<td align="center">Dm10</td>
+</tr>
+<tr class="even">
+<td>Dm11_N02</td>
+<td align="center">Dm11</td>
+<td align="center">Dm11</td>
+</tr>
+<tr class="odd">
+<td>Dm12_T01</td>
+<td align="center">Dm13</td>
+<td align="center">Dm12</td>
+</tr>
+<tr class="even">
+<td>Dm13_ZH23</td>
+<td align="center">Dm12</td>
+<td align="center">Dm13</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="section-21" class="section level1">
+<h1>20191126</h1>
+<div id="proportion-of-cdna-seen-in-ipcr" class="section level2">
+<h2>Proportion of cDNA ‘seen’ in iPCR</h2>
+<pre><code>cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate
+for d in LP20191128*ut; do awk -v sample=&quot;$d&quot; ' FNR==NR{a[$2]=1; next} {if($1 in a){c++}} END{print sample&quot;\t&quot;c&quot;\t&quot;length(a)}' &lt;( zcat $d/cDNA/*_B1_T1/*_B1_T1_trimmed_table.txt.gz) &lt;( for f in $d/count_tables*/09_ipcr_cdna_merged/ch*.bedpe.gz ; do zcat $f | awk 'NR&gt;1'; done ); done &gt; /tmp/tt
+mv /tmp/tt /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20191108_review_results_processing_LP20191106/cDNA_in_iPCR_LP20191126.txt</code></pre>
+</div>
+</div>
+<div id="section-22" class="section level1">
+<h1>20200114</h1>
+<div id="processing-sure-count-data-to-snp-siginificance-calling" class="section level2">
+<h2>Processing SuRE count data to SNP siginificance calling</h2>
+<p>Using work of prior work of Joris and Noud Klaassen. These are the processing steps to do:</p>
+<ol style="list-style-type: decimal">
+<li>determine total iPCR and cDNA counts per replicate</li>
+<li>remove data without SNPs</li>
+<li>downsample samples with too large total counts</li>
+<li>separate SNPs read in a single read</li>
+<li>remove SNPs read twice in a single read (in forward and reverse direction)</li>
+<li>remove rows with NA values (occurred in hg19 position columns in SuRE42-45 data)</li>
+<li>(discard data if SNP parent is ambiguous or otherwise uncertain)</li>
+<li>normalize iPCR and cDNA counts to reads per billion (note that some samples may have been downsampled in which case the total counts for these samples should be adapted as well)</li>
+<li>compute mean cDNA counts over all biological replicates</li>
+<li><p>normalize cDNA counts to iPCR counts</p></li>
+<li>(order data by SNP)</li>
+<li>discard SNP for whic only 1 allele (eg only alt allele) is seen</li>
+<li><p>do wilcox test (this step consists of several which I need to specify later)</p></li>
+</ol>
+<p>whole genome steps:<br />
+3. (given the total genome-wide count you can generate a binary vector of length total_count indicating which of the reads should be included in the sample)</p>
+<p>I think I can do some preparation work (steps 1&amp;2) in eg. python.<br />
+Then downsample in <strong>R</strong> (step 3)<br />
+Then do more steps in python (steps 4-7)<br />
+Not sure yet about the computational steps (steps 8,9,10,13)</p>
+<p><strong>NOTE:</strong><br />
+Although Noud’s script first removes data if no SNP’s are present, Joris’ script first dos downsampling. I will follow the latter approach as it is more logical.</p>
+</div>
+<div id="step-1-in-bash" class="section level2">
+<h2>Step 1 in bash</h2>
+<ul>
+<li>example data eg.
+<ul>
+<li><code>data/intermediate/LP20191128_Dm10_I33_pipelineOutput/count_tables/11_sorted/*</code></li>
+<li><code>data/intermediate/LP20191128_Dm12_T01_pipelineOutput/count_tables/11_sorted/*</code> IE. data from 6 chromosomes for two cel-lines</li>
+</ul></li>
+<li>bash script <a href="https://github.com/vansteensellab/LP20191016_flySuRE_project/commit/491a62838876a180616cd17f1b94b86e6726280b"><code>analyses/LP20200114_counts2pval_pipeline_devel/getTotalSuREcounts.sh</code></a></li>
+</ul>
+</div>
+</div>
+<div id="section-23" class="section level1">
+<h1>20200117</h1>
+<div id="step-1-script-finished" class="section level2">
+<h2>Step 1 script finished</h2>
+<p>The script <code>getTotalSuREcounts.sh</code> works, usage:</p>
+<pre><code>bash /DATA/usr/ludo/projects/LP190425_flySuRE/analyses/LP20200114_counts2pval_pipeline_devel/getTotalSuREcounts.sh -o /tmp/out -i count -l /tmp/log -c DGRP-324_B1 chr3L.bedpe.gz</code></pre>
+<p>The output is a single tabular text file with only a header (No_fragments iPCR-counts cDNA-sample-count(s)), and a single data line with values for each column.</p>
+</div>
+<div id="step-2-downsampling-cdna-data" class="section level2">
+<h2>Step 2: Downsampling cDNA data</h2>
+<p>This step I will not yet implement because currently the data is not of high quality anyway.<br />
+The input/output specifications are:</p>
+<p>INPUT:</p>
+<ul>
+<li>cDNA counts in tabular text files, compressed</li>
+<li>Text file with target total counts, per sample</li>
+</ul>
+<p>OUTPUT: * cDNA counts, same format, down-sampled</p>
+<p>The downs-ampling procedure used in the … paper is descriped as follows:</p>
+<pre><code>Equalization of cDNA barcode sequencing depth
+To minimize biases that might be caused by excessive differences in sequencing
+depth, cDNA reads of some samples were sub-sampled. First, for each
+transfection replicate the relative sequencing depth of cDNA barcodes was
+determined as the total cDNA barcode counts divided by the corresponding
+library complexity (i.e. the number of unique fragments identified in the
+library). Then, samples with a relative cDNA sequencing depth that exceeded the
+mean of all samples by more than one standard deviation (i.e., all K562 and
+HepG2 transfection replicates for genome HG02601 library 1, and all HepG2
+transfection replicates for genome HG02601 library 2) were down-sampled to the
+mean relative cDNA read depth.</code></pre>
+<p>Thus:</p>
+<ul>
+<li>determine relative cDNA sequencing depth as: <code>total-cDNA-counts/number-unique-iPCR-fragments</code></li>
+<li>per sample determine deviation from sample-mean</li>
+<li>samples targeted for downsampling are samples with deviation from mean &gt; 1stdev</li>
+</ul>
+<p>The relative cDNA sequencing depth is directly available from the output of step 1.<br />
+This needs to be computed for all samples.<br />
+Then I can select samples for downsampling.<br />
+The output with be the same SuRE counts files but downsampled<br />
+I may need to record new total counts at this point for the normalization step below</p>
+</div>
+<div id="step-3-filtering-and-reformatting-count-data" class="section level2">
+<h2>Step 3: filtering and reformatting count data</h2>
+<p>At this point I can do the following steps:</p>
+<ol start="2" style="list-style-type: decimal">
+<li>remove data without SNPs</li>
+<li>separate SNPs read in a single read</li>
+<li>remove SNPs read twice in a single read (in forward and reverse direction)</li>
+<li>remove rows with NA values (occurred in hg19 position columns in SuRE42-45 data)</li>
+<li><p>(discard data if SNP parent is ambiguous or otherwise uncertain)</p></li>
+<li>normalize iPCR and cDNA counts to reads per billion (note that some samples may have been downsampled in which case the total counts for these samples should be adapted as well)</li>
+<li>compute mean cDNA counts over all biological replicates</li>
+<li><p>normalize cDNA counts to iPCR counts</p></li>
+</ol>
+<p>Some thoughts about above step:</p>
+<ol style="list-style-type: decimal">
+<li>The scaling to reads per billion, and the normalization of cDNA counts relative to iPCR counts, can be simplified:
+<ul>
+<li>Discard scaling</li>
+<li>Determine the total-iPCR fraction/total-cDNA</li>
+<li>Normalize by cDNA_i/iPCR_i times above fraction</li>
+</ul></li>
+</ol>
+<p>Originally first step is downsample, this is correct<br />
+Second step is scaling to billion reads:</p>
+<p><span class="math display">\[ cDNA_{i,scaled} = \frac{cDNA_i}{\sum_{i}cDNA_i} \times 1e9 , \forall (cDNA, iPCR) \]</span></p>
+<p>Next step is to normalize cDNA relative to iPCR counts:</p>
+<p><span class="math display">\[ cDNA_{i,norm} = \frac{cDNA_{i,scaled}}{iPCR_{i,scaled}} \]</span></p>
+<p>But this means:</p>
+<p><span class="math display">\[ \frac{\frac{cDNA_i}{\sum_{i}cDNA_i} \times 1e9} {\frac{iPCR_i}{\sum_{i}iPCR_i} \times 1e9} \]</span></p>
+<p>ie</p>
+<p><span class="math display">\[ {\frac{cDNA_i}{\sum_{i}cDNA_i} \times 1e9} \times {\frac{\sum_{i}iPCR_i}{iPCR_i} \times \frac{1}{1e9}} \]</span></p>
+<p>equals</p>
+<p><span class="math display">\[ {\frac{cDNA_i}{\sum_{i}cDNA_i}} \times {\frac{\sum_{i}iPCR_i}{iPCR_i}} \]</span></p>
+<p>or</p>
+<p><span class="math display">\[ {\frac{cDNA_i}{iPCR_i}} \times {\frac{\sum_{i}iPCR_i}{\sum_{i}cDNA_i}} \]</span></p>
+<p><strong>CONCLUSION:</strong><br />
+Normalization can be done by:</p>
+<ol style="list-style-type: decimal">
+<li>determine total-iPCR-count/total-cDNA-count proportion at first step</li>
+<li>during second pass through all data individual cDNA counts can directly be normalized using associated iPCR count and the previously calculated cDNA/iPCR proportion</li>
+</ol>
+<hr />
+</div>
+</div>
+<div id="section-24" class="section level1">
+<h1>20200129</h1>
+<div id="script-normalization-step-finished" class="section level2">
+<h2>Script normalization step finished</h2>
+<p>Based on above considerations I first implemented a script which computes the normalized SuRE-score for each SuRE fragment.</p>
+<ul>
+<li>script: <code>normalizeSuREcounts.sh</code></li>
+<li>location: <code>analyses/LP20200114_counts2pval_pipeline_devel</code></li>
+<li><p>usage:</p>
+<pre><code># INTRO / BACKGROUND                                                                                                                                                                                                                   
+#   script to perform the second step of the SuREcounts2SNPcalls pipeline:                                                                                                                                                             
+#   1. go through single input data (bedpe file for a single cell-line,                                                                                                                                                                
+#     single bio-rep)                                                                                                                                                                                                                  
+#   2. computed SuRE score,                                                                                                                                                                                                            
+#      ie (cDNA-count/iPCR-count)*(total-iPCR-count/total-cDNA-count)                                                                                                                                                                  
+#   3. write new tabular text file with annotation columns (seqname, start,                                                                                                                                                            
+#      end, SNPs, etc) and computed SuRE-score                                                                                                                                                                                         
+#   The input data is a tabular text files. The counts are in 2 or more                                                                                                                                                                
+#      columns:                                                                                                                                                                                                                        
+#   1. column with iPCR counts (mostly called 'iPCR' or 'counts')                                                                                                                                                                      
+#   2. One or more collumns with cDNA counts, called anything but generally                                                                                                                                                            
+#      combinations of sample name and bio-rep nr                                                                                                                                                                                      
+#   The count columns should be specified by the user as follows:                                                                                                                                                                      
+#   - name of column with iPCR counts: '-i column-name'                                                                                                                                                                                
+#   - name(s) of the column(s) with cDNA count(s): '&quot;-c col-name1 col-name2 ...&quot;'                                                                                                                                                      
+#   This means that the latter (possibly long) string should be constructed in                                                                                                                                                         
+#     the Snakemake file.                                                                                                                                                                                                              
+#   Additional input is the file generated in pipeline-step1, with the total                                                                                                                                                           
+#     cDNA/iPCR-counts</code></pre></li>
+</ul>
+</div>
+<div id="next-steps" class="section level2">
+<h2>Next steps</h2>
+<p>Next steps include filtering and deconvolute SNPs per fragment:</p>
+<ul>
+<li>Remove data without SNPs</li>
+<li>Separate SNPs present in a single fragment</li>
+<li>Remove SNPs which are read in both directions in a single fragment</li>
+<li>Remove NAs (in position columns; due to liftover)</li>
+<li><p>Discard ambiguous SNP data (eg. if parental assignment is ambiguous)</p></li>
+<li><p><del>Merge data per SNPid</del> (merging requires sorting which I want to do in a separate step since it requires lots of RAM resources which nede to be controlled)</p></li>
+</ul>
+</div>
+<div id="pipeline-script-3-filter-and-deconvolute" class="section level2">
+<h2>Pipeline script 3; filter and deconvolute</h2>
+<ul>
+<li>script: <code>filterDeconMerge_SNPs.sh</code></li>
+<li>location: <code>analyses/LP20200114_counts2pval_pipeline_devel</code></li>
+<li>usage:<br />
+input = tabular text files with normalized SuRE-scores (and original annotation data)<br />
+output = tabular text file;
+<ul>
+<li>same data</li>
+<li>filtered and deconvoluted</li>
+<li>extra columns:
+<ul>
+<li>number of fragments underlying SNP</li>
+<li>summed iPCR and cDNA counts</li>
+<li>mean/median iPCR and cDNA counts</li>
+<li>min/max iPCR and cDNA counts</li>
+</ul></li>
+</ul></li>
+</ul>
 </div>
 </div>
 

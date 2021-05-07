@@ -1,6 +1,9 @@
 ---
 title: "Overview of pipeline results"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
+    toc: yes
 ---
 
 ## Init
@@ -49,7 +52,7 @@ assoc
 
 ## Raw read counts of iPCR and cDNA fastq files
 
-Statistics are collected from the multiQC output (ie overview of the fastQC reports)
+Statistics of the read counts are collected from the multiQC output (ie overview of the fastQC reports).
 
 ### iPCR
 ```{r multiQCipcr}
@@ -66,7 +69,7 @@ names(ipcrStats)[6]="totalReads (M)"
 # show correspondence of given names and shortnames
 owidth <- options(width=500)
 ipcrStats[,c(1,7)]
-options(owidth)
+# options(owidth)
 # print short name/readcount columns
 ipcrStats[seq(1,20, by=2),c(7,6)]
 ```
@@ -96,45 +99,43 @@ for (i in seq.int(nrow(assoc))) {
   set(stats, i=i, j="iPCRraw", value = ipcrStats[assoc[i,.(ipcr)][[1]],.(`totalReads (M)`)][[1]])
   set(stats, i=i, j="cDNAraw", value = cdnaStats[assoc[i,.(cdna)][[1]],.(`totalReads (M)`)][[1]])
 }
-stats <- cbind(stats, short=assoc$short)
+stats <- cbind(stats, short=assoc$short,long=assoc$strain)
 setkey(stats, short)
+stats
 ```
 
-## Add iPCR and cDNA counts after processing
+## Add iPCR and cDNA processing statistics
 
 ```{r add.processed, cache=TRUE, cache.vars=c("stats","data4viz")}
-fnames <- grep(value=TRUE, pattern="LP20191106.*11_sorted",dir(path='/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/',recursive=T, include.dirs=T,pattern=".*gz",full.names=T))
-fname.sample <- sub("^.*LP20191106_(Dm..).*_pipelineOutp.*$","\\1",fnames)
+fnames <- grep(value=TRUE, pattern="LP20191128.*11_sorted",dir(path='/DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate/',recursive=T, include.dirs=T,pattern=".*gz",full.names=T))
+fname.sample <- sub("^.*LP20191128_(Dm..).*_pipelineOutp.*$","\\1",fnames)
 samples <- unique(fname.sample)
 
 data4viz <- list()
 for (s in samples) {
   fs <- fnames[fname.sample %in% s]
-  dt <- rbindlist(lapply(fs, fread, select=c(3,4,5,6,14), sep="\t"))
-  # stats[s,c('libCompl', 'cdnaCompl', 'libComplFlat', 'cdnaComplFlat') := as.data.table(t(c(colSums(dt), colSums(dt>0))))]
+  dt <- rbindlist(lapply(fs, fread, select=c(2,3,4,5,14,15), sep="\t"))
+  sname <- setdiff(colnames(dt), c("BC","chrom","start","end","strand","count"))
   stats[s,c('libCompl', 'cdnaCompl', 'libComplFlat', 'cdnaComplFlat') := 
-          dt[,.('libCompl'=sum(count), 'cdnaCompl'=sum(get(colnames(dt)[5])), 'libComplFlat'=sum(count>0), 'cdnaComplFlat'=sum(0+(get(colnames(dt)[5]))>0))]]
+          dt[,.('libCompl'=sum(count), 'cdnaCompl'=sum(get(sname)), 
+                'libComplFlat'=sum(count>0), 'cdnaComplFlat'=sum(0+(get(sname)>0)))]]
 
-  sname <- colnames(dt)[5]
   data4viz[[s]] <- list(iPCR=dt[,.N,by="count"][order(count)],
                         cDNA=dt[,.N,by=eval(sname)][order(get(sname))],
                         ratio=dt[get(sname)>0,.(ratio=get(sname)/count)][,.N, by=ratio][order(ratio)],
                         chrom=dt[,.N,by=chrom][order(chrom)],
                         fragLen=dt[!(is.na(start) | is.na(end)),.(len=end-start+1)][,.N, by=len][order(len)],
-                        sampledCompl=
-  sapply(mclapply(10^seq(5,8,by=0.1), 
-                  function(s){sample(rep(seq.int(nrow(dt)), dt$count), size=s, replace=TRUE)},
-                  mc.cores = 30), 
-         function(x){tbl=table(x);c(length(tbl),sum(tbl==1))}))
+                        sampledCompl=list(sizes=seq(1e6, dt[,sum(count)], length.out = 10),
+                                             compl=sapply(seq(1e6, dt[,sum(count)], length.out = 10),
+                                                          function(s){length(unique(sample(rep(dt[,.I], dt$count), size=s)))})))
 }
-#dt <- NULL
-#gc()
-#print(stats)
 ```
 
 ## Visualization
 
-```{r plot.iPCR.distr, out.width=1000}
+### iPCR counts and SuRE fragments
+
+```{r plot.iPCR.distr, out.width=1000,fig.asp=1}
 #for (type in c("iPCR","cDNA","ratio","fragLen")) {
 col <- rep(1:5,2)
 names(col) <- names(data4viz)
@@ -143,14 +144,30 @@ names(pch) <- names(data4viz)
 type = "iPCR"
 xlim <- range(unlist(lapply(data4viz, function(e) {e[[type]]$count})))
 ylim <- range(unlist(lapply(data4viz, function(e) {e[[type]]$N})))
+# ylim <- c(1, 7e7)
 plot(NA,ty='p', log='yx', pch=19, cex=.5, xlim=xlim, ylim=ylim, 
      ylab='frequency',xlab='iPCR count', main=sprintf("Distribution iPCR counts per SuRE fragment"))
 for (s in names(data4viz)) {
   points(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s])
 }
+# abline(h=ipcrStats$`totalReads (M)`[c(T,F)]*1e6, lty=3, col=1:5)
 legend(x='topr', inset=0.02, bty='n',legend=names(data4viz), col=col, pch=pch,ncol = 2)
 
 ```
+
+```{r plot.iPCR.depth, out.width=1000}
+col <- grey(c(0,.45,.95))
+barplot(rbind(ipcrStats$`totalReads (M)`[c(T,F)]*1e6,
+              sapply(data4viz, function(e) e[["iPCR"]][,sum(N*count)]),
+              sapply(data4viz, function(e) e[["iPCR"]][,sum(N)])), 
+        beside = T, main="iPCR: raw read count, sum of iPCR counts, and unique fragment count", ylab="count", ylim=c(0,1e8),las=2,col=col)
+legend(x='topl', inset=0.025, bty='n', legend=c("raw read count","aligned read count","unique fragment count"), fill=col)
+```
+
+**CONCLUSION:**  
+All samples have a fragment complexity 15-20e6 fragments. This is according to expectations. Also see below.
+
+### cDNA counts
 
 ```{r plot.cDNA.distr, out.width=1200}
 col <- rep(1:5,2)
@@ -161,7 +178,7 @@ type = "cDNA"
 xlim <- range(unlist(lapply(data4viz, function(e) {e[[type]][[1]]})))
 ylim <- range(unlist(lapply(data4viz, function(e) {e[[type]]$N})))
 plot(NA,ty='p', log='y', pch=19, cex=.5, xlim=xlim, ylim=ylim, 
-     ylab='frequency',xlab='iPCR count', main=sprintf("Distribution cDNA counts per SuRE fragment"))
+     ylab='frequency',xlab='cDNA count', main=sprintf("Distribution cDNA counts per SuRE fragment"))
 for (s in names(data4viz)) {
   points(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s])
 }
@@ -174,6 +191,42 @@ for (s in names(data4viz)) {
 }
 
 ```
+
+
+**CONCLUSION:**  
+Several cDNA samples appear over-amplified; *Dm03, Dm04, Dm05, Dm13*, as they show increasing count frequencies for the lowest counts. Samples *Dm06 - Dm11* are more or less monotenously decreasing with increasing counts.  
+*Dm12* appears extremely undersequenced, but also strongly over-amplified.
+
+Below is the number of barcodes (BC's) present in the cDNA data, and the number of these BC's actually seen in the iPCR data. The third bar depicts the proportion of cDNA BC's seen in iPCR (axis on right side).
+
+```{bash, eval=FALSE}
+cd /DATA/usr/ludo/projects/LP190425_flySuRE/data/intermediate
+for d in LP20191128*ut; do 
+awk -v sample="$d" ' 
+  FNR==NR{a[$2]=1; next} 
+  {if($1 in a){c++}} 
+  END{print sample"\t"c"\t"length(a)}' \
+  <( zcat $d/cDNA/*_B1_T1/*_B1_T1_trimmed_table.txt.gz) \
+  <( for f in $d/count_tables*/09_ipcr_cdna_merged/ch*.bedpe.gz ; do zcat $f | awk 'NR>1'; done ); done > /tmp/tt
+```
+
+```{r cdnacounts,out.width="100%", cache=TRUE}
+opar <- par(mar=c(5,4,4,4)+.1)
+col <- grey(c(0.25,0.45,0.8))
+cDNAseen <- read.table("/tmp/tt",header=F, col.names = c('sample','seen','total'))
+rownames(cDNAseen) <- sub("LP20191128_(Dm..)_.*_pipelineOutput","\\1",cDNAseen$sample)
+barplot(t(as.matrix(cbind(cDNAseen[,3:2],prop=(cDNAseen[[2]]/cDNAseen[[3]])*max(cDNAseen$total)))),beside=TRUE, ylab="BC count",
+        density=c(-1,-1,10),col=col, main="cDNA barcodes (BC) in sample and present in iPCR", ylim=c(0,max(cDNAseen$total)*1.35), las=2)
+axis(4,at=seq(0,max(cDNAseen$total),length.out = 6),labels=seq(0,1,length.out = 6))
+mtext("proportion seen",side=4,line=3)
+par(opar)
+legend('topl',bty='n',inset=0.025,legend=c("number unique BC in cDNA","number BC seen in iPCR","proportion of BC seen in iPCR"),
+       fill=col, density=c(-1,-1,30),xpd=NA)
+```
+
+In accordance with the undersampling/over-amplification of samples *Dm03, Dm04, Dm05, Dm12, Dm13* these samples (except *Dm13*) also exhibit  low proportion of cDNA BC's which are seen in the iPCR. This is probably due to the overrepresentation of a small number of BC's in these samples.
+
+### Length of SuRE fragments
 
 ```{r plot.fraglen.distr, out.width=1200}
 col <- rep(1:5,2)
@@ -194,6 +247,11 @@ legend(x='topr', inset=0.02, bty='n',legend=names(data4viz), col=col, pch=pch,nc
 
 ```
 
+**CONCLUSION:**  
+The distribution of the length of the SuRE fragments looks good. It is unclear what causes the dip at length ~ 140bp.
+
+### Distribution of SuRE scores (cDNA_count/iPCR_ count, per SuRE fragment)
+
 ```{r plot.SuRE.score, out.width=1200}
 col <- rep(1:5,2)
 names(col) <- names(data4viz)
@@ -202,7 +260,7 @@ names(pch) <- names(data4viz)
 type = "ratio"
 xlim <- range(unlist(lapply(data4viz, function(e) {e[[type]][[1]]})))
 ylim <- c(0,100) #range(unlist(lapply(data4viz, function(e) {e[[type]]$N})))
-main <- sprintf("%s: distribution cDNA/iPCR ratio",s)
+main <- sprintf("distribution cDNA/iPCR ratio")
 xlab <- "ratio(cDNA/iPCR), for cDNA>0"
 ylab <- "cumulative percentage"
 plot(NA,ty='p', log='x', xlim=xlim, ylim=ylim, ylab=ylab,xlab=xlab, main=main)
@@ -210,7 +268,8 @@ for (s in names(data4viz)) {
   with(data4viz[[s]][[type]], points(ratio, 100*cumsum(N)/sum(N), pch=pch[s], cex=.5, col=col[s]))
 }
 legend(x='topl', inset=0.02, bty='n',legend=names(data4viz), col=col, pch=pch,ncol = 2)
-
+```
+```{r , eval=F,echo=F}
 par(mfrow=c(2,5), mar=c(2,2,1,1))
 for (s in names(data4viz)) {
   plot(data4viz[[s]][[type]], pch=pch[s], cex=.5, col=col[s],ty='p', log='x',
@@ -227,37 +286,90 @@ legend(x='topr',inset=0.025, bty='n', legend=names(data4viz), fill =1:5, angle=r
 ```
 
 
-### Complexity vs. flat complexity
+**CONCLUSION:**  
+The over-amplified cDNA samples have relatively high cDNA/iPCR ratio's. The discrete nature of the ratio scores of the other samples is due to the low counts
 
-Complexity is defined as the sum of counts of fragments detected in either iPCR or cDNA data. Flat complexity is defined as the sum of all fragments detected in either iPCR or cDNA data. The two generally highly correlate. outliers may indicate under-sequencing of other problems.
-
-Also plot distribution of fragment lengths
+### iPCR and cDNA complexity
 
 ```{r plots, out.width="100%"}
-plot(stats$iPCRraw, stats$libCompl, col=1:4, pch=19,log='y', xlab="Raw iPCR read count (in fastq, x1e6)", ylab="iPCR count (x1e6, see legend)", main="Library complexity and iPCR counts vs raw read count")
-legend(x="topl", inset = 0.025, bty='n', legend=c("iPCR total count","library complexity\n(ie, detected fragment)"), pch=c(19,1))
-text(stats$iPCRraw, stats$libCompl,labels=stats$short,pos=1:4,xpd=NA,col=1:4)
-points(stats$iPCRraw, stats$libComplFlat, col=1:4, pch=1)
+col <- rep(1:5, 2)
+pch <- rep(c(4,19), each=5)
+plot(stats$iPCRraw, stats$libCompl, col=col, pch=19,log='y', xlab="Raw iPCR read count (in fastq, x1e6)", ylab="SuRE fragment count (x1e6, see legend)", main="Library complexity and iPCR counts vs raw read count",ylim=range(stats$libCompl,stats$libComplFlat))
+legend(x="topl", inset = 0.025, bty='n', legend=c("fragment total count","library complexity\n(ie, detected fragment)"), pch=c(19,1))
+text(stats$iPCRraw, stats$libCompl,labels=stats$short,pos=c(2,3,1,4),xpd=NA,col=col)
+points(stats$iPCRraw, stats$libComplFlat, col=col, pch=1)
 
-plot(stats$libCompl, stats$libComplFlat, pch=19, xlab="library complexity (sum of iPCR counts)", ylab="flat complexity (detected fragments)", main="Library complexity; flat vs full", col=1:4)
+plot(stats$libCompl, stats$libComplFlat, pch=19, xlab="sum of fragments", ylab="library complexity (unique fragments)", main="iPCR library complexity; fragment counts vs unique fragments (lib complexity)", col=col)
 #abline(lm(libComplFlat~libCompl,data = as.data.frame(stats)), lty=3)
-text(stats$libCompl, stats$libComplFlat,labels=stats$short,pos=1:4,xpd=NA,col=1:4)
+text(stats$libCompl, stats$libComplFlat,labels=stats$short,pos=4:1,xpd=NA,col=col)
 cor(stats$libCompl, stats$libComplFlat)
 
-plot(stats$cdnaCompl, stats$cdnaComplFlat, pch=19, xlab="cDNA complexity (sum of cDNA counts)", ylab="flat complexity (detected fragments)", main="cDNA complexity; flat vs full",col=1:4, ylim=c(-5e5,0.7e7))
+plot(stats$cdnaCompl, stats$cdnaComplFlat, pch=19, xlab="sum of BC counts", ylab="cDNA complexity (unique BC's)", main="cDNA complexity; unique BCs vs total BC count",col=col, ylim=c(-5e5,0.7e7))
 #abline(lm(cdnaComplFlat~cdnaCompl,data = as.data.frame(stats)), lty=3)
-text(stats$cdnaCompl, stats$cdnaComplFlat,labels=stats$short,pos=1:4,xpd=NA,col=1:4)
+text(stats$cdnaCompl, stats$cdnaComplFlat,labels=stats$short,pos=1:4,xpd=NA,col=col)
 cor(stats$cdnaCompl, stats$cdnaComplFlat)
 ```
 
 **Conclusion:**  
 
-* iPCR libraries all look good, as far as complexity vs flat complexity is concerned.
-* Dm04_DGRP360 and Dm05_DGRP362 have very low library complexities
-* Dm3_DGRP324 has a relatively high cDNA complexity given the low flat cDNA complexity
-* Dm04_DGRP360, Dm05_DGRP362, and Dm12_T01 have very low cDNA complexities
+* Relation of iPCR data *raw read count* and *total frament count* shows a good correlation.
+* *Total  fragment count* and *unique fragment count* is poorly correlated
+* *Dm04* and *Dm05* in particular have very low library complexity
+* *cDNA BC complexity* correlates well with *cDNA BC counts *
+* The under sequenced and over-sampled cDNA samples (*Dm03, Dm04, Dm05, Dm12, Dm13*) have much lower BC complexity than the other samples.
 
 
+## Estimated saturation of iPCR library complexity
+
+Below estimates use a method developed by Tao Chen in our group. The method is not documented but appears to be based on fitting a negative binomial distribution on the observed complexity in the iPCR data, and in samplings of 6this data in decreasing sample sizes. The iPCR sample complexity is estimated using the parameterization of the fitted distribution.
+
+```{r estimCompl, out.width="100%", cache=TRUE}
+estimComplex <- function(reads, complexity, plot=FALSE, sample="sample") {
+  idx <- 4:10
+  #cow = reads[idx]/min(reads[idx]);
+  reads = reads[idx]/min(reads[idx]);
+  #bull = complexity[idx];
+  complexity = complexity[idx];
+  uni = vector();
+  
+  for (i in 1:(length(reads)-1)){
+    for (j in (i+1):length(reads)){
+      t1=reads[i];
+      t2=reads[j];
+      
+      approx <- function(x,t1=1,t2=2,b=0) {(1-x^t1)/(1-x^t2) - b}
+      xirr <- function() {
+        tryCatch(
+          {irr <- uniroot(f=approx,c(0,3),  b=complexity[i]/complexity[j], t1=reads[i], t2=reads[j])[["root"]];
+          return(irr)}, 
+          error=function(err){return(NA)}
+        )
+        return(irr)
+      }
+      root <- xirr()
+      uni <- c(uni,root);
+    }
+  }
+
+  ttl=mean(complexity/(1-mean(uni)^reads))
+  if(plot){
+    plot(seq(0,2*max(reads*ttl), length.out=20), ttl*(1-mean(uni)^seq(0,2*max(reads), length.out=20)),pch=19,type='o',
+         main =paste(sample,': saturation library complexity\nk =',round(log(mean(uni)),2),'; complexity =',round(ttl)),ylim=c(0,ttl),
+         xlab="total fragment count", ylab="complexity (unique fragments)")
+    points(c(0,reads*ttl),c(0,complexity),pch=19,col='red');
+    legend("bottomr", inset=0.025, bty="n",legend=c("modeled complexity","measured complexity","estimated SuRE library complexity"),col=c("black","red","grey"), 
+           pch=c(19,19,NA),lty=c(NA,NA,3))
+    abline(h=ttl,lty=2,col='grey')
+  }
+  return(round(ttl))
+}
+for(s in names(data4viz)) {
+  estimComplex(data4viz[[s]][[6]][[1]],data4viz[[s]][[6]][[2]],plot=TRUE,sample=stats[s]$long)
+}
+```
+
+**CONCLUSION:**  
+Most libraries are sequenced to near saturation (according to above estimations). Library *Dm04* is most undersequenced, and least saturated. An additional 
 # R session
 
 ```{r session}
